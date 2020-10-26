@@ -1,0 +1,22 @@
+@import '../../variables';
+
+.button {
+  cursor: pointer;
+  padding: 10px 55px;
+  font-size: large;
+  background-color: $color-accent;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.2s ease-in;
+  text-transform: uppercase;
+
+  &:hover{
+    background-color: white;
+    color: $color-accent;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

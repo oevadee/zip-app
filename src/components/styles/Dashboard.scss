@@ -1,0 +1,21 @@
+@import '../../variables';
+
+.dashboard{
+  flex: 0.75;
+  padding: 20px 40px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard__header{
+  flex: 0.1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+
+  h1{
+    font-size: 4rem;
+  }
+}

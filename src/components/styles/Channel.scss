@@ -1,0 +1,14 @@
+@import '../../variables';
+
+.channel{
+  padding: 20px;
+  cursor: pointer;
+
+  &:hover{
+    background-color: $color-accent;
+  }
+}
+
+.channel__roomName{
+  font-weight: 400;
+}
