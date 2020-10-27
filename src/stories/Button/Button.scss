@@ -1,15 +1,16 @@
-@import '../../variables';
+@import '../variables';
 
 .button {
-  cursor: pointer;
-  padding: 10px 55px;
+  font-family: $font;
   font-size: large;
+  padding: 10px 25px;
   background-color: $color-accent;
   color: white;
   border: none;
   border-radius: 10px;
   transition: all 0.2s ease-in;
   text-transform: uppercase;
+  cursor: pointer;
 
   &:hover{
     background-color: white;
@@ -19,12 +20,19 @@
   &:focus {
     outline: none;
   }
+
+  @media (max-width: 568px) {
+    font-size: medium;
+  }
+
+  @media (max-width: 375px) {
+    font-size: small;
+  }
 }
 
 .button--secondary{
   background-color: #aa0715ae;
   border-radius: 3px;
-  padding: 10px 25px;
 
   &:hover{
     background-color: #c32929;

@@ -9,12 +9,11 @@ import Button from "./Button";
 import db, { auth } from "../firebase";
 import firebase from "firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { selectExpensePopupVisible, setAppInfo } from "../features/appSlice";
+import { setAppInfo } from "../features/appSlice";
 
 const ExpensePopup = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState("");
   const [input, setInput] = useState(0);
-  const expensePopupVisible = useSelector(selectExpensePopupVisible);
   const dispatch = useDispatch();
 
   const avatar = useRef(null);
@@ -47,9 +46,9 @@ const ExpensePopup = ({ users }) => {
       dispatch(
         setAppInfo({
           expensePopupVisible: false,
-          currentlyOpen: 'My Doe'
+          currentlyOpen: "My Doe",
         })
-      )
+      );
       console.log("Sent");
     }
   };

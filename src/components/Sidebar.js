@@ -63,7 +63,7 @@ const Sidebar = () => {
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button text={"Logout"} onClick={() => auth.signOut()} />
+        <Button primary={false} text={"Logout"} onClick={() => auth.signOut()} />
       </div>
     </div>
   );

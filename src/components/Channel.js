@@ -16,7 +16,6 @@ const Channel = ({ id, channelName }) => {
           setAppInfo({
             channelId: id,
             channelName: channelName,
-            chatOpen: true,
             currentlyOpen: 'Chat'
           }),
         )
