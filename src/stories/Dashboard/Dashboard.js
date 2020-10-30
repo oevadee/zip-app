@@ -9,9 +9,10 @@ import db, { auth } from "../../firebase";
 // import { useSelector } from "react-redux";
 // import { selectActiveSection } from "../features/appSlice";
 
-const Dashboard = ({ activeSection }) => {
+const Dashboard = ({ activeSection, popupVisible }) => {
   const [users, setUsers] = useState([]);
   // const activeSection = useSelector(selectActiveSection);
+  // const popupVisible = useSelector(selectPopupVisible);
 
   useEffect(() => {
     db.collection("users").onSnapshot((snapshot) => {
@@ -22,7 +23,11 @@ const Dashboard = ({ activeSection }) => {
   return (
     <div className="dashboard">
       <Header activeSection={activeSection} />
-      {activeSection === "chat" ? <Chat /> : <Expenses users={users} />}
+      {activeSection === "chat" ? (
+        <Chat />
+      ) : (
+        <Expenses popupVisible={popupVisible} users={users} />
+      )}
     </div>
   );
 };

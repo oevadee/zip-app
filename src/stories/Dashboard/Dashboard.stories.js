@@ -16,7 +16,14 @@ Chat.args = {
 
 export const Expenses = Template.bind({});
 Expenses.args = {
-  activeSection: 'expenses'
+  activeSection: 'expenses',
+  popupVisible: false
+};
+
+export const ExpensesWithPopup = Template.bind({});
+ExpensesWithPopup.args = {
+  activeSection: 'expenses',
+  popupVisible: true
 };
 
 export default story;

@@ -10,13 +10,14 @@ import db, { auth } from "../../firebase";
 import firebase from "firebase";
 import { useDispatch } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
+import { setPopupVisible } from "../../features/popupSlice";
 
 const ExpensePopup = ({ users }) => {
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [prevIndex, setPrevIndex] = useState(null);
   const [input, setInput] = useState(0);
+  const userSelector = useRef(0);
   const dispatch = useDispatch();
-
-  const avatar = useRef(null);
 
   const handleExpenseAdd = () => {
     if (selectedUser) {
@@ -42,32 +43,41 @@ const ExpensePopup = ({ users }) => {
 
       setInput(0);
       setSelectedUser("");
-      avatar.current.style.opacity = 0.3;
+      userSelector.current.childNodes[prevIndex].style.opacity = 0.3;
       dispatch(
         setActiveSection({
           setActiveSection: "expenses",
         })
       );
-      console.log("Sent");
+      dispatch(
+        setPopupVisible({
+          popupOpen: false,
+        })
+      );
     }
   };
 
   return (
     <div className="expensePopup">
-      <div className="expensePopup__userSelector">
+      <div className="expensePopup__userSelector" ref={userSelector}>
         {users
           .filter((user) => user.uid !== auth.currentUser.uid)
-          .map((user) => (
+          .map((user, i) => (
             <Avatar
               key={user.uid}
-              ref={avatar}
               src={user.photo}
               onClick={() => {
-                console.log("click", avatar);
-                setSelectedUser(user.uid);
-                avatar.current.style.opacity = 1;
+                if(selectedUser) {
+                  userSelector.current.childNodes[prevIndex].style.opacity = 0.3;
+                  setSelectedUser(user.uid);
+                  userSelector.current.childNodes[i].style.opacity = 1
+                  setPrevIndex(i);
+                } else {
+                  setSelectedUser(user.uid);
+                  userSelector.current.childNodes[i].style.opacity = 1
+                  setPrevIndex(i);
+                }
               }}
-              onBlur={() => (avatar.current.style.opacity = 0.3)}
             />
           ))}
       </div>
