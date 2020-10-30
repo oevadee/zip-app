@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import Header from './Header';
+import Header from "./Header";
 
-export default {
-  title: 'Components/Header',
+const story = {
+  title: "Components/Header",
   component: Header,
 };
 
@@ -11,15 +11,17 @@ const Template = (args) => <Header {...args} />;
 
 export const Expenses = Template.bind({});
 Expenses.args = {
-  activeSection: 'expenses',  
+  activeSection: "expenses",
 };
 
 export const Chat = Template.bind({});
 Chat.args = {
-  activeSection: 'chat',
+  activeSection: "chat",
 };
 
 export const History = Template.bind({});
 History.args = {
-  activeSection: 'history',
+  activeSection: "history",
 };
+
+export default story

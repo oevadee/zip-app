@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from './Button';
 
-export default {
+const story = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
@@ -23,3 +23,5 @@ Secondary.args = {
   primary: false,
   text: 'Log out',
 };
+
+export default story

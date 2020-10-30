@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import "./App.scss";
 
-import Sidebar from "./components/Sidebar";
-import Dashboard from "./components/Dashboard";
-import LoginPage from "./components/LoginPage";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Dashboard from "./components/Dashboard/Dashboard";
+import LoginPage from "./components/LoginPage/LoginPage";
 
 import { useSelector, useDispatch } from "react-redux";
 import db, { auth } from "./firebase";
@@ -41,7 +41,7 @@ function App() {
     <div className="app">
       {user ? (
         <>
-          <Sidebar />
+          <Sidebar user={user} />
           <Dashboard />
         </>
       ) : (
