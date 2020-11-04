@@ -6,6 +6,11 @@
   color: white;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: $tablet) {
+    padding: 10px;
+    flex: 1;
+  }
 }
 
 .dashboard__header{

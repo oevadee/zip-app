@@ -1,23 +1,50 @@
 @import '../../variables';
 
 .header {
-  height: 100px;
+  height: 80px;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  justify-content: space-between;
+  padding: 10px;
 
   h1 {
-    font-size: 4rem;
+    font-size: 2.5rem;
     color: white;
     font-family: $font;
     flex: 1;
-
+  
+    @media (max-width: $tablet) {
+      display: none;
+    }
+  
     @media (max-width: $mobile-L) {
-      font-size: 3rem;
+      flex: 0;
     }
-
-    @media (max-width: $mobile-H) {
-      font-size: 2rem;
-    }
+  
   }
+}
+
+.MuiSvgIcon-root {
+  display: none;
+  cursor: pointer;
+  color: #eee;
+
+  @media (max-width: $tablet) {
+    display: block;
+  }
+}
+
+.header__buttons {
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: $tablet) {
+    flex: 1
+  }
+}
+
+.btn-single{
+  @media (max-width: $tablet) {
+    justify-content: flex-end;
+  } 
 }

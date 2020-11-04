@@ -9,6 +9,7 @@ import HistoryIcon from "@material-ui/icons/History";
 
 // import db, { auth } from "../firebase";
 // import { setAppInfo } from "../features/appSlice";
+// import { setHistoryOf } from "../features/historySlice";
 // import { useDispatch } from "react-redux";
 
 const Expense = ({ user }) => {
@@ -47,10 +48,13 @@ const Expense = ({ user }) => {
       <div className="expense__history">
         <HistoryIcon onClick={() => {
           // dispatch(
-          //   setAppInfo({
-          //     currentlyOpen: 'History'
+          //   setActiveSection({
+          //     activeSection: 'history'
           //   })
           // )
+          // dispatch(setHistoryOf({
+          //   historyOf: user
+          // }))
         }} />
       </div>
     </div>

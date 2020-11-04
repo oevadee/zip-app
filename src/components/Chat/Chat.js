@@ -10,17 +10,26 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 // Firebase
 import db from "../../firebase";
 import firebase from "firebase";
+
+// Redux
 import { useSelector } from "react-redux";
 import { selectChannelId, selectChannelName } from "../../features/appSlice";
+import { selectUser } from '../../features/userSlice';
 
 const Chat = () => {
   const channelId = useSelector(selectChannelId)
   const channelName = useSelector(selectChannelName)
+  const user = useSelector(selectUser);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
 
   const sendMessage = (e) => {
     e.preventDefault();
+    db.collection("channels").doc(channelId).collection("messages").add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      message: input,
+      user: user,
+    });
     setInput("");
   };
 

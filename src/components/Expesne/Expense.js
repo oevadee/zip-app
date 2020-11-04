@@ -11,11 +11,12 @@ import db, { auth } from "../../firebase";
 
 // Redux
 import { setActiveSection } from "../../features/sectionSlice";
+import { setHistoryOf } from "../../features/historySlice";
 import { useDispatch } from "react-redux";
 
 const Expense = ({ user }) => {
   const [total, setTotal] = useState(0);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (user) {
@@ -43,17 +44,22 @@ const Expense = ({ user }) => {
         <Avatar src={user.photo} />
         <p>{user.displayName}</p>
       </div>
-      <p className="expense__total">
-        {total} pln
-      </p>
+      <p className="expense__total">{total} pln</p>
       <div className="expense__history">
-        <HistoryIcon onClick={() => {
-          dispatch(
-            setActiveSection({
-              activeSection: 'history'
-            })
-          )
-        }} />
+        <HistoryIcon
+          onClick={() => {
+            dispatch(
+              setActiveSection({
+                activeSection: "history",
+              })
+            );
+            dispatch(
+              setHistoryOf({
+                historyOf: user,
+              })
+            );
+          }}
+        />
       </div>
     </div>
   );

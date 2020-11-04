@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { setAppInfo } from "../../features/appSlice";
 import { setActiveSection } from "../../features/sectionSlice";
 
-const Channel = ({ id, channelName }) => {
+const Channel = ({ id, channelName, setMobileNavOpen }) => {
   const dispatch = useDispatch();
 
   return (
@@ -25,6 +25,7 @@ const Channel = ({ id, channelName }) => {
             activeSection: 'chat'
           })
         );
+        setMobileNavOpen(false)
       }}
     >
       <h3 className="channel__roomName">

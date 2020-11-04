@@ -4,8 +4,9 @@ import "./Header.scss";
 
 import Button from "../Button/Button";
 
-const Header = ({ activeSection, ...props }) => {
+const Header = ({ activeSection }) => {
   const [title, setTitle] = useState("");
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     if (activeSection === "chat") setTitle("Chat");
@@ -15,13 +16,40 @@ const Header = ({ activeSection, ...props }) => {
 
   return (
     <div className="header">
-      <h1>{title}</h1>
-      <Button
-        primary={true}
-        text={activeSection === "expenses" ? "Open chat" : "New expense"}
-        onClick={() => {}}
-        {...props}
-      />
+      <h1 className={activeSection === 'expenses' ? 'header--expenses' : 'header--classic'}>{title}</h1>
+      <div className={`header__buttons ${activeSection === 'expenses' ? '' : 'btn-single'}`}>
+        {activeSection === "expenses" ? (
+          <Button
+            text="New expense"
+            onClick={() => {
+              // dispatch(setPopupVisible({
+              //   popupVisible: true
+              // }));
+            }}
+            style={{ marginRight: "20px" }}
+          />
+        ) : (
+          <></>
+        )}
+        <Button
+          text={activeSection === "expenses" ? "Open chat" : "New expense"}
+          onClick={() => {
+            if (activeSection === "chat") {
+              // dispatch(
+              //   setActiveSection({
+              //     activeSection: "expenses",
+              //   })
+              // );
+            } else if (activeSection === "expenses") {
+              // dispatch(
+              //   setActiveSection({
+              //     activeSection: "chat",
+              //   })
+              // );
+            }
+          }}
+        />
+      </div>
     </div>
   );
 };

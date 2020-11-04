@@ -5,19 +5,56 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 20px;
 
-  h1 {
+  .header--classic {
     font-size: 4rem;
     color: white;
     font-family: $font;
+    flex: 1;
+
+    @media (max-width: $tablet) {
+      font-size: 3rem;
+    }
 
     @media (max-width: $mobile-L) {
-      font-size: 3rem;
+      font-size: 2.5rem;
     }
 
     @media (max-width: $mobile-H) {
       font-size: 2rem;
     }
+
   }
+
+  .header--expenses {
+    font-size: 4rem;
+    color: white;
+    font-family: $font;
+    flex: 1;
+
+    @media (max-width: $tablet) {
+      font-size: 3rem;
+    }
+
+    @media (max-width: $mobile-L) {
+      display: none;
+      flex: 0;
+    }
+  }
+}
+
+.header__buttons {
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: $mobile-L) {
+    flex: 1
+  }
+}
+
+.btn-single{
+  @media (max-width: $mobile-L) {
+    justify-content: flex-end;
+  } 
 }

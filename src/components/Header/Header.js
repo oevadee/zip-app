@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./Header.scss";
 
+// Components
 import Button from "../Button/Button";
+
+// Icons
+import MenuIcon from '@material-ui/icons/Menu';
+
+// Redux
 import { useDispatch } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
 import { setPopupVisible } from "../../features/popupSlice";
 
-const Header = ({ activeSection }) => {
+const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
 
@@ -19,38 +25,43 @@ const Header = ({ activeSection }) => {
 
   return (
     <div className="header">
+      {activeSection === 'chat' ? (
+        <MenuIcon fontSize="large" onClick={() => setMobileNavOpen(!mobileNavOpen)} />
+      ) : <></>}
       <h1>{title}</h1>
-      {activeSection === "expenses" ? (
+      <div className={`header__buttons ${activeSection === 'expenses' ? '' : 'btn-single'}`}>
+        {activeSection === "expenses" ? (
+          <Button
+            text="New expense"
+            onClick={() => {
+              dispatch(setPopupVisible({
+                popupVisible: true
+              }));
+            }}
+            style={{ marginRight: "20px" }}
+          />
+        ) : (
+          <></>
+        )}
         <Button
-          text="New expense"
+          text={activeSection === "expenses" ? "Open chat" : "New expense"}
           onClick={() => {
-            dispatch(setPopupVisible({
-              popupVisible: true
-            }));
+            if (activeSection === "chat") {
+              dispatch(
+                setActiveSection({
+                  activeSection: "expenses",
+                })
+              );
+            } else if (activeSection === "expenses") {
+              dispatch(
+                setActiveSection({
+                  activeSection: "chat",
+                })
+              );
+            }
           }}
-          style={{marginRight: '40px'}}
         />
-      ) : (
-        <></>
-      )}
-      <Button
-        text={activeSection === "expenses" ? "Open chat" : "New expense"}
-        onClick={() => {
-          if (activeSection === "chat") {
-            dispatch(
-              setActiveSection({
-                activeSection: "expenses",
-              })
-            );
-          } else if (activeSection === "expenses") {
-            dispatch(
-              setActiveSection({
-                activeSection: "chat",
-              })
-            );
-          }
-        }}
-      />
+      </div>
     </div>
   );
 };

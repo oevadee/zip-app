@@ -15,7 +15,7 @@ import AddIcon from "@material-ui/icons/Add";
 import db, { auth } from "../../firebase";
 
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
   const [channels, setChannels] = useState([]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Sidebar = ({ user }) => {
   };
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${mobileNavOpen ? `sidebar--mobileOn` : ``}`}>
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar src={user.photo} />
@@ -59,6 +59,7 @@ const Sidebar = ({ user }) => {
               key={id}
               id={id}
               channelName={channel.channelName}
+              setMobileNavOpen={setMobileNavOpen}
             />
           ))}
         </div>

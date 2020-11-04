@@ -21,11 +21,11 @@
     outline: none;
   }
 
-  @media (max-width: $mobile-L) {
+  @media (max-width: $tablet) {
     font-size: medium;
   }
 
-  @media (max-width: $mobile-H) {
+  @media (max-width: $mobile-L) {
     font-size: small;
   }
 }

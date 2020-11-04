@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.scss";
 
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -10,6 +10,7 @@ import db, { auth } from "./firebase";
 import { login, logout, selectUser } from "./features/userSlice";
 
 function App() {
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
@@ -41,8 +42,8 @@ function App() {
     <div className="app">
       {user ? (
         <>
-          <Sidebar user={user} />
-          <Dashboard />
+          <Sidebar user={user} mobileNavOpen={mobileNavOpen} setMobileNavOpen={setMobileNavOpen} />
+          <Dashboard setMobileNavOpen={setMobileNavOpen} mobileNavOpen={mobileNavOpen} />
         </>
       ) : (
         <LoginPage />

@@ -1,0 +1,28 @@
+@import '../variables';
+
+.history{
+  display: flex;
+  align-items: center;
+  font-size: large;
+  padding: 20px 40px;
+  color: white;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+}
+
+.history__user{
+  display: flex;
+  align-items: center;
+  flex: 0.55;
+
+  p{
+    margin-left: 20px;
+  }
+}
+
+.history__expense{
+  flex: 0.3;
+  text-align: center;
+}

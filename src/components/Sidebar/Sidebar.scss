@@ -7,6 +7,17 @@
   flex: 0.25;
   background-color: $color-secondary;
   color: white;
+
+  @media (max-width: $mobile-L) {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    transform: translateX(-100%);
+  }
+}
+
+.sidebar--mobileOn{
+  transform: translateX(0);
 }
 
 .sidebar__user {

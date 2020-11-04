@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { selectActiveSection } from "../../features/sectionSlice";
 import { selectPopupVisible } from "../../features/popupSlice";
 
-const Dashboard = () => {
+const Dashboard = ({ setMobileNavOpen, mobileNavOpen }) => {
   const [users, setUsers] = useState([]);
   const activeSection = useSelector(selectActiveSection);
   const popupVisible = useSelector(selectPopupVisible);
@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <Header activeSection={activeSection} />
+      <Header activeSection={activeSection} setMobileNavOpen={setMobileNavOpen} mobileNavOpen={mobileNavOpen} />
       {activeSection === "chat" ? <Chat /> : <Expenses popupVisible={popupVisible} users={users} />}
     </div>
   );

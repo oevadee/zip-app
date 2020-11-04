@@ -6,6 +6,10 @@
   height: calc(100% - 150px);
   flex: 1;
   margin: 20px;
+
+  @media (max-width: $tablet) {
+    margin: 10px;
+  }
 }
 
 .chat__messages {
