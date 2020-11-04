@@ -11,8 +11,9 @@ import History from '../History/History';
 import db, { auth } from "../../firebase";
 import { useSelector } from "react-redux";
 import { selectHistoryOf } from "../../features/historySlice";
+import { selectPopupVisible } from "../../features/popupSlice";
 
-const Expenses = ({ users, popupVisible, activeSection }) => {
+const Expenses = ({ users, activeSection, popupVisible }) => {
   const historyOf = useSelector(selectHistoryOf)
   const [historyArr, setHistoryArr] = useState([]);
 

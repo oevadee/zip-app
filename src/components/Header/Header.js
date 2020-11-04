@@ -67,7 +67,7 @@ const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
         <Button
           text={activeSection === "expenses" ? "Open chat" : "New expense"}
           onClick={() => {
-            if (activeSection === "chat") {
+            if (activeSection === "chat" || activeSection === 'history') {
               dispatch(
                 setActiveSection({
                   activeSection: "expenses",
