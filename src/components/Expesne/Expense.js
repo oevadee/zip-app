@@ -28,7 +28,6 @@ const Expense = ({ user }) => {
         .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) => {
           const data = snapshot.docs.map((doc) => doc.data().value);
-          console.log(data);
           let sum = 0;
           data.forEach((item) => {
             sum += parseInt(item);
@@ -49,13 +48,13 @@ const Expense = ({ user }) => {
         <HistoryIcon
           onClick={() => {
             dispatch(
-              setActiveSection({
-                activeSection: "history",
+              setHistoryOf({
+                historyOf: user,
               })
             );
             dispatch(
-              setHistoryOf({
-                historyOf: user,
+              setActiveSection({
+                activeSection: "history",
               })
             );
           }}

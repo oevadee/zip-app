@@ -6,12 +6,14 @@ import "./Header.scss";
 import Button from "../Button/Button";
 
 // Icons
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from "@material-ui/icons/Menu";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 // Redux
 import { useDispatch } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
 import { setPopupVisible } from "../../features/popupSlice";
+import { setHistoryOf } from "../../features/historySlice";
 
 const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
   const [title, setTitle] = useState("");
@@ -25,18 +27,37 @@ const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
 
   return (
     <div className="header">
-      {activeSection === 'chat' ? (
-        <MenuIcon fontSize="large" onClick={() => setMobileNavOpen(!mobileNavOpen)} />
-      ) : <></>}
+      {activeSection === "chat" ? (
+        <MenuIcon
+          fontSize="large"
+          onClick={() => setMobileNavOpen(!mobileNavOpen)}
+        />
+      ) : (
+        <></>
+      )}
+      {activeSection === "history" ? <ArrowBackIcon fontSize="large" onClick={() => dispatch(setActiveSection({
+        activeSection: 'expenses'
+      }))} /> : <></>}
       <h1>{title}</h1>
-      <div className={`header__buttons ${activeSection === 'expenses' ? '' : 'btn-single'}`}>
+      <div
+        className={`header__buttons ${
+          activeSection === "expenses" ? "" : "btn-single"
+        }`}
+      >
         {activeSection === "expenses" ? (
           <Button
             text="New expense"
             onClick={() => {
-              dispatch(setPopupVisible({
-                popupVisible: true
-              }));
+              dispatch(
+                setPopupVisible({
+                  popupVisible: true,
+                })
+              );
+              dispatch(
+                setActiveSection({
+                  activeSection: "expenses",
+                })
+              );
             }}
             style={{ marginRight: "20px" }}
           />

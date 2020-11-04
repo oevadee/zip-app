@@ -24,7 +24,7 @@ const Dashboard = ({ setMobileNavOpen, mobileNavOpen }) => {
   return (
     <div className="dashboard">
       <Header activeSection={activeSection} setMobileNavOpen={setMobileNavOpen} mobileNavOpen={mobileNavOpen} />
-      {activeSection === "chat" ? <Chat /> : <Expenses popupVisible={popupVisible} users={users} />}
+      {activeSection === "chat" ? <Chat /> : <Expenses activeSection={activeSection} popupVisible={popupVisible} users={users} />}
     </div>
   );
 };

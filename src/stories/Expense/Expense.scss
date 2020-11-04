@@ -10,12 +10,17 @@
   &:hover {
     background-color: $color-accent;
   }
+
+  @media (max-width: $tablet) {
+    font-size: medium;
+    padding: 20px;
+  }
 }
 
 .expense__user{
   display: flex;
   align-items: center;
-  flex: 0.55;
+  flex: 0.5;
 
   p{
     margin-left: 20px;
@@ -28,7 +33,7 @@
 }
 
 .expense__history{
-  flex: 0.15;
+  flex: 0.2;
   text-align: center;
 
   .MuiSvgIcon-root{

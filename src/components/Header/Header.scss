@@ -17,22 +17,24 @@
       display: none;
     }
   
-    @media (max-width: $mobile-L) {
+    @media (max-width: $tablet) {
       flex: 0;
     }
   
   }
-}
 
-.MuiSvgIcon-root {
-  display: none;
-  cursor: pointer;
-  color: #eee;
-
-  @media (max-width: $tablet) {
-    display: block;
+  .MuiSvgIcon-root {
+    display: none !important;
+    cursor: pointer;
+    color: #eee;
+  
+    @media (max-width: $tablet) {
+      display: block !important;
+    }
   }
 }
+
+
 
 .header__buttons {
   display: flex;

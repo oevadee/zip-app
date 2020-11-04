@@ -1,6 +1,6 @@
-@import '../variables';
+@import '../../variables';
 
-.history{
+.history {
   display: flex;
   align-items: center;
   font-size: large;
@@ -17,21 +17,22 @@
   }
 }
 
-.history__user{
+.history__user {
   display: flex;
   align-items: center;
   flex: 0.4;
 
-  p{
+  p {
     margin-left: 20px;
   }
 }
 
-.history__expense{
+.history__expense {
   flex: 0.3;
   text-align: center;
 }
 
-.history__timestamp{
-  flex: 0.3
+.history__timestamp {
+  flex: 0.3;
+  text-align: center;
 }

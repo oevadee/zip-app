@@ -26,7 +26,7 @@ const Dashboard = ({ activeSection, popupVisible }) => {
       {activeSection === "chat" ? (
         <Chat />
       ) : (
-        <Expenses popupVisible={popupVisible} users={users} />
+        <Expenses activeSection={activeSection} popupVisible={popupVisible} users={users} />
       )}
     </div>
   );
