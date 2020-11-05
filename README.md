@@ -1,3 +1,9 @@
+This is the app that I created for my friends in order to keep track of our expenses. You can check it out on:
+
+https://zip-app--222.firebaseapp.com/
+
+Please don't spam because I haven't added the friend grouping yet.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts
