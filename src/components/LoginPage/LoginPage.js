@@ -12,7 +12,7 @@ const LoginPage = () => {
 
   return (
     <div className="loginPage">
-      <h1>Ultimate crew expense tracker</h1>
+      <h1>Ultimate crew expense tracker <br /><span style={{color: 'rgb(61, 90, 9)'}}>Halloweed edition</span></h1>
       <Button text="Login" onClick={loginUser} />
     </div>
   );

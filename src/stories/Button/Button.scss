@@ -31,11 +31,11 @@
 }
 
 .button--secondary{
-  background-color: #aa0715ae;
+  background-color: $color-logoutBtn;
   border-radius: 3px;
 
   &:hover{
-    background-color: #c32929;
+    background-color: $color-logoutBtnHover;
     color: white;
     opacity: 1
   }
