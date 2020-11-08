@@ -10,14 +10,15 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 // Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
-import { setPopupVisible } from "../../features/popupSlice";
+import { selectPopupVisible, setPopupVisible } from "../../features/popupSlice";
 import { setHistoryOf } from "../../features/historySlice";
 
 const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
+  const popupVisible = useSelector(selectPopupVisible)
 
   useEffect(() => {
     if (activeSection === "chat") setTitle("Chat");
@@ -46,7 +47,7 @@ const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
       >
         {activeSection === "expenses" ? (
           <Button
-            text="New expense"
+            text={popupVisible ? 'CANCEL' : 'New expense'}
             onClick={() => {
               dispatch(
                 setPopupVisible({

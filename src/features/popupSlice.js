@@ -6,8 +6,8 @@ export const popupSlice = createSlice({
     popupVisible: false,
   },
   reducers: {
-    setPopupVisible: (state, action) => {
-      state.popupVisible = action.payload.popupVisible
+    setPopupVisible: state => {
+      state.popupVisible = !state.popupVisible
     },
   },
 });

@@ -9,8 +9,12 @@
 }
 
 .expensePopup__userSelector {
+  width: 100%;
   display: flex;
   justify-content: space-around;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
 
   .MuiAvatar-root {
     display: inline-block;
@@ -24,6 +28,19 @@
       opacity: 1
     }
   }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.expensePopup__userSelector::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.expensePopup__userSelector {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .expensePopup__expenseValue{
