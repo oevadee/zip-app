@@ -1,7 +1,9 @@
-This is the app that I created for my friends in order to keep track of our expenses. You can check it out on:
+# React expense app with redux and firebase
 
-### https://zip-app--222.firebaseapp.com/
+### You can check it out on:
 
-Please don't spam because I haven't added the friend grouping yet.
+> https://zip-app--222.firebaseapp.com/
 
-Peace
+**Please don't spam because I haven't added the friend grouping yet.**
+
+> Peace
