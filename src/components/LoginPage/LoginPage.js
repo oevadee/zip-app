@@ -15,7 +15,7 @@ const LoginPage = () => {
       <div className="loginPage__loginContainer">
         <h1>
           Ultimate crew expense tracker <br />
-          <span style={{ color: '#fff' }}>Winter edition</span>
+          <span style={{ color: '#990306' }}>Winter edition</span>
         </h1>
         <Button text="Login" onClick={loginUser} />
       </div>
