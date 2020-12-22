@@ -20,19 +20,19 @@
 .history__user {
   display: flex;
   align-items: center;
-  flex: 0.3;
+  flex: 0.1;
 
-  p {
-    margin-left: 20px;
+  @media (max-width: $mobile-L) {
+    flex: 0.2
   }
 }
 
 .history__expense {
-  flex: 0.2;
+  flex: 0.25;
   text-align: center;
 
   @media (max-width: $mobile-L) {
-    flex: 0.3;
+    flex: 0.3
   }
 }
 
@@ -41,12 +41,12 @@
   text-align: center;
 
   @media (max-width: $mobile-L) {
-    flex: 0.4;
+    flex: 0.5;
   }
 }
 
 .history__about {
-  flex: 0.3;
+  flex: 0.45;
   text-align: center;
 
   @media (max-width: $mobile-L) {

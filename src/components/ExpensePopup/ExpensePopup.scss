@@ -60,5 +60,9 @@
     border: solid 1px $color-secondary;
     outline: none;
     margin-bottom: 10px;
+
+    @media (max-width: $mobile-L) {
+      width: 80%;
+    }
   }
 }

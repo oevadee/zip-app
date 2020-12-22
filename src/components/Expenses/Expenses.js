@@ -66,7 +66,7 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
                 : `expenseHeader__history`
             }
           >
-            {activeSection === "history" ? "Time" : "History"}
+            {activeSection === "history" ? "Time" : <span>History</span>}
           </h3>
           {activeSection === "history" && (
             <h3 className='historyHeader__about'>
