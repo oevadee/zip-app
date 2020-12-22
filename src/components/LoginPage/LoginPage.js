@@ -12,8 +12,16 @@ const LoginPage = () => {
 
   return (
     <div className="loginPage">
-      <h1>Ultimate crew expense tracker <br /><span style={{color: 'rgb(61, 90, 9)'}}>Halloweed edition</span></h1>
-      <Button text="Login" onClick={loginUser} />
+      <div className="loginPage__loginContainer">
+        <h1>
+          Ultimate crew expense tracker <br />
+          <span style={{ color: '#fff' }}>Winter edition</span>
+        </h1>
+        <Button text="Login" onClick={loginUser} />
+      </div>
+      <div className="loginPage__imageContainer">
+        <img src="/images/christmas.jpg" alt="christmas tree" />
+      </div>
     </div>
   );
 };

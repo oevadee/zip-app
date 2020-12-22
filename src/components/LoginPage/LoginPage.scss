@@ -6,23 +6,41 @@
   text-align: center;
   background-color: $color-primary;
   display: flex;
+  flex-direction: row;
+  color: rgb(61, 90, 9);
+}
+
+.loginPage__loginContainer {
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  padding: 40px;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  color: white;
+  justify-content: center;
 
   h1 {
     font-size: 4rem;
     text-align: center;
-    width: 80%;
-    line-height: 200%;
-
+    margin-bottom: 40px;
+  
     @media (max-width: $tablet) {
       font-size: 3rem;
     }
-
+  
     @media (max-width: $mobile-L) {
       font-size: 2rem;
     }
+  }
+}
+
+.loginPage__imageContainer {
+  flex: 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }

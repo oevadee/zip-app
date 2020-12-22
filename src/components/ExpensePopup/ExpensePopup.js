@@ -15,7 +15,8 @@ import { setPopupVisible } from "../../features/popupSlice";
 const ExpensePopup = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [prevIndex, setPrevIndex] = useState(null);
-  const [input, setInput] = useState(0);
+  const [numberInput, setNumberInput] = useState(0);
+  const [aboutInput, setAboutInput] = useState('');
   const userSelector = useRef(0);
   const dispatch = useDispatch();
 
@@ -27,7 +28,8 @@ const ExpensePopup = ({ users }) => {
         .doc(selectedUser)
         .collection(selectedUser)
         .add({
-          value: input,
+          value: numberInput,
+          aboutTransaction: aboutInput,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
@@ -37,11 +39,12 @@ const ExpensePopup = ({ users }) => {
         .doc(auth.currentUser.uid)
         .collection(auth.currentUser.uid)
         .add({
-          value: -input,
+          value: -numberInput,
+          aboutTransaction: aboutInput,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
-      setInput(0);
+      setNumberInput(0);
       setSelectedUser("");
       userSelector.current.childNodes[prevIndex].style.opacity = 0.3;
       dispatch(
@@ -84,8 +87,15 @@ const ExpensePopup = ({ users }) => {
       <div className="expensePopup__expenseValue">
         <input
           type="number"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={numberInput}
+          onChange={(e) => setNumberInput(e.target.value)}
+          placeholder="How big is the expese?"
+        />
+        <input
+          type="text"
+          value={aboutInput}
+          onChange={(e) => setAboutInput(e.target.value)}
+          placeholder="Describe your expense"
         />
         <Button text="Add" onClick={handleExpenseAdd} />
       </div>

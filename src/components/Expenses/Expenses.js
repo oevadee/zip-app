@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { PropTypes } from 'prop-types';
+import { PropTypes } from "prop-types";
 import "./Expenses.scss";
 
 // Components
-import Expense from '../Expesne/Expense';
+import Expense from "../Expesne/Expense";
 import ExpensePopup from "../ExpensePopup/ExpensePopup";
-import History from '../History/History';
+import History from "../History/History";
 
 // Firebase
 import db, { auth } from "../../firebase";
@@ -14,13 +14,13 @@ import { selectHistoryOf } from "../../features/historySlice";
 import { selectPopupVisible } from "../../features/popupSlice";
 
 const Expenses = ({ users, activeSection, popupVisible }) => {
-  const historyOf = useSelector(selectHistoryOf)
+  const historyOf = useSelector(selectHistoryOf);
   const [historyArr, setHistoryArr] = useState([]);
 
   useEffect(() => {
     if (historyOf) {
-      console.log(auth.currentUser.uid)
-      console.log(historyOf)
+      console.log(auth.currentUser.uid);
+      console.log(historyOf);
       db.collection("users")
         .doc(auth.currentUser.uid)
         .collection("expensesFrom")
@@ -33,21 +33,46 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
   }, [historyOf]);
 
   useEffect(() => {
-    console.log(historyOf)
-  }, [historyOf])
+    console.log(historyArr);
+  }, [historyArr]);
 
   return (
     <>
       {popupVisible ? <ExpensePopup users={users} /> : <></>}
       <div className="expenseSection">
         <div className="expenseHeader">
-          <h3 className={activeSection === 'history' ? `historyHeader__user` : `expenseHeader__user`}>User</h3>
-          <h3 className={activeSection === 'history' ? `historyHeader__total` : `expenseHeader__total`}>
+          <h3
+            className={
+              activeSection === "history"
+                ? `historyHeader__user`
+                : `expenseHeader__user`
+            }
+          >
+            User
+          </h3>
+          <h3
+            className={
+              activeSection === "history"
+                ? `historyHeader__total`
+                : `expenseHeader__total`
+            }
+          >
             {activeSection === "history" ? "Expense" : "Total"}
           </h3>
-          <h3 className={activeSection === 'history' ? `historyHeader__timestamp` : `expenseHeader__history`}>
+          <h3
+            className={
+              activeSection === "history"
+                ? `historyHeader__timestamp`
+                : `expenseHeader__history`
+            }
+          >
             {activeSection === "history" ? "Time" : "History"}
           </h3>
+          {activeSection === "history" && (
+            <h3 className='historyHeader__about'>
+              About
+            </h3>
+          )}
         </div>
         {activeSection === "history" ? (
           <div className="historyList">
@@ -74,7 +99,7 @@ Expenses.propTypes = {
 };
 
 Expenses.defaultProps = {
-  users: []
+  users: [],
 };
 
 export default Expenses;

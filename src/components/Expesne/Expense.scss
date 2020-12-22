@@ -15,7 +15,7 @@
 .expense__user{
   display: flex;
   align-items: center;
-  flex: 0.55;
+  flex: 0.3;
 
   p{
     margin-left: 20px;
@@ -23,12 +23,12 @@
 }
 
 .expense__total{
-  flex: 0.3;
+  flex: 0.5;
   text-align: center;
 }
 
 .expense__history{
-  flex: 0.15;
+  flex: 0.2;
   text-align: center;
 
   .MuiSvgIcon-root{

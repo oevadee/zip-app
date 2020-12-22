@@ -20,7 +20,7 @@
 .history__user {
   display: flex;
   align-items: center;
-  flex: 0.4;
+  flex: 0.3;
 
   p {
     margin-left: 20px;
@@ -28,11 +28,16 @@
 }
 
 .history__expense {
-  flex: 0.3;
+  flex: 0.2;
   text-align: center;
 }
 
 .history__timestamp {
+  flex: 0.2;
+  text-align: center;
+}
+
+.history__about {
   flex: 0.3;
   text-align: center;
 }

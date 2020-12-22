@@ -12,7 +12,8 @@ const History = ({ historyEl, historyOf }) => {
         <p>{historyOf.displayName}</p>
       </div>
       <p className="history__expense">{historyEl.value}</p>
-      <p className="history__timestamp">{new Date(historyEl.timestamp?.toDate()).toUTCString()}</p>
+      <p className="history__timestamp">{new Date(historyEl.timestamp?.toDate()).toDateString()}</p>
+      <p className="history__about">{historyEl.aboutTransaction}</p>
     </div>
   );
 };
