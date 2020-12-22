@@ -30,14 +30,26 @@
 .history__expense {
   flex: 0.2;
   text-align: center;
+
+  @media (max-width: $mobile-L) {
+    flex: 0.3;
+  }
 }
 
 .history__timestamp {
   flex: 0.2;
   text-align: center;
+
+  @media (max-width: $mobile-L) {
+    flex: 0.4;
+  }
 }
 
 .history__about {
   flex: 0.3;
   text-align: center;
+
+  @media (max-width: $mobile-L) {
+    display: none;
+  }
 }

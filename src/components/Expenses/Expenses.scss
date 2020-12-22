@@ -59,14 +59,25 @@
 .historyHeader__total {
   flex: 0.2;
   text-align: center;
+  @media (max-width: $mobile-L) {
+    flex: 0.3;
+  }
 }
 
 .historyHeader__timestamp {
   flex: 0.2;
   text-align: center;
+
+  @media (max-width: $mobile-L) {
+    flex: 0.4;
+  }
 }
 
 .historyHeader__about {
   flex: 0.3;
   text-align: center;
+
+  @media (max-width: $mobile-L) {
+    display: none;
+  }
 }
