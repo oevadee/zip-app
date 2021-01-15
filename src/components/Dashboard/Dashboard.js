@@ -5,7 +5,7 @@ import Header from "../Header/Header";
 import Chat from "../Chat/Chat";
 import Expenses from "../Expenses/Expenses";
 
-import db, { auth } from "../../firebase";
+import db from "../../firebase";
 import { useSelector } from "react-redux";
 import { selectActiveSection } from "../../features/sectionSlice";
 import { selectPopupVisible } from "../../features/popupSlice";

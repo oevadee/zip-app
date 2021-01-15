@@ -13,7 +13,6 @@ import db, { auth } from "../../firebase";
 import { setActiveSection } from "../../features/sectionSlice";
 import { setHistoryOf } from "../../features/historySlice";
 import { useDispatch } from "react-redux";
-import { setPopupVisible } from "../../features/popupSlice";
 
 const Expense = ({ user }) => {
   const [total, setTotal] = useState(0);
@@ -56,11 +55,6 @@ const Expense = ({ user }) => {
             dispatch(
               setActiveSection({
                 activeSection: "history",
-              })
-            );
-            dispatch(
-              setPopupVisible({
-                popupVisible: false,
               })
             );
           }}

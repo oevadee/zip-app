@@ -11,7 +11,6 @@ import History from "../History/History";
 import db, { auth } from "../../firebase";
 import { useSelector } from "react-redux";
 import { selectHistoryOf } from "../../features/historySlice";
-import { selectPopupVisible } from "../../features/popupSlice";
 
 const Expenses = ({ users, activeSection, popupVisible }) => {
   const historyOf = useSelector(selectHistoryOf);
@@ -26,6 +25,7 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
         .collection("expensesFrom")
         .doc(historyOf.uid)
         .collection(historyOf.uid)
+        .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) => {
           setHistoryArr(snapshot.docs.map((doc) => doc.data()));
         });
@@ -69,9 +69,7 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
             {activeSection === "history" ? "Time" : <span>History</span>}
           </h3>
           {activeSection === "history" && (
-            <h3 className='historyHeader__about'>
-              About
-            </h3>
+            <h3 className="historyHeader__about">About</h3>
           )}
         </div>
         {activeSection === "history" ? (
