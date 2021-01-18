@@ -1,4 +1,5 @@
 import React from "react";
+import { PropTypes } from 'prop-types'
 import "./History.scss";
 
 // Components
@@ -15,6 +16,11 @@ const History = ({ historyEl, historyOf }) => {
       <p className="history__about">{historyEl.aboutTransaction}</p>
     </div>
   );
+};
+
+History.propTypes = {
+  historyEl: PropTypes.object,
+  historyOf: PropTypes.object,
 };
 
 export default History;

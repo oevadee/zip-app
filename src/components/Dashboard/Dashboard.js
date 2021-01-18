@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { PropTypes } from "prop-types";
 import "./Dashboard.scss";
 
 import Header from "../Header/Header";
@@ -23,10 +24,32 @@ const Dashboard = ({ setMobileNavOpen, mobileNavOpen }) => {
 
   return (
     <div className="dashboard">
-      <Header activeSection={activeSection} setMobileNavOpen={setMobileNavOpen} mobileNavOpen={mobileNavOpen} />
-      {activeSection === "chat" ? <Chat /> : <Expenses activeSection={activeSection} popupVisible={popupVisible} users={users} />}
+      <Header
+        activeSection={activeSection}
+        setMobileNavOpen={setMobileNavOpen}
+        mobileNavOpen={mobileNavOpen}
+      />
+      {activeSection === "chat" ? (
+        <Chat />
+      ) : (
+        <Expenses
+          activeSection={activeSection}
+          popupVisible={popupVisible}
+          users={users}
+        />
+      )}
     </div>
   );
+};
+
+Dashboard.propTypes = {
+  mobileNavOpen: PropTypes.bool,
+  setMobileNavOpen: PropTypes.func,
+};
+
+Dashboard.defaultProps = {
+  user: null,
+  mobileNavOpen: false,
 };
 
 export default Dashboard;

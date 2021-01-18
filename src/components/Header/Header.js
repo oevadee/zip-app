@@ -97,12 +97,13 @@ const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
 
 Header.propTypes = {
   activeSection: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
+  setMobileNavOpen: PropTypes.bool,
+  mobileNavOpen: PropTypes.func
 };
 
 Header.defaultProps = {
   activeSection: "expenses",
-  onClick: undefined,
+  setMobileNavOpen: false,
 };
 
 export default Header;

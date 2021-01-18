@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { PropTypes } from "prop-types";
 import "./ExpensePopup.scss";
 
 // Components
@@ -101,6 +102,10 @@ const ExpensePopup = ({ users }) => {
       </div>
     </div>
   );
+};
+
+ExpensePopup.propTypes = {
+  users: PropTypes.array,
 };
 
 export default ExpensePopup;

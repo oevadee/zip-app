@@ -51,6 +51,7 @@ const Chat = () => {
         {messages.map((message) => {
           return (
             <Message
+              key={new Date(message.timestamp?.toDate()).toUTCString()}
               timestamp={new Date(message.timestamp?.toDate()).toUTCString()}
               message={message.message}
               user={message.user}

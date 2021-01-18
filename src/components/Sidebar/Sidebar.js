@@ -73,10 +73,13 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
 
 Sidebar.propTypes = {
   user: PropTypes.object.isRequired,
+  mobileNavOpen: PropTypes.bool,
+  setMobileNavOpen: PropTypes.func,
 };
 
 Sidebar.defaultProps = {
-  user: null
+  user: null,
+  mobileNavOpen: false,
 };
 
 export default Sidebar;

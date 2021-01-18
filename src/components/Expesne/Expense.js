@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { PropTypes } from 'prop-types'
 
 // Components
 import "./Expense.scss";
@@ -40,7 +41,7 @@ const Expense = ({ user }) => {
   return (
     <div className="expense">
       <div className="expense__user">
-        <Avatar src={user.photo} />
+      <Avatar src={user.photo} />
         <p>{user.displayName}</p>
       </div>
       <p className="expense__total">{total} pln</p>
@@ -62,6 +63,14 @@ const Expense = ({ user }) => {
       </div>
     </div>
   );
+};
+
+Expense.propTypes = {
+  user: PropTypes.object.isRequired,
+};
+
+Expense.defaultProps = {
+  user: null,
 };
 
 export default Expense;

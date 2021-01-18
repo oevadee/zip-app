@@ -38,6 +38,7 @@ const Channel = ({ id, channelName, setMobileNavOpen }) => {
 Channel.propTypes = {
   id: PropTypes.string.isRequired,
   channelName: PropTypes.string.isRequired,
+  setMobileNavOpen: PropTypes.func
 };
 
 Channel.defaultProps = {

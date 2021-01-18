@@ -75,7 +75,7 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
         {activeSection === "history" ? (
           <div className="historyList">
             {historyArr.map((historyEl) => (
-              <History historyEl={historyEl} historyOf={historyOf} />
+              <History key={historyEl} historyEl={historyEl} historyOf={historyOf} />
             ))}
           </div>
         ) : (
@@ -94,10 +94,13 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
 
 Expenses.propTypes = {
   users: PropTypes.array,
+  activeSection: PropTypes.string,
+  popupVisible: PropTypes.bool,
 };
 
 Expenses.defaultProps = {
   users: [],
+  popupVisible: false,
 };
 
 export default Expenses;
