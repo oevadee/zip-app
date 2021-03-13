@@ -4,10 +4,13 @@ import "./App.scss";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./components/Dashboard/Dashboard";
 import LoginPage from "./components/LoginPage/LoginPage";
+import { ChatRoute, ExpensesRoute } from './routes';
 
 import { useSelector, useDispatch } from "react-redux";
 import db, { auth } from "./firebase";
 import { login, logout, selectUser } from "./features/userSlice";
+
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -38,17 +41,29 @@ function App() {
     });
   }, [dispatch]);
 
-
   return (
     <div className="app">
-      {user ? (
-        <>
-          <Sidebar user={user} mobileNavOpen={mobileNavOpen} setMobileNavOpen={setMobileNavOpen} />
-          <Dashboard setMobileNavOpen={setMobileNavOpen} mobileNavOpen={mobileNavOpen} />
-        </>
-      ) : (
-        <LoginPage />
-      )}
+      <Router>
+        {user ? (
+          <>
+            <Sidebar
+              user={user}
+              mobileNavOpen={mobileNavOpen}
+              setMobileNavOpen={setMobileNavOpen}
+            />
+            <Switch>
+              <Route path="/expenses">
+                <ExpensesRoute />
+              </Route>
+              <Route path="/chat">
+                <ChatRoute />
+              </Route>
+            </Switch>
+          </>
+        ) : (
+          <LoginPage />
+        )}
+      </Router>
     </div>
   );
 }

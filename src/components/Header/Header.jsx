@@ -13,96 +13,49 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
 import { selectPopupVisible, setPopupVisible } from "../../features/popupSlice";
+import { Link } from "react-router-dom";
 
-const Header = ({ activeSection, setMobileNavOpen, mobileNavOpen }) => {
-  const [title, setTitle] = useState("");
+const Header = ({ title, setMobileNavOpen, mobileNavOpen }) => {
   const dispatch = useDispatch();
   const popupVisible = useSelector(selectPopupVisible);
 
-  useEffect(() => {
-    if (activeSection === "chat") setTitle("Chat");
-    else if (activeSection === "expenses") setTitle("My Doe");
-    else if (activeSection === "history") setTitle("History");
-  }, [activeSection]);
-
   return (
     <div className="header">
-      {activeSection === "chat" ? (
-        <MenuIcon
-          fontSize="large"
-          onClick={() => setMobileNavOpen(!mobileNavOpen)}
-        />
-      ) : (
-        <></>
-      )}
-      {activeSection === "history" ? (
-        <ArrowBackIcon
-          fontSize="large"
-          onClick={() =>
-            dispatch(
-              setActiveSection({
-                activeSection: "expenses",
-              })
-            )
-          }
-        />
-      ) : (
-        <></>
-      )}
+      <MenuIcon
+        fontSize="large"
+        onClick={() => setMobileNavOpen(!mobileNavOpen)}
+      />
+      <ArrowBackIcon
+        fontSize="large"
+        onClick={() =>
+          dispatch(
+            setActiveSection({
+              activeSection: "expenses",
+            })
+          )
+        }
+      />
       <h1>{title}</h1>
-      <div
-        className={`header__buttons ${
-          activeSection === "expenses" ? "" : "btn-single"
-        }`}
-      >
-        {activeSection === "expenses" ? (
-          <Button
-            text={popupVisible ? "CANCEL" : "New expense"}
-            onClick={() => {
-              dispatch(setPopupVisible());
-              dispatch(
-                setActiveSection({
-                  activeSection: "expenses",
-                })
-              );
-            }}
-            style={{ marginRight: "20px" }}
-          />
-        ) : (
-          <></>
-        )}
+      <div className="header__buttons">
         <Button
-          text={activeSection === "expenses" ? "Open chat" : "Expenses"}
-          onClick={() => {
-            if (activeSection === "chat" || activeSection === "history") {
-              dispatch(
-                setActiveSection({
-                  activeSection: "expenses",
-                })
-              );
-              popupVisible && dispatch(setPopupVisible());
-            } else if (activeSection === "expenses") {
-              dispatch(
-                setActiveSection({
-                  activeSection: "chat",
-                })
-              );
-            }
-          }}
+          text={popupVisible ? "CANCEL" : "New expense"}
+          onClick={() => dispatch(setPopupVisible())}
+          style={{ marginRight: "20px" }}
         />
+        <Link to="/chat">
+          <Button text="Open chat" />
+        </Link>
       </div>
     </div>
   );
 };
 
 Header.propTypes = {
-  activeSection: PropTypes.string.isRequired,
   setMobileNavOpen: PropTypes.bool,
-  mobileNavOpen: PropTypes.func
+  mobileNavOpen: PropTypes.func,
 };
 
 Header.defaultProps = {
-  activeSection: "expenses",
   setMobileNavOpen: false,
 };
 
