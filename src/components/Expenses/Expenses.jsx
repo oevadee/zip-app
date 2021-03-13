@@ -18,8 +18,6 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
 
   useEffect(() => {
     if (historyOf) {
-      console.log(auth.currentUser.uid);
-      console.log(historyOf);
       db.collection("users")
         .doc(auth.currentUser.uid)
         .collection("expensesFrom")
@@ -31,10 +29,6 @@ const Expenses = ({ users, activeSection, popupVisible }) => {
         });
     }
   }, [historyOf]);
-
-  useEffect(() => {
-    console.log(historyArr);
-  }, [historyArr]);
 
   return (
     <>

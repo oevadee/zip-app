@@ -4,13 +4,19 @@ import "./App.scss";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./components/Dashboard/Dashboard";
 import LoginPage from "./components/LoginPage/LoginPage";
-import { ChatRoute, ExpensesRoute } from './routes';
+import { ChatRoute, ExpensesRoute } from "./routes";
 
 import { useSelector, useDispatch } from "react-redux";
 import db, { auth } from "./firebase";
 import { login, logout, selectUser } from "./features/userSlice";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 
 function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -19,7 +25,6 @@ function App() {
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
-      console.log("User is: ", authUser);
       if (authUser) {
         dispatch(
           login({
@@ -46,6 +51,7 @@ function App() {
       <Router>
         {user ? (
           <>
+            <Redirect to="/" />
             <Sidebar
               user={user}
               mobileNavOpen={mobileNavOpen}
@@ -61,7 +67,12 @@ function App() {
             </Switch>
           </>
         ) : (
-          <LoginPage />
+          <>
+            <Redirect to="/login" />
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+          </>
         )}
       </Router>
     </div>

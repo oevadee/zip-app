@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { PropTypes } from 'prop-types'
+import { PropTypes } from "prop-types";
 import "./Sidebar.scss";
 
 // Components
@@ -13,7 +13,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 // Firebase
 import db, { auth } from "../../firebase";
-
+import { Link } from "react-router-dom";
 
 const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
   const [channels, setChannels] = useState([]);
@@ -48,24 +48,35 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
         </div>
         <SettingsIcon />
       </div>
-      <div className="sidebar__chatSelector">
-        <div className="sidebar__chatSelectorHeader">
+      <div className="sidebar__selector">
+        <Link to="/expenses">
+          <div className="sidebar__selectorHeader">
+            <h2>Expenses</h2>
+          </div>
+        </Link>
+        <div className="sidebar__selectorHeader">
           <h2>Chat room</h2>
           <AddIcon onClick={handleAddChannel} />
         </div>
         <div className="sidebar__chatList">
           {channels.map(({ channel, id }) => (
-            <Channel
-              key={id}
-              id={id}
-              channelName={channel.channelName}
-              setMobileNavOpen={setMobileNavOpen}
-            />
+            <Link to="/chat">
+              <Channel
+                key={id}
+                id={id}
+                channelName={channel.channelName}
+                setMobileNavOpen={setMobileNavOpen}
+              />
+            </Link>
           ))}
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button primary={false} text={"Logout"} onClick={() => auth.signOut()} />
+        <Button
+          primary={false}
+          text={"Logout"}
+          onClick={() => auth.signOut()}
+        />
       </div>
     </div>
   );

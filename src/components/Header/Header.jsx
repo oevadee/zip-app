@@ -12,12 +12,10 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
-import { selectPopupVisible, setPopupVisible } from "../../features/popupSlice";
 import { Link } from "react-router-dom";
 
 const Header = ({ title, setMobileNavOpen, mobileNavOpen }) => {
   const dispatch = useDispatch();
-  const popupVisible = useSelector(selectPopupVisible);
 
   return (
     <div className="header">
@@ -37,11 +35,9 @@ const Header = ({ title, setMobileNavOpen, mobileNavOpen }) => {
       />
       <h1>{title}</h1>
       <div className="header__buttons">
-        <Button
-          text={popupVisible ? "CANCEL" : "New expense"}
-          onClick={() => dispatch(setPopupVisible())}
-          style={{ marginRight: "20px" }}
-        />
+        <Link to="/expenses" >
+          <Button text="New expense" style={{ marginRight: "20px" }} />
+        </Link>
         <Link to="/chat">
           <Button text="Open chat" />
         </Link>

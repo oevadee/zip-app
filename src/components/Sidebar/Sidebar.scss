@@ -1,7 +1,9 @@
-@import '../../variables';
+@import "../../variables";
 
 .sidebar {
   height: 100%;
+  min-width: 220px;
+  max-width: 220px;
   display: flex;
   flex-direction: column;
   flex: 0.25;
@@ -16,7 +18,7 @@
   }
 }
 
-.sidebar--mobileOn{
+.sidebar--mobileOn {
   transform: translateX(0);
 }
 
@@ -28,7 +30,7 @@
   padding: 20px;
   border-bottom: 1px solid $color-primary;
 
-  .MuiSvgIcon-root{
+  .MuiSvgIcon-root {
     cursor: pointer;
   }
 }
@@ -47,19 +49,32 @@
   }
 }
 
-.sidebar__chatSelector {
+.sidebar__selector {
   flex: 1;
 }
 
-.sidebar__chatSelectorHeader {
+a {
+  text-decoration: none;
+}
+
+.sidebar__selectorHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  border-bottom: 1px solid $color-primary;
 
-  .MuiSvgIcon-root{
-    cursor: pointer;
+  &:hover {
+    background-color: $color-accent;
   }
+
+  h2 {
+    color: #fff;
+  }
+}
+
+.MuiSvgIcon-root {
+  cursor: pointer;
 }
 
 .sidebar__chatList {

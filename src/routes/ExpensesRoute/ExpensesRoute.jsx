@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import "./ExpensesRoute.scss";
 import { Header } from "../../components";
 import Expense from "../../components/Expesne/Expense";
-import { selectPopupVisible } from "../../features/popupSlice";
 import db, { auth } from "../../firebase";
+import ExpensePopup from "../../components/ExpensePopup/ExpensePopup";
 
 const ExpensesRoute = () => {
-  const popupVisible = useSelector(selectPopupVisible);
+  const popupVisible = false;
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -17,18 +17,16 @@ const ExpensesRoute = () => {
   }, []);
 
   return (
-    <div>
-      <Header />
+    <div className="expenses">
+      <Header title='Expenses' />
       {popupVisible && <ExpensePopup users={users} />}
-      <div className="expenseSection">
-        <div className="expenseHeader">
-          <h3 className="expenseHeader__user">User</h3>
-          <h3 className="expenseHeader__total">Expense</h3>
-          <h3 className="expenseHeader__history">
-            <span>History</span>
-          </h3>
+      <div className="expensesSection">
+        <div className="expensesHeader">
+          <h3 className="expensesHeader__user">User</h3>
+          <h3 className="expensesHeader__total">Expense</h3>
+          <h3 className="expensesHeader__history">History</h3>
         </div>
-        <div className="expenseList">
+        <div className="expensesList">
           {users
             .filter((user) => user.uid !== auth.currentUser.uid)
             .map((user) => (
