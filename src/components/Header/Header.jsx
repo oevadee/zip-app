@@ -36,10 +36,7 @@ const Header = ({ title, setMobileNavOpen, mobileNavOpen }) => {
       <h1>{title}</h1>
       <div className="header__buttons">
         <Link to="/expenses" >
-          <Button text="New expense" style={{ marginRight: "20px" }} />
-        </Link>
-        <Link to="/chat">
-          <Button text="Open chat" />
+          <Button text="New expense" />
         </Link>
       </div>
     </div>

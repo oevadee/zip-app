@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./ExpensesRoute.scss";
 import { Header } from "../../components";
-import Expense from "../../components/Expesne/Expense";
+import Expense from "../../components/Expense/Expense";
 import db, { auth } from "../../firebase";
 import ExpensePopup from "../../components/ExpensePopup/ExpensePopup";
 

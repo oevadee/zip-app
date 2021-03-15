@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import "./App.scss";
 
 import Sidebar from "./components/Sidebar/Sidebar";
-import Dashboard from "./components/Dashboard/Dashboard";
 import LoginPage from "./components/LoginPage/LoginPage";
 import { ChatRoute, ExpensesRoute } from "./routes";
 
 import { useSelector, useDispatch } from "react-redux";
+import { loginUser, logoutUser } from "./state/actions/userAction";
 import db, { auth } from "./firebase";
-import { login, logout, selectUser } from "./features/userSlice";
 
 import {
   BrowserRouter as Router,
@@ -20,14 +19,14 @@ import {
 
 function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+  const userDispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        dispatch(
-          login({
+        userDispatch(
+          loginUser({
             uid: authUser.uid,
             photo: authUser.photoURL,
             email: authUser.email,
@@ -41,10 +40,10 @@ function App() {
           displayName: authUser.displayName,
         });
       } else {
-        dispatch(logout());
+        userDispatch(logoutUser());
       }
     });
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="app">
@@ -61,8 +60,8 @@ function App() {
               <Route path="/expenses">
                 <ExpensesRoute />
               </Route>
-              <Route path="/chat">
-                <ChatRoute />
+              <Route path="/chat/:channelId">
+                <ChatRoute user={user} />
               </Route>
             </Switch>
           </>

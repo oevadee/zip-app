@@ -21,16 +21,4 @@ const Message = ({ timestamp, message, user }) => {
   );
 };
 
-Message.propTypes = {
-  user: PropTypes.object.isRequired,
-  message: PropTypes.string,
-  timestamp: PropTypes.string,
-};
-
-Message.defaultProps = {
-  user: null,
-  message: '',
-  timestamp: '',
-};
-
 export default Message;

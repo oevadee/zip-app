@@ -60,7 +60,7 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
         </div>
         <div className="sidebar__chatList">
           {channels.map(({ channel, id }) => (
-            <Link to="/chat">
+            <Link to={`/chat/${id}`}>
               <Channel
                 key={id}
                 id={id}

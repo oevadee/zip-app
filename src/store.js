@@ -1,17 +1,22 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {
+  applyMiddleware,
+  combineReducers,
+  createStore,
+} from "@reduxjs/toolkit";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunk from "redux-thunk";
 
-import userReducer from './features/userSlice';
-import appReducer from './features/appSlice'
-import sectionReducer from './features/sectionSlice'
-import popupReducer from './features/popupSlice'
-import historyReducer from './features/historySlice'
+import channelReducer from "./state/reducers/channelReducer";
+import userReducer from "./state/reducers/userReducer";
 
-export default configureStore({
-  reducer: {
-    user: userReducer,
-    app: appReducer,
-    section: sectionReducer,
-    popup: popupReducer,
-    history: historyReducer,
-  },
+const rootReducer = combineReducers({
+  user: userReducer,
+  channel: channelReducer,
 });
+
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
+
+export default store;
