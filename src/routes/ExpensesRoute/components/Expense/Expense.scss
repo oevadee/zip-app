@@ -1,0 +1,51 @@
+@import '../../../../variables';
+
+.expense {
+  display: flex;
+  align-items: center;
+  font-size: large;
+  padding: 20px 40px;
+  color: white;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+
+  @media(max-width: $mobile-L) {
+    padding: 20px 20px;
+  }
+}
+
+.expense__user {
+  display: flex;
+  align-items: center;
+  flex: 0.5;
+
+  p {
+    margin-left: 20px;
+  }
+}
+
+.expense__total {
+  flex: 0.3;
+  text-align: center;
+
+  @media(max-width: $mobile-L) {
+    flex: 0.4;
+    text-align: center;
+  }
+}
+
+.expense__history {
+  flex: 0.2;
+  text-align: center;
+
+  .MuiSvgIcon-root {
+    cursor: pointer;
+  }
+
+  @media(max-width: $mobile-L) {
+    flex: 0.1;
+    text-align: center;
+  }
+}
