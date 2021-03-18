@@ -4,22 +4,21 @@ import "./ExpensePopup.scss";
 
 // Components
 import { Avatar } from "@material-ui/core";
-import Button from "../Button/Button";
+import { Button } from "/src/components";
 
 // Redux
-import db, { auth } from "../../firebase";
+import db, { auth } from "../../../../firebase";
 import firebase from "firebase";
 import { useDispatch } from "react-redux";
-import { setActiveSection } from "../../features/sectionSlice";
-import { setPopupVisible } from "../../features/popupSlice";
+import { togglePopup } from "../../../../state/actions/appAction";
 
 const ExpensePopup = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [prevIndex, setPrevIndex] = useState(null);
   const [numberInput, setNumberInput] = useState(0);
-  const [aboutInput, setAboutInput] = useState('');
+  const [aboutInput, setAboutInput] = useState("");
   const userSelector = useRef(0);
-  const dispatch = useDispatch();
+  const popupDispatch = useDispatch();
 
   const handleExpenseAdd = () => {
     if (selectedUser) {
@@ -48,16 +47,7 @@ const ExpensePopup = ({ users }) => {
       setNumberInput(0);
       setSelectedUser("");
       userSelector.current.childNodes[prevIndex].style.opacity = 0.3;
-      dispatch(
-        setActiveSection({
-          setActiveSection: "expenses",
-        })
-      );
-      dispatch(
-        setPopupVisible({
-          popupOpen: false,
-        })
-      );
+      popupDispatch(togglePopup);
     }
   };
 
@@ -71,14 +61,16 @@ const ExpensePopup = ({ users }) => {
               key={user.uid}
               src={user.photo}
               onClick={() => {
-                if(selectedUser) {
-                  userSelector.current.childNodes[prevIndex].style.opacity = 0.3;
+                if (selectedUser) {
+                  userSelector.current.childNodes[
+                    prevIndex
+                  ].style.opacity = 0.3;
                   setSelectedUser(user.uid);
-                  userSelector.current.childNodes[i].style.opacity = 1
+                  userSelector.current.childNodes[i].style.opacity = 1;
                   setPrevIndex(i);
                 } else {
                   setSelectedUser(user.uid);
-                  userSelector.current.childNodes[i].style.opacity = 1
+                  userSelector.current.childNodes[i].style.opacity = 1;
                   setPrevIndex(i);
                 }
               }}

@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import "./ChatRoute.scss";
 
+import db from "../../firebase";
+import { useParams } from "react-router";
+
 // Components
-import { Message } from "/src/components";
+import { Message, Header } from "/src/components";
 
 // Icons
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-import db from "../../firebase";
-import { useParams } from "react-router";
-import { getChannelName } from "../../utils/getChannelName";
-import { useDispatch } from "react-redux";
-import { Header } from "../../components";
 
 const ChatRoute = ({ user }) => {
   const [messages, setMessages] = useState([]);

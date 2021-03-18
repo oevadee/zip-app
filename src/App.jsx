@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.scss";
 
 import Sidebar from "./components/Sidebar/Sidebar";
-import LoginPage from "./components/LoginPage/LoginPage";
-import { ChatRoute, ExpensesRoute } from "./routes";
+import { ChatRoute, ExpensesRoute, LoginRoute } from "./routes";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, logoutUser } from "./state/actions/userAction";
@@ -69,7 +68,7 @@ function App() {
           <>
             <Redirect to="/login" />
             <Route path="/login">
-              <LoginPage />
+              <LoginRoute />
             </Route>
           </>
         )}

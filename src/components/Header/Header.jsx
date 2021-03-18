@@ -13,9 +13,20 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveSection } from "../../features/sectionSlice";
 import { Link } from "react-router-dom";
+import { togglePopup } from "../../state/actions/appAction";
 
-const Header = ({ title, setMobileNavOpen, mobileNavOpen }) => {
-  const dispatch = useDispatch();
+const Header = ({
+  title,
+  setMobileNavOpen,
+  mobileNavOpen,
+  expenseButton = false,
+}) => {
+  const popupDispatch = useDispatch();
+  const popupVisible = useSelector(state => state.app.popupVisible);
+
+  const handlePopupToggle = () => {
+    popupDispatch(togglePopup())
+  };
 
   return (
     <div className="header">
@@ -35,9 +46,11 @@ const Header = ({ title, setMobileNavOpen, mobileNavOpen }) => {
       />
       <h1>{title}</h1>
       <div className="header__buttons">
-        <Link to="/expenses" >
-          <Button text="New expense" />
-        </Link>
+        {expenseButton && (
+          <Link to="/expenses">
+            <Button text={popupVisible ? 'x' : 'New expense'} onClick={handlePopupToggle} />
+          </Link>
+        )}
       </div>
     </div>
   );

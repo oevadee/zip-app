@@ -8,10 +8,12 @@ import thunk from "redux-thunk";
 
 import channelReducer from "./state/reducers/channelReducer";
 import userReducer from "./state/reducers/userReducer";
+import appReducer from "./state/reducers/appReducer";
 
 const rootReducer = combineReducers({
   user: userReducer,
   channel: channelReducer,
+  app: appReducer,
 });
 
 const store = createStore(

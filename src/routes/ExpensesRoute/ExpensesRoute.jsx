@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./ExpensesRoute.scss";
 import { Header } from "../../components";
-import Expense from "../../components/Expense/Expense";
 import db, { auth } from "../../firebase";
-import ExpensePopup from "../../components/ExpensePopup/ExpensePopup";
+import { ExpensePopup, Expense } from "./components";
+import { useSelector } from "react-redux";
 
 const ExpensesRoute = () => {
-  const popupVisible = false;
+  const popupVisible = useSelector((state) => state.app.popupVisible);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -15,10 +15,10 @@ const ExpensesRoute = () => {
       setUsers(snapshot.docs.map((doc) => doc.data()));
     });
   }, []);
-
+    
   return (
     <div className="expenses">
-      <Header title='Expenses' />
+      <Header title="Expenses" expenseButton />
       {popupVisible && <ExpensePopup users={users} />}
       <div className="expensesSection">
         <div className="expensesHeader">

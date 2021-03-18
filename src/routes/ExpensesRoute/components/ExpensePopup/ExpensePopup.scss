@@ -1,11 +1,11 @@
-@import '../../variables';
+@import "../../../../variables";
 
 .expensePopup {
   min-height: 260px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  margin: 20px 20px 0;
+  margin: 20px;
 }
 
 .expensePopup__userSelector {
@@ -15,6 +15,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+  margin-bottom: 20px;
 
   .MuiAvatar-root {
     display: inline-block;
@@ -24,8 +25,8 @@
     cursor: pointer;
     transition: opacity 0.2s ease;
 
-    &:hover{
-      opacity: 1
+    &:hover {
+      opacity: 1;
     }
   }
 }
@@ -43,7 +44,7 @@
   /* Firefox */
 }
 
-.expensePopup__expenseValue{
+.expensePopup__expenseValue {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,7 +53,9 @@
 
   input {
     width: 50%;
-    padding: 10px 25px;
+    height: 50px;
+    padding: 10px 45px;
+    border-radius: 10px;
     background: none;
     color: white;
     font-size: large;
