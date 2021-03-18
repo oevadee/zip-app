@@ -4,19 +4,19 @@ import "./Sidebar.scss";
 
 // Components
 import { Avatar } from "@material-ui/core";
-import Channel from "../Channel/Channel";
-import Button from "../Button/Button";
+import { Channel, Button } from "/src/components";
 
 // Icons
-import SettingsIcon from "@material-ui/icons/Settings";
-import AddIcon from "@material-ui/icons/Add";
+import { Settings as SettingsIcon, Add as AddIcon } from "@material-ui/icons";
 
 // Firebase
-import db, { auth } from "../../firebase";
+import db, { auth } from "/src/firebase";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
+const Sidebar = ({ user }) => {
   const [channels, setChannels] = useState([]);
+  const navOpen = useSelector((state) => state.app.navOpen);
 
   useEffect(() => {
     db.collection("channels").onSnapshot((snapshot) =>
@@ -40,7 +40,7 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
   };
 
   return (
-    <div className={`sidebar ${mobileNavOpen ? `sidebar--mobileOn` : ``}`}>
+    <div className={`sidebar ${navOpen ? `sidebar--mobileOn` : ``}`}>
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar src={user.photo} />
@@ -54,7 +54,7 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
             <h2>Expenses</h2>
           </div>
         </Link>
-        <div className="sidebar__selectorHeader">
+        <div className="sidebar__selectorHeader--withoutHover">
           <h2>Chat room</h2>
           <AddIcon onClick={handleAddChannel} />
         </div>
@@ -65,7 +65,6 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
                 key={id}
                 id={id}
                 channelName={channel.channelName}
-                setMobileNavOpen={setMobileNavOpen}
               />
             </Link>
           ))}
@@ -84,13 +83,10 @@ const Sidebar = ({ user, mobileNavOpen, setMobileNavOpen }) => {
 
 Sidebar.propTypes = {
   user: PropTypes.object.isRequired,
-  mobileNavOpen: PropTypes.bool,
-  setMobileNavOpen: PropTypes.func,
 };
 
 Sidebar.defaultProps = {
   user: null,
-  mobileNavOpen: false,
 };
 
 export default Sidebar;

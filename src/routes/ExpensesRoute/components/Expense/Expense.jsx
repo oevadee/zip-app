@@ -44,16 +44,9 @@ const Expense = ({ user }) => {
       </div>
       <p className="expense__total">{String(total).split('.')[0]}pln</p>
       <div className="expense__history">
-        <Link to="/history">
+        <Link to={`/history/${user.uid}`}>
           <HistoryIcon
             style={{ color: "#fff" }}
-            onClick={() => {
-              dispatch(
-                setHistoryOf({
-                  historyOf: user,
-                })
-              );
-            }}
           />
         </Link>
       </div>

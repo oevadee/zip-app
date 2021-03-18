@@ -1,68 +1,55 @@
-import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./Header.scss";
 
 // Components
-import Button from "../Button/Button";
+import { Button } from "/src/components";
 
 // Icons
-import MenuIcon from "@material-ui/icons/Menu";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import {
+  Menu as MenuIcon,
+  ArrowBack as ArrowBackIcon,
+} from "@material-ui/icons";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveSection } from "../../features/sectionSlice";
 import { Link } from "react-router-dom";
-import { togglePopup } from "../../state/actions/appAction";
+import { toggleNav, togglePopup } from "../../state/actions/appAction";
 
-const Header = ({
-  title,
-  setMobileNavOpen,
-  mobileNavOpen,
-  expenseButton = false,
-}) => {
-  const popupDispatch = useDispatch();
-  const popupVisible = useSelector(state => state.app.popupVisible);
+const Header = ({ title, expenseButton = false, goBackButton = false }) => {
+  const appDispatch = useDispatch();
+  const popupVisible = useSelector((state) => state.app.popupVisible);
 
   const handlePopupToggle = () => {
-    popupDispatch(togglePopup())
+    appDispatch(togglePopup());
+  };
+
+  const handleNavToggle = () => {
+    appDispatch(toggleNav());
   };
 
   return (
     <div className="header">
-      <MenuIcon
-        fontSize="large"
-        onClick={() => setMobileNavOpen(!mobileNavOpen)}
-      />
-      <ArrowBackIcon
-        fontSize="large"
-        onClick={() =>
-          dispatch(
-            setActiveSection({
-              activeSection: "expenses",
-            })
-          )
-        }
-      />
+      <div className="header__menu">
+        <MenuIcon fontSize="large" onClick={handleNavToggle} />
+      </div>
       <h1>{title}</h1>
       <div className="header__buttons">
         {expenseButton && (
           <Link to="/expenses">
-            <Button text={popupVisible ? 'x' : 'New expense'} onClick={handlePopupToggle} />
+            <Button
+              text={popupVisible ? "x" : "New expense"}
+              onClick={handlePopupToggle}
+            />
+          </Link>
+        )}
+        {goBackButton && (
+          <Link to="/expenses">
+            <ArrowBackIcon fontSize="large" />
           </Link>
         )}
       </div>
     </div>
   );
-};
-
-Header.propTypes = {
-  setMobileNavOpen: PropTypes.bool,
-  mobileNavOpen: PropTypes.func,
-};
-
-Header.defaultProps = {
-  setMobileNavOpen: false,
 };
 
 export default Header;

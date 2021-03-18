@@ -1,7 +1,8 @@
-import { TOGGLE_POPUP } from '../types/appTypes';
+import { TOGGLE_POPUP, TOGGLE_NAV } from "../types/appTypes";
 
 const initialState = {
   popupVisible: false,
+  navOpen: false,
 };
 
 const appReducer = (state = initialState, action) => {
@@ -10,6 +11,12 @@ const appReducer = (state = initialState, action) => {
       return {
         ...state,
         popupVisible: !state.popupVisible,
+      };
+    }
+    case TOGGLE_NAV: {
+      return {
+        ...state,
+        navOpen: !state.navOpen,
       };
     }
     default: {

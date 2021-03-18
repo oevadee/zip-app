@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.scss";
 
 import Sidebar from "./components/Sidebar/Sidebar";
-import { ChatRoute, ExpensesRoute, LoginRoute } from "./routes";
+import { ChatRoute, ExpensesRoute, LoginRoute, HistoryRoute } from "./routes";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, logoutUser } from "./state/actions/userAction";
@@ -12,7 +12,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from "react-router-dom";
 
@@ -49,19 +48,16 @@ function App() {
       <Router>
         {user ? (
           <>
-            <Redirect to="/" />
+            <Redirect to="/expenses" />
             <Sidebar
               user={user}
               mobileNavOpen={mobileNavOpen}
               setMobileNavOpen={setMobileNavOpen}
             />
             <Switch>
-              <Route path="/expenses">
-                <ExpensesRoute />
-              </Route>
-              <Route path="/chat/:channelId">
-                <ChatRoute user={user} />
-              </Route>
+              <Route path="/expenses" component={ExpensesRoute} />
+              <Route path="/history/:id" component={HistoryRoute} />
+              <Route path="/chat/:channelId">{<ChatRoute user={user} />}</Route>
             </Switch>
           </>
         ) : (

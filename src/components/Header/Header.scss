@@ -19,13 +19,15 @@
     }
   }
 
-  .MuiSvgIcon-root {
-    display: none !important;
-    cursor: pointer;
-    color: #eee;
+  .header__menu {
+    .MuiSvgIcon-root {
+      display: none !important;
+      cursor: pointer;
+      color: #eee;
 
-    @media (max-width: $tablet) {
-      display: block !important;
+      @media (max-width: $tablet) {
+        display: block !important;
+      }
     }
   }
 }
@@ -33,6 +35,12 @@
 .header__buttons {
   display: flex;
   justify-content: space-between;
+
+  .MuiSvgIcon-root {
+    cursor: pointer;
+    color: #eee;
+    margin-right: 20px;
+  }
 
   @media (max-width: $tablet) {
     flex: 1;
