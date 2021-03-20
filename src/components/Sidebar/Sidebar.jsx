@@ -52,7 +52,9 @@ const Sidebar = ({ user }) => {
           <Avatar src={user.photo} />
           <h3>{user.displayName}</h3>
         </div>
-        <SettingsIcon />
+        <Link to="/profile" onClick={handleNavToggle}>
+          <SettingsIcon />
+        </Link>
       </div>
       <div className="sidebar__selector">
         <Link to="/expenses">

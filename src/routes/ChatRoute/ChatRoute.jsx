@@ -59,6 +59,7 @@ const ChatRoute = ({ user }) => {
         <AddCircleIcon fontSize="large" />
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
+            autoComplete="off"
             name="message"
             ref={register}
             disabled={!channelId}

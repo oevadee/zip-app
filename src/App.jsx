@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.scss";
 
 import Sidebar from "./components/Sidebar/Sidebar";
-import { ChatRoute, ExpensesRoute, LoginRoute, HistoryRoute } from "./routes";
+import { ChatRoute, ExpensesRoute, LoginRoute, HistoryRoute, ProfileRoute } from "./routes";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, logoutUser } from "./state/actions/userAction";
@@ -57,7 +57,10 @@ function App() {
             <Switch>
               <Route path="/expenses" component={ExpensesRoute} />
               <Route path="/history/:id" component={HistoryRoute} />
-              <Route path="/chat/:channelId">{<ChatRoute user={user} />}</Route>
+              <Route path="/chat/:channelId">
+                <ChatRoute user={user} />
+              </Route>
+              <Route path="/profile" component={ProfileRoute} />
             </Switch>
           </>
         ) : (

@@ -7,7 +7,7 @@
   background-color: $color-primary;
   display: flex;
   flex-direction: row;
-  color: #fff;
+  color: $color-white;
 }
 
 .login__loginContainer {
@@ -39,6 +39,10 @@
     @media (max-width: $mobile-L) {
       font-size: 2rem;
     }
+  }
+
+  .login__loginContainer__textSplit {
+    color: $color-accent-secondary;
   }
 }
 

@@ -3,7 +3,7 @@
 .channel{
   padding: 20px;
   cursor: pointer;
-  color: white;
+  color: $color-white;
 
   &:hover{
     background-color: $color-accent;

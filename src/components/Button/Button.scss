@@ -5,7 +5,7 @@
   font-size: large;
   padding: 10px 25px;
   background-color: $color-accent;
-  color: white;
+  color: $color-white;
   border: none;
   border-radius: $border-radius;
   transition: all 0.2s ease-in;
@@ -13,7 +13,7 @@
   cursor: pointer;
 
   &:hover{
-    background-color: white;
+    background-color: $color-white;
     color: $color-accent;
   }
 
@@ -37,7 +37,7 @@
 
   &:hover{
     background-color: $color-logoutBtnHover;
-    color: white;
+    color: $color-white;
     opacity: 1
   }
 }

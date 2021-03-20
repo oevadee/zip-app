@@ -15,7 +15,7 @@ const LoginRoute = () => {
       <div className="login__loginContainer">
         <h1>
           Ultimate crew expense tracker <br />
-          <span style={{ color: "rgb(185, 136, 246)" }}>OG edition</span>
+          <span className="login__loginContainer__textSplit">OG edition</span>
         </h1>
         <Button text="login" onClick={loginUser} />
       </div>

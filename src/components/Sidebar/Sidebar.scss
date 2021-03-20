@@ -8,10 +8,13 @@
   flex-direction: column;
   flex: 0.25;
   background-color: $color-secondary;
-  color: white;
+  color: $color-white;
 
   @media (max-width: $tablet) {
     position: absolute;
+    left: 0;
+    top: 0;
+    max-width: 100%;
     width: 100%;
     z-index: 1;
     transform: translateX(-100%);
@@ -30,8 +33,12 @@
   padding: 20px;
   border-bottom: 1px solid $color-primary;
 
-  .MuiSvgIcon-root {
-    cursor: pointer;
+  a {
+    color: $color-white;
+
+    .MuiSvgIcon-root {
+      cursor: pointer;
+    }
   }
 }
 
@@ -69,7 +76,7 @@ a {
   }
 
   h2 {
-    color: #fff;
+    color: $color-white;
   }
 }
 
@@ -81,7 +88,7 @@ a {
   border-bottom: 1px solid $color-primary;
 
   h2 {
-    color: #fff;
+    color: $color-white;
   }
 }
 

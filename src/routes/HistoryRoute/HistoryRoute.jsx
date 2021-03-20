@@ -7,6 +7,7 @@ import { Avatar } from "@material-ui/core";
 import { useParams } from "react-router";
 import { Header } from "../../components";
 import db, { auth } from "../../firebase";
+import { Trash2 as TrashIcon } from "react-feather";
 
 const HistoryRoute = ({ historyEl, historyOf }) => {
   const { id } = useParams();
@@ -30,6 +31,10 @@ const HistoryRoute = ({ historyEl, historyOf }) => {
       });
   }, [id]);
 
+  const handleDeleteRequest = () => {
+    
+  }
+
   return (
     <div className="history">
       <Header title="History" goBackButton />
@@ -52,6 +57,11 @@ const HistoryRoute = ({ historyEl, historyOf }) => {
                 {new Date(historyEl.timestamp?.toDate()).toLocaleDateString()}
               </p>
               <p className="tableRow__about">{historyEl.aboutTransaction}</p>
+              <TrashIcon
+                size={20}
+                color="#e84545"
+                style={{ cursor: "pointer" }}
+              />
             </div>
           ))}
         </div>

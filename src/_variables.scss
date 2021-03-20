@@ -8,6 +8,8 @@ $tablet: 810px;
 $mobile-L: 568px;
 $mobile-H: 375px;
 
+$color-white: #efefef;
+
 // Halloween Edition
 // Colors
 // $color-primary: #000000;
@@ -37,5 +39,6 @@ $mobile-H: 375px;
 $color-primary: rgb(18, 18, 18);
 $color-secondary: rgb(30, 30, 30);
 $color-accent: rgb(78, 120, 183);
-$color-logoutBtn: rgb(252, 45, 110);
-$color-logoutBtnHover: rgb(252, 45, 110);
+$color-accent-secondary: rgb(252, 45, 110);
+$color-logoutBtn: #e84545;
+$color-logoutBtnHover: #f95656;
