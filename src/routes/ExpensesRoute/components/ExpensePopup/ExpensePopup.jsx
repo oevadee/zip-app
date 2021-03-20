@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { PropTypes } from "prop-types";
 import "./ExpensePopup.scss";
 
@@ -7,10 +7,10 @@ import { Avatar } from "@material-ui/core";
 import { Button } from "/src/components";
 
 // Redux
-import db, { auth } from "../../../../firebase";
+import db, { auth } from "/src/firebase";
 import firebase from "firebase";
 import { useDispatch } from "react-redux";
-import { togglePopup } from "../../../../state/actions/appAction";
+import { togglePopup } from "/src/state/actions/appAction";
 
 const ExpensePopup = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState(null);

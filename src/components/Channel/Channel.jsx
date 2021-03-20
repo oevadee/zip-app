@@ -1,30 +1,26 @@
-import { PropTypes} from 'prop-types';
+import React from "react";
+import { PropTypes } from "prop-types";
 import "./Channel.scss";
 
 // Redux
 import { useDispatch } from "react-redux";
-import { setAppInfo } from "../../features/appSlice";
-import { setActiveSection } from "../../features/sectionSlice";
+import { setChannel } from "../../state/actions/channelAction";
+import { toggleNav } from "../../state/actions/appAction";
 
-const Channel = ({ id, channelName, setMobileNavOpen }) => {
-  const dispatch = useDispatch();
+const Channel = ({ id, channelName }) => {
+  const channelDispatch = useDispatch();
 
   return (
     <div
       className="channel"
       onClick={() => {
-        dispatch(
-          setAppInfo({
+        channelDispatch(
+          setChannel({
             channelId: id,
             channelName: channelName,
           })
-        )
-        dispatch(
-          setActiveSection({
-            activeSection: 'chat'
-          })
         );
-        setMobileNavOpen(false)
+        channelDispatch(toggleNav());
       }}
     >
       <h3 className="channel__roomName">
@@ -37,7 +33,7 @@ const Channel = ({ id, channelName, setMobileNavOpen }) => {
 Channel.propTypes = {
   id: PropTypes.string.isRequired,
   channelName: PropTypes.string.isRequired,
-  setMobileNavOpen: PropTypes.func
+  setMobileNavOpen: PropTypes.func,
 };
 
 Channel.defaultProps = {

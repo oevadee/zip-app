@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ChatRoute.scss";
 
 import db from "../../firebase";
@@ -8,13 +8,17 @@ import { useParams } from "react-router";
 import { Message, Header } from "/src/components";
 
 // Icons
-import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { Plus as AddCircleIcon } from "react-feather";
+
+import { useForm } from "react-hook-form";
+import { getCurrentTimestamp } from "../../utils/getCurrentTimestamp";
 
 const ChatRoute = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [channelName, setChannelName] = useState("");
-  const [input, setInput] = useState("");
   const { channelId } = useParams();
+  const { register, handleSubmit, reset } = useForm();
+  const timestamp = getCurrentTimestamp();
 
   useEffect(() => {
     channelId &&
@@ -29,7 +33,14 @@ const ChatRoute = ({ user }) => {
       .onSnapshot((snap) => setChannelName(snap.data().channelName));
   }, [channelId]);
 
-  const sendMessage = () => {};
+  const onSubmit = (data) => {
+    db.collection("channels").doc(channelId).collection("messages").add({
+      message: data.message,
+      timestamp: timestamp,
+      user: user,
+    });
+    reset();
+  };
 
   return (
     <div className="chat">
@@ -39,25 +50,21 @@ const ChatRoute = ({ user }) => {
           <Message
             user={message.user}
             key={i}
-            timestamp={new Date(message.timestamp?.toDate()).toUTCString()}
+            timestamp={message.timestamp}
             message={message.message}
           />
         ))}
       </div>
       <div className="chat__input">
         <AddCircleIcon fontSize="large" />
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            value={input}
+            name="message"
+            ref={register}
             disabled={!channelId}
-            onChange={(e) => setInput(e.target.value)}
             placeholder={`Message #${channelName}`}
           />
-          <button
-            onClick={sendMessage}
-            className="chat__inputButton"
-            type="submit"
-          >
+          <button className="chat__inputButton" type="submit">
             Send Message
           </button>
         </form>

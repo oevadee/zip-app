@@ -2,6 +2,7 @@
 
 .header {
   height: 80px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,10 +21,12 @@
   }
 
   .header__menu {
-    .MuiSvgIcon-root {
+    .header__buttons__icon {
+      flex: 1;
       display: none !important;
       cursor: pointer;
       color: #eee;
+      margin-left: 20px;
 
       @media (max-width: $tablet) {
         display: block !important;
@@ -34,9 +37,9 @@
 
 .header__buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 
-  .MuiSvgIcon-root {
+  .header__buttons__icon {
     cursor: pointer;
     color: #eee;
     margin-right: 20px;
@@ -44,11 +47,5 @@
 
   @media (max-width: $tablet) {
     flex: 1;
-  }
-}
-
-.btn-single {
-  @media (max-width: $tablet) {
-    justify-content: flex-end;
   }
 }

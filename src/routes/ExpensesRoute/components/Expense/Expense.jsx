@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PropTypes } from "prop-types";
 
 // Components
@@ -6,12 +6,11 @@ import "./Expense.scss";
 import { Avatar } from "@material-ui/core";
 
 // Icons
-import HistoryIcon from "@material-ui/icons/History";
+import { Clock as HistoryIcon } from "react-feather";
 
-import db, { auth } from "../../../../firebase";
+import db, { auth } from "/src/firebase";
 
 // Redux
-import { setHistoryOf } from "../../../../features/historySlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -42,12 +41,10 @@ const Expense = ({ user }) => {
         <Avatar src={user.photo} />
         <p>{user.displayName}</p>
       </div>
-      <p className="expense__total">{String(total).split('.')[0]}pln</p>
+      <p className="expense__total">{String(total).split(".")[0]}pln</p>
       <div className="expense__history">
         <Link to={`/history/${user.uid}`}>
-          <HistoryIcon
-            style={{ color: "#fff" }}
-          />
+          <HistoryIcon style={{ color: "#fff" }} />
         </Link>
       </div>
     </div>
