@@ -7,7 +7,7 @@
   background-color: $color-accent;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: $border-radius;
   transition: all 0.2s ease-in;
   text-transform: uppercase;
   cursor: pointer;
@@ -31,8 +31,9 @@
 }
 
 .button--secondary{
-  background-color: $color-logoutBtn;
-  border-radius: 3px;
+  border: solid 2px $color-logoutBtn;
+  border-radius: $border-radius;
+  background: none;
 
   &:hover{
     background-color: $color-logoutBtnHover;

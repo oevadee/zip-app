@@ -1,6 +1,7 @@
+import React from "react";
 import "./LoginRoute.scss";
 
-import Button from "../../components/Button/Button";
+import { Button } from "/src/components";
 
 import { auth, provider } from "../../firebase";
 
@@ -14,7 +15,7 @@ const LoginRoute = () => {
       <div className="login__loginContainer">
         <h1>
           Ultimate crew expense tracker <br />
-          <span style={{ color: 'rgb(185, 136, 246)' }}>OG edition</span>
+          <span style={{ color: "rgb(185, 136, 246)" }}>OG edition</span>
         </h1>
         <Button text="login" onClick={loginUser} />
       </div>

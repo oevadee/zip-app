@@ -23,7 +23,7 @@
   @media (max-width: $tablet) {
     z-index: 666;
     height: 100%;
-    border-radius: 15px;
+    border-radius: $border-radius;
   }
 
   h1 {

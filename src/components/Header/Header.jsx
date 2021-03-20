@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import "./Header.scss";
 
@@ -5,10 +6,7 @@ import "./Header.scss";
 import { Button } from "/src/components";
 
 // Icons
-import {
-  Menu as MenuIcon,
-  ArrowBack as ArrowBackIcon,
-} from "@material-ui/icons";
+import { Menu as MenuIcon, ArrowLeft as ArrowBackIcon } from "react-feather";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +28,7 @@ const Header = ({ title, expenseButton = false, goBackButton = false }) => {
   return (
     <div className="header">
       <div className="header__menu">
-        <MenuIcon fontSize="large" onClick={handleNavToggle} />
+        <MenuIcon className="header__buttons__icon" fontSize="large" onClick={handleNavToggle} />
       </div>
       <h1>{title}</h1>
       <div className="header__buttons">
@@ -44,7 +42,7 @@ const Header = ({ title, expenseButton = false, goBackButton = false }) => {
         )}
         {goBackButton && (
           <Link to="/expenses">
-            <ArrowBackIcon fontSize="large" />
+            <ArrowBackIcon className="header__buttons__icon" fontSize="large" />
           </Link>
         )}
       </div>

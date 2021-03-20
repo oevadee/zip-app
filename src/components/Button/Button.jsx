@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types';
 import './Button.scss';
 
@@ -15,8 +16,8 @@ const Button = ({ primary = true, text, backgroundColor, ...props }) => {
 };
 
 Button.propTypes = {
-  text: PropTypes.string.isRequired,
   primary: PropTypes.bool,
+  text: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string,
   onClick: PropTypes.func,
 };
