@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
-$font: 'Open Sans', sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap");
+$font: "Open Sans", sans-serif;
+
+$border-radius: 5px;
 
 // RWD
 $tablet: 810px;
 $mobile-L: 568px;
 $mobile-H: 375px;
-
 
 // Halloween Edition
 // Colors
@@ -24,11 +25,17 @@ $mobile-H: 375px;
 // $color-logoutBtn: #c58006;
 // $color-logoutBtnHover: #e7a118;
 
-
 // OG Colors
-$color-primary: #121212;
-$color-secondary: #1f1b24;
-$color-accent: #577399;
-$color-accent-secondary: rgb(185, 136, 246);
-$color-logoutBtn: #aa0715ae;
-$color-logoutBtnHover: #c32929;
+// $color-primary: #121212;
+// $color-secondary: #1f1b24;
+// $color-accent: #577399;
+// $color-accent-secondary: rgb(185, 136, 246);
+// $color-logoutBtn: #aa0715ae;
+// $color-logoutBtnHover: #c32929;
+
+// Improved dark mode
+$color-primary: rgb(18, 18, 18);
+$color-secondary: rgb(30, 30, 30);
+$color-accent: rgb(78, 120, 183);
+$color-logoutBtn: rgb(252, 45, 110);
+$color-logoutBtnHover: rgb(252, 45, 110);
