@@ -25,6 +25,13 @@ function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const userDispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    db.collection("users").onSnapshot((snapshot) => {
+      setUsers(snapshot.docs.map((doc) => doc.data()));
+    });
+  }, []);
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
@@ -61,12 +68,16 @@ function App() {
               setMobileNavOpen={setMobileNavOpen}
             />
             <Switch>
-              <Route path="/expenses" component={ExpensesRoute} />
+              <Route path="/expenses">
+                <ExpensesRoute users={users} />
+              </Route>
               <Route path="/history/:id" component={HistoryRoute} />
               <Route path="/chat/:channelId">
                 <ChatRoute user={user} />
               </Route>
-              <Route path="/notifications" component={NotificationsRoute} />
+              <Route path="/notifications">
+                <NotificationsRoute users={users} />
+              </Route>
             </Switch>
           </>
         ) : (

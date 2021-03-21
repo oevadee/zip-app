@@ -3,7 +3,7 @@ import "./HistoryRoute.scss";
 import { PropTypes } from "prop-types";
 
 // Components
-import { Avatar } from "@material-ui/core";
+import { Avatar } from "@material-ui/core"; 
 import { useParams } from "react-router";
 import { Header } from "../../components";
 import db, { auth } from "../../firebase";
@@ -38,7 +38,7 @@ const HistoryRoute = ({ historyEl, historyOf }) => {
     console.log(expenseId);
     console.log(id);
     db.collection('users').doc(auth.currentUser.uid).collection('expensesFrom').doc(id).collection(id).doc(expenseId).update({
-      deletion_request: true  
+      deletion_request: true
     })
   };
 

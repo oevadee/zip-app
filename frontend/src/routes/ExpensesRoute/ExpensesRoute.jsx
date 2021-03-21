@@ -1,20 +1,12 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import "./ExpensesRoute.scss";
 import { Header } from "../../components";
 import db, { auth } from "../../firebase";
 import { ExpensePopup, Expense } from "./components";
 import { useSelector } from "react-redux";
 
-const ExpensesRoute = () => {
+const ExpensesRoute = ({ users }) => {
   const popupVisible = useSelector((state) => state.app.popupVisible);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    db.collection("users").onSnapshot((snapshot) => {
-      setUsers(snapshot.docs.map((doc) => doc.data()));
-    });
-  }, []);
     
   return (
     <div className="expenses">
