@@ -7,7 +7,7 @@ import { Avatar } from "@material-ui/core";
 import { Channel, Button } from "/src/components";
 
 // Icons
-import { Settings as SettingsIcon, Plus as AddIcon } from "react-feather";
+import { Bell as NotificationIcon, Plus as AddIcon } from "react-feather";
 
 // Firebase
 import db, { auth } from "/src/firebase";
@@ -52,8 +52,8 @@ const Sidebar = ({ user }) => {
           <Avatar src={user.photo} />
           <h3>{user.displayName}</h3>
         </div>
-        <Link to="/profile" onClick={handleNavToggle}>
-          <SettingsIcon />
+        <Link to="/notifications" onClick={handleNavToggle}>
+          <NotificationIcon />
         </Link>
       </div>
       <div className="sidebar__selector">

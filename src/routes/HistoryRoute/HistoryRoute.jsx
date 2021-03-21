@@ -22,7 +22,10 @@ const HistoryRoute = ({ historyEl, historyOf }) => {
       .collection(id)
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
-        setHistoryArr(snapshot.docs.map((doc) => doc.data()));
+        setHistoryArr(snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        })));
       });
     db.collection("users")
       .doc(id)
@@ -31,9 +34,13 @@ const HistoryRoute = ({ historyEl, historyOf }) => {
       });
   }, [id]);
 
-  const handleDeleteRequest = () => {
-    
-  }
+  const handleExpenseDelete = (expenseId) => {
+    console.log(expenseId);
+    console.log(id);
+    db.collection('users').doc(auth.currentUser.uid).collection('expensesFrom').doc(id).collection(id).doc(expenseId).update({
+      deletion_request: true  
+    })
+  };
 
   return (
     <div className="history">
@@ -44,26 +51,33 @@ const HistoryRoute = ({ historyEl, historyOf }) => {
           <h3 className="historyHeader__expense">Expense</h3>
           <h3 className="historyHeader__timestamp">Time</h3>
           <h3 className="historyHeader__about">About</h3>
+          <div className="historyHeader__blank"></div>
         </div>
 
         <div className="historyList">
-          {historyArr.map((historyEl) => (
-            <div className="tableRow" key={historyEl.timestamp}>
-              <div className="tableRow__user">
-                <Avatar src={user && user.photo} />
+          {historyArr.map((historyEl) => {
+            console.log(historyEl.id)
+            return (
+              <div className="tableRow" key={historyEl.timestamp}>
+                <div className="tableRow__user">
+                  <Avatar src={user && user.photo} />
+                </div>
+                <p className="tableRow__expense">{historyEl.value}</p>
+                <p className="tableRow__timestamp">
+                  {new Date(historyEl.timestamp?.toDate()).toLocaleDateString()}
+                </p>
+                <p className="tableRow__about">{historyEl.aboutTransaction}</p>
+                <div className="tableRow__blank">
+                  <TrashIcon
+                    size={20}
+                    color="#e84545"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleExpenseDelete(historyEl.id)}
+                  />
+                </div>
               </div>
-              <p className="tableRow__expense">{historyEl.value}</p>
-              <p className="tableRow__timestamp">
-                {new Date(historyEl.timestamp?.toDate()).toLocaleDateString()}
-              </p>
-              <p className="tableRow__about">{historyEl.aboutTransaction}</p>
-              <TrashIcon
-                size={20}
-                color="#e84545"
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

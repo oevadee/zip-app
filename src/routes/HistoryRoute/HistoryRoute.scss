@@ -14,15 +14,15 @@
 }
 
 .historySection {
-  width: calc(100% - 40px);
-  background-color: $color-secondary;
-  color: $color-white;
-  padding: 20px 0;
-  margin: 10px 20px;
-  border-radius: $border-radius;
-  overflow: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+    width: calc(100% - 40px);
+    background-color: $color-secondary;
+    color: $color-white;
+    padding: 20px 0;
+    margin: 10px 20px;
+    border-radius: $border-radius;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
@@ -73,6 +73,10 @@
       @media (max-width: $mobile-L) {
         display: none;
       }
+    }
+
+    .historyHeader__blank {
+      flex: 0.1
     }
   }
 }
@@ -130,4 +134,8 @@
   @media (max-width: $mobile-L) {
     display: none;
   }
+}
+
+.tableRow__blank {
+  flex: 0.1;
 }

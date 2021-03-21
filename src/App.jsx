@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./App.scss";
 
 import Sidebar from "./components/Sidebar/Sidebar";
-import { ChatRoute, ExpensesRoute, LoginRoute, HistoryRoute, ProfileRoute } from "./routes";
+import {
+  ChatRoute,
+  ExpensesRoute,
+  LoginRoute,
+  HistoryRoute,
+  NotificationsRoute,
+} from "./routes";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, logoutUser } from "./state/actions/userAction";
@@ -60,7 +66,7 @@ function App() {
               <Route path="/chat/:channelId">
                 <ChatRoute user={user} />
               </Route>
-              <Route path="/profile" component={ProfileRoute} />
+              <Route path="/notifications" component={NotificationsRoute} />
             </Switch>
           </>
         ) : (
