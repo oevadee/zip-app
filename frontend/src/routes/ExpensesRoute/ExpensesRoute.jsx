@@ -20,22 +20,14 @@ const ExpensesRoute = ({ users }) => {
         </div>
         <div className="expensesList">
           {users
-            .filter((user) => user.uid !== auth.currentUser.uid)
+            .filter((user) => user.id !== auth.currentUser.uid)
             .map((user) => (
-              <Expense key={user.uid} user={user} />
+              <Expense key={user.id} user={user} />
             ))}
         </div>
       </div>
     </div>
   );
-};
-
-Expense.propTypes = {
-  // user: PropTypes.object.isRequired,
-};
-
-Expense.defaultProps = {
-  // user: null,
 };
 
 export default ExpensesRoute;

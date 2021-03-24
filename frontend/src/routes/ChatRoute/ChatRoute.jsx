@@ -11,7 +11,7 @@ import { Message, Header } from "/src/components";
 import { Plus as AddCircleIcon } from "react-feather";
 
 import { useForm } from "react-hook-form";
-import { getCurrentTimestamp } from "../../utils/getCurrentTimestamp";
+import { getCurrentTimestamp } from "../../utils";
 
 const ChatRoute = ({ user }) => {
   const [messages, setMessages] = useState([]);

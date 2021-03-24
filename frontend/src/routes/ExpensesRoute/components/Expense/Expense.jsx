@@ -13,25 +13,27 @@ import db, { auth } from "/src/firebase";
 // Redux
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useFetch } from "../../../../hooks";
 
 const Expense = ({ user }) => {
   const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
+  const data = useFetch(`/expenses/${user.id}`)
 
   useEffect(() => {
     if (user) {
-      db.collection("users")
-        .doc(auth.currentUser.uid)
-        .collection("expensesFrom")
-        .doc(user.uid)
-        .collection(user.uid)
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          const data = snapshot.docs
-            .map((doc) => doc.data().value)
-            .reduce((acc, curr) => Number(acc) + Number(curr));
-          setTotal(data);
-        });
+      // db.collection("users")
+      //   .doc(auth.currentUser.uid)
+      //   .collection("expensesFrom")
+      //   .doc(user.uid)
+      //   .collection(user.uid)
+      //   .orderBy("timestamp", "desc")
+      //   .onSnapshot((snapshot) => {
+      //     const data = snapshot.docs
+      //       .map((doc) => doc.data().value)
+      //       .reduce((acc, curr) => Number(acc) + Number(curr));
+      //     setTotal(data);
+      //   });
     }
   }, [user]);
 

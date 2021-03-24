@@ -1,37 +1,38 @@
-import React, { useEffect, useState } from "react";
-import "./App.scss";
+import React, { useEffect, useState } from 'react';
+import './App.scss';
 
-import Sidebar from "./components/Sidebar/Sidebar";
+import Sidebar from './components/Sidebar/Sidebar';
 import {
   ChatRoute,
   ExpensesRoute,
   LoginRoute,
   HistoryRoute,
   NotificationsRoute,
-} from "./routes";
+} from './routes';
 
-import { useSelector, useDispatch } from "react-redux";
-import { loginUser, logoutUser } from "./state/actions/userAction";
-import db, { auth } from "./firebase";
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser, logoutUser } from './state/actions/userAction';
+import db, { auth } from './firebase';
+import axios from 'axios';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-} from "react-router-dom";
+} from 'react-router-dom';
+import { useFetch } from './hooks';
 
-function App() {
+const App = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const userDispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const [users, setUsers] = useState([]);
+  const data = useFetch('/users');
 
   useEffect(() => {
-    db.collection("users").onSnapshot((snapshot) => {
-      setUsers(snapshot.docs.map((doc) => doc.data()));
-    });
-  }, []);
+    data && setUsers(data);
+  }, [data]);
 
   useEffect(() => {
     auth.onAuthStateChanged((authUser) => {
@@ -42,9 +43,9 @@ function App() {
             photo: authUser.photoURL,
             email: authUser.email,
             displayName: authUser.displayName,
-          })
+          }),
         );
-        db.collection("users").doc(authUser.uid).set({
+        db.collection('users').doc(authUser.uid).set({
           uid: authUser.uid,
           photo: authUser.photoURL,
           email: authUser.email,
@@ -91,6 +92,6 @@ function App() {
       </Router>
     </div>
   );
-}
+};
 
 export default App;

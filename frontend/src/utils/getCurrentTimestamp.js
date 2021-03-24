@@ -1,2 +1,4 @@
 const date = new Date();
-export const getCurrentTimestamp = () => date.toString().split('+' || '-')[0];
+const getCurrentTimestamp = () => date.toString().split('+' || '-')[0];
+
+export default getCurrentTimestamp;
