@@ -114,8 +114,6 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const getHistory = async (req: Request, res: Response): Promise<any> => {
+const getHistory = async (req: Request, res: Response): Promise<any> => {};
 
-}
-
-export { getAllUserExpenses, createExpense };
+export { getAllUserExpenses, createExpense, getHistory };
