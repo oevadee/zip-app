@@ -2,11 +2,8 @@
 
 .sidebar {
   height: 100%;
-  min-width: 220px;
-  max-width: 220px;
   display: flex;
   flex-direction: column;
-  flex: 0.25;
   background-color: $color-secondary;
   color: $color-white;
 
@@ -46,7 +43,7 @@
   display: flex;
   align-items: center;
 
-  .MuiAvatar-root {
+  .sidebar__userHeader__avatar {
     margin-right: 20px;
     cursor: pointer;
   }

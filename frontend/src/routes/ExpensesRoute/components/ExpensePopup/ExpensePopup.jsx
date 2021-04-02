@@ -1,12 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { PropTypes } from 'prop-types';
 import './ExpensePopup.scss';
 
 // Redux
-import db, { auth } from '/src/firebase';
-import firebase from 'firebase';
-import { useDispatch } from 'react-redux';
-import { togglePopup } from '/src/state/actions/appAction';
 import {
   Input,
   Box,
@@ -23,51 +19,40 @@ import {
   Check as CheckIcon,
   X as XIcon,
 } from 'react-feather';
-import { useForm, Control } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import axios from 'axios';
+import { getCurrentTimestamp } from '../../../../utils';
 
-const ExpensePopup = ({ users }) => {
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [prevIndex, setPrevIndex] = useState(null);
-  const [numberInput, setNumberInput] = useState(0);
-  const [aboutInput, setAboutInput] = useState('');
-  const userSelector = useRef(0);
-  const popupDispatch = useDispatch();
-  const { register, control, handleSubmit } = useForm();
+const ExpensePopup = ({ user, users }) => {
+  const { register, handleSubmit, control, watch } = useForm({
+    defaultValues: {
+      value: 0,
+      details: '',
+    },
+  });
 
-  const handleExpenseAdd = () => {
-    if (selectedUser) {
-      db.collection('users')
-        .doc(auth.currentUser.uid)
-        .collection('expensesFrom')
-        .doc(selectedUser)
-        .collection(selectedUser)
-        .add({
-          value: numberInput,
-          aboutTransaction: aboutInput,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+  const selectedUser = watch('user');
+  const value = watch('value');
 
-      db.collection('users')
-        .doc(selectedUser)
-        .collection('expensesFrom')
-        .doc(auth.currentUser.uid)
-        .collection(auth.currentUser.uid)
-        .add({
-          value: -numberInput,
-          aboutTransaction: aboutInput,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+  const onSubmit = async (values) => {
+    const data = await axios.post(
+      `http://localhost:8080/api/expenses/${user.id}`,
+      {
+        values,
+        timestamp: new Date().toLocaleDateString(),
+      },
+    );
 
-      setNumberInput(0);
-      setSelectedUser('');
-      userSelector.current.childNodes[prevIndex].style.opacity = 0.3;
-      popupDispatch(togglePopup);
-    }
+    console.log(data);
+  };
+
+  const onError = (err) => {
+    console.log(err);
   };
 
   return (
     <Box className="expensePopup" d="flex" alignItems="center">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Stack
           w={400}
           textColor="white"
@@ -75,14 +60,24 @@ const ExpensePopup = ({ users }) => {
           placeItems="center"
           spacing={2}
         >
-          <Select
-            icon={<Avatar src={selectedUser && users[selectedUser].photo} />}
-            placeholder="Who owes you money?"
-          >
-            {users.map((user) => (
-              <option value={user.id}>{user.name}</option>
-            ))}
-          </Select>
+          <Controller
+            name="user"
+            control={control}
+            as={
+              <Select
+                icon={
+                  <Avatar src={selectedUser && users[selectedUser]?.photo} />
+                }
+                placeholder="Who owes you money?"
+              >
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </Select>
+            }
+          />
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -91,35 +86,35 @@ const ExpensePopup = ({ users }) => {
               children="$"
             />
             <Input
+              name="value"
               type="number"
-              value={numberInput}
-              onChange={(e) => setNumberInput(e.target.value)}
+              ref={register}
               placeholder="How big is the expese?"
               textColor="white"
             />
             <InputRightElement
               children={
-                numberInput > 0 ? (
+                value > 0 ? (
                   <CheckIcon color="green" />
-                ) : numberInput === 0 || numberInput === '' ? null : (
+                ) : value === 0 || value === '' ? null : (
                   <XIcon color="red" />
                 )
               }
             />
           </InputGroup>
           <Input
+            name="details"
             type="text"
-            value={aboutInput}
-            onChange={(e) => setAboutInput(e.target.value)}
+            ref={register}
             placeholder="Describe your expense"
             mb={2}
           />
           <Button
+            type="submit"
             w={100}
             variant="solid"
             colorScheme="blue"
             textColor="white"
-            onClick={handleExpenseAdd}
           >
             Add
           </Button>

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import txc, { session } from "../config/db";
+import session from "../config/db";
 
 interface IuserWithExpeses {
   id: number;
@@ -16,7 +16,7 @@ const getAllUserExpenses = async (
   const { userId } = req.query;
 
   try {
-    const usersQuery = await txc.run(
+    const usersQuery = await session.run(
       `MATCH (a:User) WHERE NOT id(a) = toInteger($id) RETURN a`,
       { id: userId }
     );
@@ -30,33 +30,33 @@ const getAllUserExpenses = async (
     const expenses: object[] = [];
 
     for (const user of users) {
-      const inExpensesQuery = await txc.run(
-        `MATCH (a:User)<-[IS_OWED]-(e:Expense)<-[OWES]-(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
-        { id: userId, externalId: user.id }
-      );
+      const inExpensesQuery = await session.readTransaction(async (txc) => {
+        const result = await txc.run(
+          `MATCH (a:User)<-[IS_OWED]-(e:Expense)<-[OWES]-(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
+          { id: userId, externalId: user.id }
+        );
 
-      const inExpenses = inExpensesQuery.records.map((el: any) => ({
-        value: el.get("e").properties.value,
-      }));
+        return result.records.map((el: any) => ({
+          value: el.get("e").properties.value,
+        }));
+      });
 
-      const incomingExpenses = inExpenses.reduce(
+      const incomingExpenses = inExpensesQuery.reduce(
         (acc, curr) => acc + curr.value,
         0
       );
 
-      const outExpensesQuery = await txc.readTransaction((txc) => {
-        const result = txc.run(
+      const outExpensesQuery = await session.readTransaction(async (txc) => {
+        const result = await txc.run(
           `MATCH (a:User)-[OWES]->(e:Expense)-[IS_OWED]->(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
           { id: userId, externalId: user.id }
         );
-        return result;
+        return await result.records.map((el: any) => ({
+          value: el.get("e").properties.value,
+        }));
       });
 
-      const outExpenses = outExpensesQuery.records.map((el: any) => ({
-        value: el.get("e").properties.value,
-      }));
-
-      const outgoingExpenses = outExpenses.reduce(
+      const outgoingExpenses = outExpensesQuery.reduce(
         (acc, curr) => acc + curr.value,
         0
       );
@@ -79,4 +79,43 @@ const getAllUserExpenses = async (
   }
 };
 
-export { getAllUserExpenses };
+const createExpense = async (req: Request, res: Response): Promise<any> => {
+  const { userId } = req.query;
+  const { values, timestamp } = req.body;
+
+  try {
+    const { value, details, user } = values;
+
+    await session.writeTransaction((txc) => {
+      txc.run(
+        `
+        MATCH (a:User) (b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) CREATE (a)-[OWES]->(e:Expense {})-[IS_OWED]->(b)
+      `,
+        value > 0
+          ? {
+              id: user,
+              externalId: userId,
+            }
+          : value === 0
+          ? new Error("You cant create an empy expense.")
+          : {
+              id: userId,
+              externalId: user,
+            }
+      );
+    });
+
+    return res.json();
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "The was an error while creating new expense." });
+  }
+};
+
+const getHistory = async (req: Request, res: Response): Promise<any> => {
+
+}
+
+export { getAllUserExpenses, createExpense };

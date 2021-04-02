@@ -13,8 +13,7 @@ import db, { auth } from '/src/firebase';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleNav } from '../../state/actions/appAction';
-import { Avatar } from '@chakra-ui/avatar';
-import { Button } from '@chakra-ui/button';
+import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
 
 const Sidebar = ({ user }) => {
   const [channels, setChannels] = useState([]);
@@ -47,11 +46,13 @@ const Sidebar = ({ user }) => {
   };
 
   return (
-    <div className={`sidebar ${navOpen ? `sidebar--mobileOn` : ``}`}>
+    <Box w={220} className={`sidebar ${navOpen && `sidebar--mobileOn`}`}>
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
-          <Avatar src={user.photo} />
-          <h3>{user.name}</h3>
+          <Avatar className="sidebar__userHeader__avatar" src={user.photo} />
+          <Heading as="h3" size="xs">
+            {user.name}
+          </Heading>
         </div>
         <Link to="/notifications" onClick={handleNavToggle}>
           <NotificationIcon />
@@ -81,9 +82,11 @@ const Sidebar = ({ user }) => {
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button colorScheme="pink" onClick={() => auth.signOut()}>Logout</Button>
+        <Button colorScheme="pink" onClick={() => auth.signOut()}>
+          Logout
+        </Button>
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -8,11 +8,14 @@ import { Header } from "../../components";
 import db, { auth } from "../../firebase";
 import { Trash2 as TrashIcon } from "react-feather";
 import { Avatar } from "@chakra-ui/avatar";
+import useFetch from "../../hooks/useFetch";
 
-const HistoryRoute = ({ historyEl, historyOf }) => {
+const HistoryRoute = () => {
   const { id } = useParams();
   const [historyArr, setHistoryArr] = useState([]);
   const [user, setUser] = useState(null);
+
+  const history = useFetch(`/api/expenses/history/${id}`)
 
   useEffect(() => {
     db.collection("users")

@@ -18,7 +18,6 @@ const options: cors.CorsOptions = {
     "Accept",
     "X-Access-Token",
   ],
-  credentials: true,
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
   origin: "http://localhost:3000",
   preflightContinue: false,
@@ -31,7 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", usersRoute);
-app.use('/api/expenses', expensesRoute);
+app.use("/api/expenses", expensesRoute);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
