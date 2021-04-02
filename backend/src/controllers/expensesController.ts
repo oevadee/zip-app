@@ -27,51 +27,50 @@ const getAllUserExpenses = async (
       ...el.get("a").properties,
     }));
 
+    const expenses: object[] = [];
+
     for (const user of users) {
       const inExpensesQuery = await txc.run(
-        `MATCH (a:User)<-[IS_OWED]-(e:Expense)<-[OWES]-(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN a, b, e`,
+        `MATCH (a:User)<-[IS_OWED]-(e:Expense)<-[OWES]-(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
         { id: userId, externalId: user.id }
       );
 
       const inExpenses = inExpensesQuery.records.map((el: any) => ({
         value: el.get("e").properties.value,
-          // ? el.get("e").properties.value.low
-          // : el.get("e").properties.value,
-        user: el.get("b").identity.low,
       }));
 
-      console.log(inExpenses);
-
-      const incomingExpenses = inExpenses.map((el) => typeof el.value);
-
-      // console.log(incomingExpenses);
-
-      const outExpensesQuery = await txc.run(
-        `MATCH (a:User)<-[IS_OWED]-(e:Expense)<-[OWES]-(b:User) WHERE id(a) = toInteger($id) RETURN a, b, e`,
-        { id: userId }
+      const incomingExpenses = inExpenses.reduce(
+        (acc, curr) => acc + curr.value,
+        0
       );
 
+      const outExpensesQuery = await txc.readTransaction((txc) => {
+        const result = txc.run(
+          `MATCH (a:User)-[OWES]->(e:Expense)-[IS_OWED]->(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
+          { id: userId, externalId: user.id }
+        );
+        return result;
+      });
+
       const outExpenses = outExpensesQuery.records.map((el: any) => ({
-        value: el.get("e").properties.value.low
-          ? el.get("e").properties.value.low
-          : el.get("e").properties.value,
-        user: el.get("b").identity.low,
+        value: el.get("e").properties.value,
       }));
+
+      const outgoingExpenses = outExpenses.reduce(
+        (acc, curr) => acc + curr.value,
+        0
+      );
+
+      const sum = incomingExpenses - outgoingExpenses;
+
+      const expense = {
+        value: sum.toFixed(),
+        user: user,
+      };
+      expenses.push(expense);
     }
 
-    // console.log(users);
-
-    // const outgoingExpenses = outExpenses.reduce(
-    //   (acc: any, curr: any, i: number, arr: any[]) => {
-    //     return [
-    //       ...acc,
-    //       (acc[curr.user].total = acc[curr.user].total + +curr.value),
-    //     ];
-    //   },
-    //   users
-    // );
-
-    return res.json();
+    return res.json({ expenses, users });
   } catch (err) {
     console.log(err);
     return res
