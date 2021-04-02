@@ -9,16 +9,16 @@ import { Link } from 'react-router-dom';
 import { Clock as HistoryIcon } from 'react-feather';
 import { Avatar } from '@chakra-ui/avatar';
 
-const Expense = ({ photo, displayName, id, total }) => {
+const Expense = ({ user, value }) => {
   return (
     <div className="expense">
       <div className="expense__user">
-        <Avatar src={photo} />
-        <p>{displayName}</p>
+        <Avatar src={user.photo} />
+        <p>{user.name}</p>
       </div>
-      <p className="expense__total">{String(total)}pln</p>
+      <p className="expense__total">{value}pln</p>
       <div className="expense__history">
-        <Link to={`/history/${id}`}>
+        <Link to={`/history/${user.id}`}>
           <HistoryIcon style={{ color: '#fff' }} />
         </Link>
       </div>

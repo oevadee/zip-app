@@ -35,12 +35,12 @@ const LoginRoute = () => {
         Ultimate crew expense tracker <br />
       </Heading>
       <span className="login__loginContainer__textSplit">
-        <Text fontSize="4xl" mb={10}>
+        <Text fontSize="4xl" mb={10} color="rgb(31, 117, 196)">
           OG edition
         </Text>
       </span>
       <Box maxWidth={600}>
-        <form autocomplete="off" onSubmit={handleSubmit(onSubmit, onError)}>
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmit, onError)}>
           <Input
             name="email"
             ref={register}
@@ -59,12 +59,12 @@ const LoginRoute = () => {
             variant="outline"
             mb={5}
           />
-          <ButtonGroup variant="outline" spacing="6">
-            <Button type="submit" colorScheme="blue" variant="solid" size="lg">
+          <ButtonGroup spacing="6">
+            <Button type="submit" colorScheme="blue" variant="solid">
               Login
             </Button>
             <Link to="/register">
-              <Button size="lg">Register</Button>
+              <Button variant="outline" colorScheme="pink">Register</Button>
             </Link>
           </ButtonGroup>
         </form>

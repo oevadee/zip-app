@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { PropTypes } from "prop-types";
-import "./Sidebar.scss";
+import React, { useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
+import './Sidebar.scss';
 
 // Components
-import { Channel, Button } from "/src/components";
+import { Channel } from '/src/components';
 
 // Icons
-import { Bell as NotificationIcon, Plus as AddIcon } from "react-feather";
+import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
 
 // Firebase
-import db, { auth } from "/src/firebase";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleNav } from "../../state/actions/appAction";
-import { Avatar } from "@chakra-ui/avatar";
+import db, { auth } from '/src/firebase';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleNav } from '../../state/actions/appAction';
+import { Avatar } from '@chakra-ui/avatar';
+import { Button } from '@chakra-ui/button';
 
 const Sidebar = ({ user }) => {
   const [channels, setChannels] = useState([]);
@@ -21,13 +22,13 @@ const Sidebar = ({ user }) => {
   const navDispatch = useDispatch();
 
   useEffect(() => {
-    db.collection("channels").onSnapshot((snapshot) =>
+    db.collection('channels').onSnapshot((snapshot) =>
       setChannels(
         snapshot.docs.map((doc) => ({
           id: doc.id,
           channel: doc.data(),
-        }))
-      )
+        })),
+      ),
     );
   }, []);
 
@@ -35,7 +36,7 @@ const Sidebar = ({ user }) => {
     const channelName = prompt(`Enter a new channel name`);
 
     if (channelName) {
-      db.collection("channels").add({
+      db.collection('channels').add({
         channelName: channelName,
       });
     }
@@ -80,11 +81,7 @@ const Sidebar = ({ user }) => {
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button
-          primary={false}
-          text={"Logout"}
-          onClick={() => auth.signOut()}
-        />
+        <Button colorScheme="pink" onClick={() => auth.signOut()}>Logout</Button>
       </div>
     </div>
   );

@@ -5,8 +5,9 @@ import db, { auth } from '../../firebase';
 import { ExpensePopup, Expense } from './components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFetch } from '/src/hooks';
+import { Spinner } from '@chakra-ui/spinner';
 
-const ExpensesRoute = ({ users }) => {
+const ExpensesRoute = () => {
   const popupVisible = useSelector((state) => state.app.popupVisible);
   const [total, setTotal] = useState(0);
   const dispatch = useDispatch();
@@ -14,12 +15,12 @@ const ExpensesRoute = ({ users }) => {
 
   const data = useFetch(`/api/expenses?userId=${user.id}`);
 
-  console.log(data);
+  if (!data) return <Spinner color="red.500" />;
 
   return (
     <div className="expenses">
       <Header title="Expenses" expenseButton />
-      {popupVisible && <ExpensePopup users={users} />}
+      {popupVisible && <ExpensePopup users={data.users} />}
       <div className="expensesSection">
         <div className="expensesHeader">
           <h3 className="expensesHeader__user">User</h3>
@@ -27,11 +28,14 @@ const ExpensesRoute = ({ users }) => {
           <h3 className="expensesHeader__history">History</h3>
         </div>
         <div className="expensesList">
-          {/* {users
-            .filter((user) => user.id !== auth.currentUser.uid)
-            .map((user) => (
-              <Expense key={user.id} user={user} />
-            ))} */}
+          {data &&
+            data.expenses.map((expense) => (
+              <Expense
+                key={expense.user.id}
+                user={expense.user}
+                value={expense.value}
+              />
+            ))}
         </div>
       </div>
     </div>

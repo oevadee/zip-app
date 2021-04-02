@@ -1,34 +1,11 @@
-@import "../../../../variables";
+@import '../../../../variables';
 
 .expensePopup {
-  min-height: 260px;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   margin: 20px;
-}
-
-.expensePopup__userSelector {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  margin-bottom: 20px;
-
-  .MuiAvatar-root {
-    display: inline-block;
-    opacity: 0.3;
-    width: 75px;
-    height: 75px;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -50,22 +27,4 @@
   align-items: center;
   justify-content: space-around;
   flex: 0.75;
-
-  input {
-    width: 50%;
-    height: 50px;
-    padding: 10px 45px;
-    border-radius: $border-radius;
-    background: none;
-    color: $color-white;
-    font-size: large;
-    text-align: center;
-    border: solid 1px $color-secondary;
-    outline: none;
-    margin-bottom: 10px;
-
-    @media (max-width: $mobile-L) {
-      width: 80%;
-    }
-  }
 }

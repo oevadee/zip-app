@@ -32,13 +32,11 @@ const RegisterRoute = () => {
       <Heading as="h1" fontSize="6xl" isTruncated mb={1}>
         Ultimate crew expense tracker <br />
       </Heading>
-      <span className="login__loginContainer__textSplit">
-        <Text fontSize="4xl" mb={10}>
-          OG edition
-        </Text>
-      </span>
+      <Text fontSize="4xl" mb={10} colorScheme="blue" color="rgb(31, 117, 196)">
+        OG edition
+      </Text>
       <Box maxWidth={600}>
-        <form autocomplete="off" onSubmit={handleSubmit(onSubmit, onError)}>
+        <form autoComplete="off" onSubmit={handleSubmit(onSubmit, onError)}>
           <Input
             name="email"
             ref={register}
@@ -66,12 +64,14 @@ const RegisterRoute = () => {
             variant="outline"
             mb={5}
           />
-          <ButtonGroup variant="outline" spacing="6">
-            <Button type="submit" colorScheme="blue" variant="solid" size="lg">
+          <ButtonGroup spacing="6">
+            <Button type="submit" colorScheme="blue" variant="solid">
               Register
             </Button>
             <Link to="/login">
-              <Button size="lg">Login</Button>
+              <Button variant="outline" colorScheme="pink">
+                Login
+              </Button>
             </Link>
           </ButtonGroup>
         </form>
