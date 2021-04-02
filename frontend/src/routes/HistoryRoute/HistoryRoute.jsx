@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./HistoryRoute.scss";
 import { PropTypes } from "prop-types";
 
-// Components
-import { Avatar } from "@material-ui/core"; 
+// Components 
 import { useParams } from "react-router";
 import { Header } from "../../components";
 import db, { auth } from "../../firebase";
 import { Trash2 as TrashIcon } from "react-feather";
+import { Avatar } from "@chakra-ui/avatar";
 
 const HistoryRoute = ({ historyEl, historyOf }) => {
   const { id } = useParams();

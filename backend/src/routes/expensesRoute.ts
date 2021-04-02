@@ -1,9 +1,9 @@
 import express from "express";
 
-import { getExpensesFromUser } from "../controllers/expensesController";
+import { getAllUserExpenses } from "../controllers/expensesController";
 
 const router = express.Router();
 
-router.get("/:userId", getExpensesFromUser);
+router.get("/", getAllUserExpenses);
 
 export default router;

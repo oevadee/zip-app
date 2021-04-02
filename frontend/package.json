@@ -1,7 +1,6 @@
 {
   "name": "zip-app",
   "version": "0.1.1",
-  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -10,11 +9,15 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
+  "proxy": "http://localhost:8080",
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
+    "@chakra-ui/react": "^1.4.1",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@reduxjs/toolkit": "^1.1.0",
     "axios": "^0.21.1",
     "firebase": "^7.24.0",
+    "framer-motion": "^4",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-feather": "^2.0.9",

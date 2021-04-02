@@ -1,7 +1,25 @@
 @import './variables';
 
-.app{
+.app {
   height: 100vh;
   display: flex;
   background-color: $color-primary;
+}
+
+input {
+  box-shadow: none;
+
+  &:-webkit-autofill {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: white !important;
+  }
+
+  &:focus {
+    &:-webkit-autofill {
+      outline: none;
+      box-shadow: none;
+      border-color: none;
+    }
+  }
 }

@@ -1,13 +1,21 @@
-import React from "react";
-import "./ExpensesRoute.scss";
-import { Header } from "../../components";
-import db, { auth } from "../../firebase";
-import { ExpensePopup, Expense } from "./components";
-import { useSelector } from "react-redux";
+import React, { useState } from 'react';
+import './ExpensesRoute.scss';
+import { Header } from '../../components';
+import db, { auth } from '../../firebase';
+import { ExpensePopup, Expense } from './components';
+import { useSelector, useDispatch } from 'react-redux';
+import { useFetch } from '/src/hooks';
 
 const ExpensesRoute = ({ users }) => {
   const popupVisible = useSelector((state) => state.app.popupVisible);
-    
+  const [total, setTotal] = useState(0);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+
+  const data = useFetch(`/api/expenses?userId=${user.id}`);
+
+  console.log(data);
+
   return (
     <div className="expenses">
       <Header title="Expenses" expenseButton />
@@ -19,11 +27,11 @@ const ExpensesRoute = ({ users }) => {
           <h3 className="expensesHeader__history">History</h3>
         </div>
         <div className="expensesList">
-          {users
+          {/* {users
             .filter((user) => user.id !== auth.currentUser.uid)
             .map((user) => (
               <Expense key={user.id} user={user} />
-            ))}
+            ))} */}
         </div>
       </div>
     </div>

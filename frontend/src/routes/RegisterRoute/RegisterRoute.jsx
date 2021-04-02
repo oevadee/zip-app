@@ -1,5 +1,4 @@
 import React from 'react';
-import './LoginRoute.scss';
 import { useForm } from 'react-hook-form';
 import {
   Heading,
@@ -14,24 +13,23 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
 import { Link } from 'react-router-dom';
 
-const LoginRoute = () => {
+const RegisterRoute = () => {
   const { register, handleSubmit } = useForm();
   const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
+    console.log(values);
     const { data } = await axios.post(
-      `http://localhost:8080/api/users/login`,
+      `http://localhost:8080/api/users/register`,
       values,
     );
-
-    data && dispatch(loginUser(data));
   };
 
   const onError = (err) => console.log(err);
 
   return (
     <div className="login">
-      <Heading as="h1" fontSize="6xl" isTruncated mb={1} colorScheme="pink">
+      <Heading as="h1" fontSize="6xl" isTruncated mb={1}>
         Ultimate crew expense tracker <br />
       </Heading>
       <span className="login__loginContainer__textSplit">
@@ -59,12 +57,21 @@ const LoginRoute = () => {
             variant="outline"
             mb={5}
           />
+          <Input
+            name="confirmPassword"
+            ref={register}
+            placeholder="Confirm password"
+            type="password"
+            size="lg"
+            variant="outline"
+            mb={5}
+          />
           <ButtonGroup variant="outline" spacing="6">
             <Button type="submit" colorScheme="blue" variant="solid" size="lg">
-              Login
+              Register
             </Button>
-            <Link to="/register">
-              <Button size="lg">Register</Button>
+            <Link to="/login">
+              <Button size="lg">Login</Button>
             </Link>
           </ButtonGroup>
         </form>
@@ -73,4 +80,4 @@ const LoginRoute = () => {
   );
 };
 
-export default LoginRoute;
+export default RegisterRoute;

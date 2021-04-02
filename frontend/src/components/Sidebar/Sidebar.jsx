@@ -3,7 +3,6 @@ import { PropTypes } from "prop-types";
 import "./Sidebar.scss";
 
 // Components
-import { Avatar } from "@material-ui/core";
 import { Channel, Button } from "/src/components";
 
 // Icons
@@ -14,6 +13,7 @@ import db, { auth } from "/src/firebase";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleNav } from "../../state/actions/appAction";
+import { Avatar } from "@chakra-ui/avatar";
 
 const Sidebar = ({ user }) => {
   const [channels, setChannels] = useState([]);
@@ -50,7 +50,7 @@ const Sidebar = ({ user }) => {
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar src={user.photo} />
-          <h3>{user.displayName}</h3>
+          <h3>{user.name}</h3>
         </div>
         <Link to="/notifications" onClick={handleNavToggle}>
           <NotificationIcon />

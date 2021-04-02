@@ -22,6 +22,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { useFetch } from './hooks';
+import RegisterRoute from './routes/RegisterRoute/RegisterRoute';
 
 const App = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -34,28 +35,24 @@ const App = () => {
     data && setUsers(data);
   }, [data]);
 
-  useEffect(() => {
-    auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        userDispatch(
-          loginUser({
-            uid: authUser.uid,
-            photo: authUser.photoURL,
-            email: authUser.email,
-            displayName: authUser.displayName,
-          }),
-        );
-        db.collection('users').doc(authUser.uid).set({
-          uid: authUser.uid,
-          photo: authUser.photoURL,
-          email: authUser.email,
-          displayName: authUser.displayName,
-        });
-      } else {
-        userDispatch(logoutUser());
-      }
-    });
-  }, []);
+  console.log(users);
+
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((authUser) => {
+  //     console.log(authUser);
+  //     if (authUser) {
+  //       userDispatch(
+  //         loginUser({
+  //           name: authUser.displayName,
+  //           email: authUser.email,
+  //           photo: authUser.photoURL,
+  //         }),
+  //       );
+  //     } else {
+  //       userDispatch(logoutUser());
+  //     }
+  //   });
+  // }, []);
 
   return (
     <div className="app">
@@ -84,9 +81,8 @@ const App = () => {
         ) : (
           <>
             <Redirect to="/login" />
-            <Route path="/login">
-              <LoginRoute />
-            </Route>
+            <Route path="/login" component={LoginRoute} />
+            <Route path="/register" component={RegisterRoute} />
           </>
         )}
       </Router>

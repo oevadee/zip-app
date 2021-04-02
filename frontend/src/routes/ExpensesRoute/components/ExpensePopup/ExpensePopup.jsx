@@ -3,7 +3,6 @@ import { PropTypes } from "prop-types";
 import "./ExpensePopup.scss";
 
 // Components
-import { Avatar } from "@material-ui/core";
 import { Button } from "/src/components";
 
 // Redux
@@ -11,6 +10,7 @@ import db, { auth } from "/src/firebase";
 import firebase from "firebase";
 import { useDispatch } from "react-redux";
 import { togglePopup } from "/src/state/actions/appAction";
+import { Avatar } from "@chakra-ui/avatar";
 
 const ExpensePopup = ({ users }) => {
   const [selectedUser, setSelectedUser] = useState(null);

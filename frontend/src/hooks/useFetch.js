@@ -5,17 +5,13 @@ const useFetch = (url) => {
   const [data, setData] = useState(null);
 
   const fetch = async () => {
-    const { data: newData } = await axios.get(
-      'http://localhost:8080/api' + url,
-    );
-    console.log(newData);
+    const { data: newData } = await axios.get('http://localhost:8080' + url);
     setData(newData);
   };
 
   useEffect(() => {
     fetch();
   }, []);
-
 
   return data;
 };

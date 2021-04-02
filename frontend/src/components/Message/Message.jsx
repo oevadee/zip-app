@@ -1,9 +1,7 @@
 import React from 'react'
 import { PropTypes } from "prop-types";
 import './Message.scss';
-
-// Icons
-import { Avatar } from "@material-ui/core";
+import { Avatar } from '@chakra-ui/avatar';
 
 const Message = ({ timestamp, message, user }) => {
   return (
