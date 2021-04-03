@@ -13,6 +13,7 @@ import { Plus as AddCircleIcon } from 'react-feather';
 
 import { useForm } from 'react-hook-form';
 import { getCurrentTimestamp } from '../../utils';
+import axios from 'axios';
 
 const ChatRoute = ({ user }) => {
   const [messages, setMessages] = useState([]);
@@ -21,8 +22,12 @@ const ChatRoute = ({ user }) => {
   const { register, handleSubmit, reset } = useForm();
   const timestamp = getCurrentTimestamp();
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const {message} = values
+    const data = await axios.post(
+      `http://localhost:8080/api/chat?userId=${user.id}`,
+      { message, timestamp },
+    );
 
     reset();
   };

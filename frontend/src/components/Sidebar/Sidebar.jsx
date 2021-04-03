@@ -14,11 +14,16 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleNav } from '../../state/actions/appAction';
 import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
+import axios from 'axios';
+import useFetch from '../../hooks/useFetch';
 
 const Sidebar = ({ user }) => {
   const [channels, setChannels] = useState([]);
   const navOpen = useSelector((state) => state.app.navOpen);
   const navDispatch = useDispatch();
+  const { data } = useFetch('/api/chat/channel');
+
+  console.log(data);
 
   useEffect(() => {
     db.collection('channels').onSnapshot((snapshot) =>
@@ -31,12 +36,12 @@ const Sidebar = ({ user }) => {
     );
   }, []);
 
-  const handleAddChannel = () => {
+  const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
 
     if (channelName) {
-      db.collection('channels').add({
-        channelName: channelName,
+      const data = await axios.post('http://localhost:8080/api/chat/channel', {
+        channelName,
       });
     }
   };
@@ -66,7 +71,10 @@ const Sidebar = ({ user }) => {
         </Link>
         <div className="sidebar__selectorHeader--withoutHover">
           <h2>Chat room</h2>
-          <AddIcon onClick={handleAddChannel} />
+          <AddIcon
+            className="sidebar__selectorHeader__icon"
+            onClick={handleAddChannel}
+          />
         </div>
         <div className="sidebar__chatList">
           {channels.map(({ channel, id }) => (

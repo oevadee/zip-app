@@ -4,7 +4,7 @@ import moduleAlias from "module-alias";
 import config from "./config";
 import path from "path";
 
-import { usersRoute, expensesRoute } from "./routes";
+import { usersRoute, expensesRoute, chatRoute } from "./routes";
 
 moduleAlias.addAlias("src", __dirname);
 const app = express();
@@ -31,6 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users", usersRoute);
 app.use("/api/expenses", expensesRoute);
+app.use("/api/chat", chatRoute);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
