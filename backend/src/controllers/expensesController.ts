@@ -80,32 +80,42 @@ const getAllUserExpenses = async (
 };
 
 const createExpense = async (req: Request, res: Response): Promise<any> => {
-  const { userId } = req.query;
+  const { userId } = req.params;
   const { values, timestamp } = req.body;
 
   try {
     const { value, details, user } = values;
+    const newValue = Math.abs(+value)
 
-    await session.writeTransaction((txc) => {
-      txc.run(
+    const [expense] = await session.writeTransaction(async (txc) => {
+      const result = await txc.run(
         `
-        MATCH (a:User) (b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) CREATE (a)-[OWES]->(e:Expense {})-[IS_OWED]->(b)
+        MATCH (a:User), (b:User) 
+        WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) 
+        CREATE (a)-[:OWES]->(e:Expense {details: $details, timestamp: $timestamp, value: $value})-[:IS_OWED]->(b) RETURN e
       `,
-        value > 0
+        +value > 0
           ? {
               id: user,
               externalId: userId,
+              details,
+              timestamp,
+              value: newValue
             }
-          : value === 0
+          : +value === 0
           ? new Error("You cant create an empy expense.")
           : {
               id: userId,
               externalId: user,
+              details,
+              timestamp,
+              value: newValue
             }
       );
+      return result.records.map((el: any) => el.get('e').properties);
     });
 
-    return res.json();
+    return res.json(expense);
   } catch (err) {
     console.error(err);
     return res
