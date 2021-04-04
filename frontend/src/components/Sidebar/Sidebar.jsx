@@ -16,25 +16,11 @@ import { toggleNav } from '../../state/actions/appAction';
 import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
 import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
+import { mutate } from 'swr';
 
-const Sidebar = ({ user }) => {
-  const [channels, setChannels] = useState([]);
+const Sidebar = ({ user, channels }) => {
   const navOpen = useSelector((state) => state.app.navOpen);
   const navDispatch = useDispatch();
-  const { data } = useFetch('/api/chat/channel');
-
-  console.log(data);
-
-  useEffect(() => {
-    db.collection('channels').onSnapshot((snapshot) =>
-      setChannels(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          channel: doc.data(),
-        })),
-      ),
-    );
-  }, []);
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
@@ -48,6 +34,7 @@ const Sidebar = ({ user }) => {
 
   const handleNavToggle = () => {
     navDispatch(toggleNav());
+    mutate('http://localhost:8080/api/chat');
   };
 
   return (
@@ -77,12 +64,12 @@ const Sidebar = ({ user }) => {
           />
         </div>
         <div className="sidebar__chatList">
-          {channels.map(({ channel, id }) => (
+          {channels.map(({ name, id }) => (
             <Link to={`/chat/${id}`} key={id}>
               <Channel
                 key={id}
                 id={id}
-                channelName={channel.channelName}
+                channelName={name}
                 onClick={handleNavToggle}
               />
             </Link>

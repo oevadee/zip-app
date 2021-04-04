@@ -1,11 +1,11 @@
-import React from "react";
-import { PropTypes } from "prop-types";
-import "./Channel.scss";
+import React from 'react';
+import { PropTypes } from 'prop-types';
+import './Channel.scss';
 
 // Redux
-import { useDispatch } from "react-redux";
-import { setChannel } from "../../state/actions/channelAction";
-import { toggleNav } from "../../state/actions/appAction";
+import { useDispatch } from 'react-redux';
+import { setChannel } from '../../state/actions/channelAction';
+import { toggleNav } from '../../state/actions/appAction';
 
 const Channel = ({ id, channelName }) => {
   const channelDispatch = useDispatch();
@@ -18,7 +18,7 @@ const Channel = ({ id, channelName }) => {
           setChannel({
             channelId: id,
             channelName: channelName,
-          })
+          }),
         );
         channelDispatch(toggleNav());
       }}
@@ -31,7 +31,7 @@ const Channel = ({ id, channelName }) => {
 };
 
 Channel.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   channelName: PropTypes.string.isRequired,
   setMobileNavOpen: PropTypes.func,
 };

@@ -1,20 +1,20 @@
-import React from 'react'
-import { PropTypes } from "prop-types";
+import React from 'react';
+import { PropTypes } from 'prop-types';
 import './Message.scss';
 import { Avatar } from '@chakra-ui/avatar';
 
-const Message = ({ timestamp, message, user }) => {
+const Message = ({ message }) => {
   return (
     <div className="message">
-      <Avatar src={user.photo} />
+      <Avatar src={message.user.photo} />
       <div className="message__info">
         <h4>
-          {user.displayName}
+          {message.user.name}
           <span className="message__timestamp">
-            {timestamp}
+            {message.message.timestamp}
           </span>
         </h4>
-        <p>{message}</p>
+        <p>{message.message.message}</p>
       </div>
     </div>
   );

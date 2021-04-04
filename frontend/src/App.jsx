@@ -15,12 +15,14 @@ import {
   LoginRoute,
   HistoryRoute,
   NotificationsRoute,
-  RegisterRoute
+  RegisterRoute,
 } from './routes';
+import useFetch from './hooks/useFetch';
+import { setChannel } from './state/actions/channelAction';
 
 const App = () => {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const user = useSelector((state) => state.user.user);
+  const channels = useFetch('/api/chat/channel');
 
   return (
     <div className="app">
@@ -28,11 +30,7 @@ const App = () => {
         {user ? (
           <>
             <Redirect to="/expenses" />
-            <Sidebar
-              user={user}
-              mobileNavOpen={mobileNavOpen}
-              setMobileNavOpen={setMobileNavOpen}
-            />
+            <Sidebar channels={channels && channels} user={user} />
             <Switch>
               <Route path="/expenses">
                 <ExpensesRoute />

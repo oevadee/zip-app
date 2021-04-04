@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  getAllMessages,
   createNewMessage,
   getAllChannels,
   createNewChannel,
@@ -8,7 +9,8 @@ import {
 
 const router = express.Router();
 
-router.post("/", createNewMessage);
+router.get("/messages/:channelId", getAllMessages);
+router.post("/messages", createNewMessage);
 router.get("/channel", getAllChannels);
 router.post("/channel", createNewChannel);
 
