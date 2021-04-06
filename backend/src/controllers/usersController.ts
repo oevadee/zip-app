@@ -1,31 +1,31 @@
 import { Request, Response } from "express";
-import txc, { session } from "../config/db";
+import session from "../config/db";
 import bcrypt from "bcrypt";
 
 const login = async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password } = req.body;
 
-    const dbUser = await txc.run(
-      `
-    MATCH (a:User {email: $email})
-    RETURN a
-    `,
-      {
-        email: email,
-      }
-    );
+    const [dbUser] = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
+        `
+        MATCH (a:User {email: $email})
+        RETURN a
+      `,
+        { email: email }
+      );
 
-    const data = dbUser.records.map((el: any) => ({
-      id: el.get("a").identity.low,
-      ...el.get("a").properties,
-    }))[0];
+      return result.records.map((el: any) => ({
+        id: el.get("a").identity.low,
+        ...el.get("a").properties,
+      }));
+    });
 
-    if (bcrypt.compareSync(password, data.password)) {
+    if (bcrypt.compareSync(password, dbUser.password)) {
       const newData = {
-        id: data.id,
-        name: data.name,
-        email: data.email,
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
       };
       return res.status(200).json(newData);
     } else return res.status(400).json({ message: "Auth failed." });
@@ -93,14 +93,18 @@ const register = async (req: Request, res: Response): Promise<any> => {
 
 const getUsers = async (req: Request, res: Response): Promise<any> => {
   try {
-    const result = await txc.run(`MATCH (u:User) RETURN u as user`);
+    const users = await session.readTransaction(async (txc) => {
+      const result = await txc.run(`
+        MATCH (u:User) RETURN u as user
+        `);
 
-    const data = result.records.map((el: any) => ({
-      id: el.get("user").identity.low,
-      ...el.get("user").properties,
-    }));
+      return result.records.map((el: any) => ({
+        id: el.get("user").identity.low,
+        ...el.get("user").properties,
+      }));
+    });
 
-    return res.json(data);
+    return res.json(users);
   } catch (err) {
     console.error(err);
     return res

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChatRoute.scss';
 import { useParams } from 'react-router';
 
@@ -10,22 +10,26 @@ import { useForm } from 'react-hook-form';
 import { getCurrentTimestamp } from '../../utils';
 import axios from 'axios';
 import useFetch from '../../hooks/useFetch';
-import { mutate } from 'swr';
+import useSWR from 'swr';
 
 const ChatRoute = ({ user }) => {
   const [channelName, setChannelName] = useState('');
   const { channelId } = useParams();
   const { register, handleSubmit, reset } = useForm();
-  const messages = useFetch(`/api/chat/messages/${channelId}`);
+  const { data: messages, mutate } = useSWR(`/api/chat/messages/${channelId}`);
+
+  useEffect(() => {
+    mutate();
+  }, [channelId]);
 
   const onSubmit = async (values) => {
     const { message } = values;
     const timestamp = getCurrentTimestamp();
-    const data = await axios.post(
+    await axios.post(
       `http://localhost:8080/api/chat/messages?userId=${user.id}`,
       { message, timestamp, channelId },
     );
-    mutate('http://localhost:8080/api/chat');
+    mutate();
     reset();
   };
 

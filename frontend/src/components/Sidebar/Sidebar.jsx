@@ -7,35 +7,24 @@ import { Channel } from '/src/components';
 
 // Icons
 import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
+import { Spinner } from '@chakra-ui/spinner';
 
 // Firebase
-import db, { auth } from '/src/firebase';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleNav } from '../../state/actions/appAction';
+import { useSelector } from 'react-redux';
 import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
 import axios from 'axios';
-import useFetch from '../../hooks/useFetch';
-import { mutate } from 'swr';
 
-const Sidebar = ({ user, channels }) => {
+const Sidebar = ({ user, mutate, channels }) => {
   const navOpen = useSelector((state) => state.app.navOpen);
-  const navDispatch = useDispatch();
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
-
-    if (channelName) {
-      const data = await axios.post('http://localhost:8080/api/chat/channel', {
-        channelName,
-      });
-    }
+    if (channelName) await axios.post('/api/chat/channel', { channelName });
+    mutate();
   };
 
-  const handleNavToggle = () => {
-    navDispatch(toggleNav());
-    mutate('http://localhost:8080/api/chat');
-  };
+  if (!channels) return <Spinner color="pink" />;
 
   return (
     <Box w={220} className={`sidebar ${navOpen && `sidebar--mobileOn`}`}>
@@ -46,13 +35,13 @@ const Sidebar = ({ user, channels }) => {
             {user.name}
           </Heading>
         </div>
-        <Link to="/notifications" onClick={handleNavToggle}>
+        <Link to="/notifications">
           <NotificationIcon />
         </Link>
       </div>
       <div className="sidebar__selector">
         <Link to="/expenses">
-          <div className="sidebar__selectorHeader" onClick={handleNavToggle}>
+          <div className="sidebar__selectorHeader">
             <h2>Expenses</h2>
           </div>
         </Link>
@@ -66,20 +55,13 @@ const Sidebar = ({ user, channels }) => {
         <div className="sidebar__chatList">
           {channels.map(({ name, id }) => (
             <Link to={`/chat/${id}`} key={id}>
-              <Channel
-                key={id}
-                id={id}
-                channelName={name}
-                onClick={handleNavToggle}
-              />
+              <Channel key={id} id={id} channelName={name} />
             </Link>
           ))}
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button colorScheme="pink" onClick={() => auth.signOut()}>
-          Logout
-        </Button>
+        <Button colorScheme="pink">Logout</Button>
       </div>
     </Box>
   );

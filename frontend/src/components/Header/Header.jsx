@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import './Header.scss';
 
 // Icons
-import { Menu as MenuIcon, ArrowLeft as ArrowBackIcon } from 'react-feather';
+import { Menu as MenuIcon } from 'react-feather';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toggleNav, togglePopup } from '../../state/actions/appAction';
-import { Button } from '@chakra-ui/button';
+import { Button, CloseButton } from '@chakra-ui/react';
 
 const Header = ({ title, expenseButton = false, goBackButton = false }) => {
   const appDispatch = useDispatch();
@@ -43,7 +43,7 @@ const Header = ({ title, expenseButton = false, goBackButton = false }) => {
         )}
         {goBackButton && (
           <Link to="/expenses">
-            <Button className="header__buttons__icon" fontSize="large" />
+            <CloseButton color="white" size="lg" />
           </Link>
         )}
       </div>

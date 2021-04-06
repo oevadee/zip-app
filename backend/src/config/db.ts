@@ -1,8 +1,13 @@
-import neo4j from 'neo4j-driver';
+import neo4j from "neo4j-driver";
+import config from "./index";
 
-const driver = neo4j.driver('bolt://localhost', neo4j.auth.basic('neo4j', 'juice2018sz'), {
-  maxTransactionRetryTime: 30000
-});
-export const session = driver.session();
+export const driver = neo4j.driver(
+  "bolt://localhost",
+  neo4j.auth.basic("neo4j", config.neo_password),
+  {
+    maxTransactionRetryTime: 30000,
+  }
+);
+const session = driver.session();
 
 export default session;

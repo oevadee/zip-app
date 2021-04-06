@@ -7,14 +7,19 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import theme from './themes/theme';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ChakraProvider>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <App />
-      </ChakraProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <App />
+        </ChakraProvider>
+      </QueryClientProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),

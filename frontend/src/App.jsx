@@ -7,6 +7,7 @@ import {
   Switch,
   Route,
   Redirect,
+  useParams,
 } from 'react-router-dom';
 
 import {
@@ -17,12 +18,14 @@ import {
   NotificationsRoute,
   RegisterRoute,
 } from './routes';
-import useFetch from './hooks/useFetch';
-import { setChannel } from './state/actions/channelAction';
+import useSWR from 'swr';
+import { Spinner } from '@chakra-ui/spinner';
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
-  const channels = useFetch('/api/chat/channel');
+  const { data, mutate } = useSWR('/api/chat/channel');
+
+  if (!data) return <Spinner color="pink" />;
 
   return (
     <div className="app">
@@ -30,12 +33,14 @@ const App = () => {
         {user ? (
           <>
             <Redirect to="/expenses" />
-            <Sidebar channels={channels && channels} user={user} />
+            <Sidebar user={user} mutate={mutate} channels={data} />
             <Switch>
               <Route path="/expenses">
                 <ExpensesRoute />
               </Route>
-              <Route path="/history/:id" component={HistoryRoute} />
+              <Route path="/history/:id">
+                <HistoryRoute user={user} />
+              </Route>
               <Route path="/chat/:channelId">
                 <ChatRoute user={user} />
               </Route>

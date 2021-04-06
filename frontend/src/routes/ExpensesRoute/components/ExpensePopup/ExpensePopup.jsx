@@ -23,8 +23,8 @@ import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { getCurrentTimestamp } from '../../../../utils';
 
-const ExpensePopup = ({ user, users }) => {
-  const { register, handleSubmit, control, watch } = useForm({
+const ExpensePopup = ({ user, users, mutate }) => {
+  const { register, handleSubmit, control, watch, reset } = useForm({
     defaultValues: {
       value: 0,
       details: '',
@@ -42,6 +42,9 @@ const ExpensePopup = ({ user, users }) => {
         timestamp: new Date().toLocaleDateString(),
       },
     );
+
+    reset();
+    mutate();
 
     console.log(data);
   };

@@ -1,49 +1,25 @@
-import React, { useEffect, useState } from "react";
-import "./HistoryRoute.scss";
-import { PropTypes } from "prop-types";
+import React, { useEffect, useState } from 'react';
+import './HistoryRoute.scss';
+import { PropTypes } from 'prop-types';
 
-// Components 
-import { useParams } from "react-router";
-import { Header } from "../../components";
-import db, { auth } from "../../firebase";
-import { Trash2 as TrashIcon } from "react-feather";
-import { Avatar } from "@chakra-ui/avatar";
-import useFetch from "../../hooks/useFetch";
+// Components
+import { useParams } from 'react-router';
+import { Header } from '../../components';
+import db, { auth } from '../../firebase';
+import { Trash2 as TrashIcon } from 'react-feather';
+import { Avatar } from '@chakra-ui/avatar';
+import useSWR from 'swr';
 
-const HistoryRoute = () => {
+const HistoryRoute = ({ user }) => {
   const { id } = useParams();
-  const [historyArr, setHistoryArr] = useState([]);
-  const [user, setUser] = useState(null);
 
-  const history = useFetch(`/api/expenses/history/${id}`)
+  const { data, mutate } = useSWR(
+    `/api/expenses/history/${id}?userId=${user.id}`,
+  );
 
-  useEffect(() => {
-    db.collection("users")
-      .doc(auth.currentUser.uid)
-      .collection("expensesFrom")
-      .doc(id)
-      .collection(id)
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        setHistoryArr(snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        })));
-      });
-    db.collection("users")
-      .doc(id)
-      .onSnapshot((snap) => {
-        setUser(snap.data());
-      });
-  }, [id]);
+  console.log(data);
 
-  const handleExpenseDelete = (expenseId) => {
-    console.log(expenseId);
-    console.log(id);
-    db.collection('users').doc(auth.currentUser.uid).collection('expensesFrom').doc(id).collection(id).doc(expenseId).update({
-      deletion_request: true
-    })
-  };
+  const handleExpenseDelete = (expenseId) => {};
 
   return (
     <div className="history">
@@ -58,7 +34,7 @@ const HistoryRoute = () => {
         </div>
 
         <div className="historyList">
-          {historyArr.map((historyEl) => {
+          {/* {historyArr.map((historyEl) => {
             console.log(historyEl.id)
             return (
               <div className="tableRow" key={historyEl.timestamp}>
@@ -80,7 +56,7 @@ const HistoryRoute = () => {
                 </div>
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     </div>

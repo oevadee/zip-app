@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import moduleAlias from "module-alias";
 import config from "./config";

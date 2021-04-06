@@ -85,7 +85,7 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
 
   try {
     const { value, details, user } = values;
-    const newValue = Math.abs(+value)
+    const newValue = Math.abs(+value);
 
     const [expense] = await session.writeTransaction(async (txc) => {
       const result = await txc.run(
@@ -100,7 +100,7 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
               externalId: userId,
               details,
               timestamp,
-              value: newValue
+              value: newValue,
             }
           : +value === 0
           ? new Error("You cant create an empy expense.")
@@ -109,10 +109,10 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
               externalId: user,
               details,
               timestamp,
-              value: newValue
+              value: newValue,
             }
       );
-      return result.records.map((el: any) => el.get('e').properties);
+      return result.records.map((el: any) => el.get("e").properties);
     });
 
     return res.json(expense);
@@ -124,6 +124,42 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const getHistory = async (req: Request, res: Response): Promise<any> => {};
+const getHistory = async (req: Request, res: Response): Promise<any> => {
+  const { externalId } = req.params;
+  const { userId } = req.query;
+
+  console.log(userId, externalId);
+
+  try {
+    const history = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
+        `
+        MATCH (a:User)-[]-(e:Expense)-[]-(b:User)
+        WHERE id(a) = toInteger($userId)
+        AND id(b) = toInteger($externalId)
+        RETURN a,b,e
+      `,
+        {
+          userId,
+          externalId,
+        }
+      );
+
+      return result.records.map((el) => ({
+        ...el.get("a").properties,
+        ...el.get("b").properties,
+        ...el.get("e").properties,
+      }));
+    });
+
+    console.log(history);
+    return res.json();
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with getting history" });
+  }
+};
 
 export { getAllUserExpenses, createExpense, getHistory };

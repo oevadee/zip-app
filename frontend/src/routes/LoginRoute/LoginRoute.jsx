@@ -19,10 +19,7 @@ const LoginRoute = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
-    const { data } = await axios.post(
-      `http://localhost:8080/api/users/login`,
-      values,
-    );
+    const { data } = await axios.post(`/api/users/login`, values);
 
     data && dispatch(loginUser(data));
   };
@@ -64,7 +61,9 @@ const LoginRoute = () => {
               Login
             </Button>
             <Link to="/register">
-              <Button variant="outline" colorScheme="pink">Register</Button>
+              <Button variant="outline" colorScheme="pink">
+                Register
+              </Button>
             </Link>
           </ButtonGroup>
         </form>
