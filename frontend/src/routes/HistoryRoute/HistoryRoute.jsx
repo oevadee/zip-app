@@ -34,10 +34,6 @@ const HistoryRoute = ({ user }) => {
 
   if (!data) return <Spinner color="pink" />;
 
-  console.log(history);
-
-  const prepared
-
   return (
     <div className="history">
       <Header title="History" goBackButton />
