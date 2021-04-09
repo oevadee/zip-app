@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import session from "../config/db";
+import driver from "../config/db";
 
 interface IuserWithExpeses {
   id: number;
@@ -13,6 +13,7 @@ const getAllUserExpenses = async (
   req: Request,
   res: Response
 ): Promise<any> => {
+  const session = driver.session();
   const { userId } = req.query;
 
   try {
@@ -76,12 +77,15 @@ const getAllUserExpenses = async (
     return res
       .status(400)
       .json({ message: "There was an error with getting user expenses" });
+  } finally {
+    session.close();
   }
 };
 
 const createExpense = async (req: Request, res: Response): Promise<any> => {
   const { userId } = req.params;
   const { values, timestamp } = req.body;
+  const session = driver.session();
 
   try {
     const { value, details, user } = values;
@@ -121,23 +125,24 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
     return res
       .status(400)
       .json({ message: "The was an error while creating new expense." });
+  } finally {
+    session.close();
   }
 };
 
 const getHistory = async (req: Request, res: Response): Promise<any> => {
   const { externalId } = req.params;
   const { userId } = req.query;
-
-  console.log(userId, externalId);
+  const session = driver.session();
 
   try {
-    const history = await session.readTransaction(async (txc) => {
+    const outHistory = await session.readTransaction(async (txc) => {
       const result = await txc.run(
         `
-        MATCH (a:User)-[]-(e:Expense)-[]-(b:User)
+        MATCH (a:User)-[:OWES]->(e:Expense)-[:IS_OWED]->(b:User)
         WHERE id(a) = toInteger($userId)
         AND id(b) = toInteger($externalId)
-        RETURN a,b,e
+        RETURN b.name as name, b.photo as photo, e
       `,
         {
           userId,
@@ -146,19 +151,51 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
       );
 
       return result.records.map((el) => ({
-        ...el.get("a").properties,
-        ...el.get("b").properties,
+        name: el.get("name"),
+        photo: el.get("photo"),
+        id: el.get("e").identity.low,
         ...el.get("e").properties,
       }));
     });
 
-    console.log(history);
-    return res.json();
+    const preparedOutHistory = outHistory.map((el) => ({
+      ...el,
+      value: -el.value,
+    }));
+
+    const inHistory = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
+        `
+        MATCH (a:User)-[:OWES]->(e:Expense)-[:IS_OWED]->(b:User)
+        WHERE id(a) = toInteger($externalId)
+        AND id(b) = toInteger($userId)
+        RETURN a.name as name, a.photo as photo, e
+      `,
+        {
+          externalId,
+          userId,
+        }
+      );
+
+      return result.records.map((el) => ({
+        name: el.get("name"),
+        photo: el.get("photo"),
+        id: el.get("e").identity.low,
+        ...el.get("e").properties,
+      }));
+    });
+
+    return res.json({
+      inHistory,
+      outHistory: preparedOutHistory,
+    });
   } catch (err) {
     console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with getting history" });
+  } finally {
+    session.close();
   }
 };
 

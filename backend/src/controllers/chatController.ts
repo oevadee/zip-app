@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import session from "../config/db";
+import driver from "../config/db";
 
 const getAllMessages = async (req: Request, res: Response): Promise<any> => {
   const { channelId } = req.params;
+  const session = driver.session();
 
   try {
     const messages = await session.readTransaction(async (txc) => {
@@ -24,19 +25,21 @@ const getAllMessages = async (req: Request, res: Response): Promise<any> => {
       }));
     });
 
-    console.log(messages);
     return res.json(messages);
   } catch (err) {
     console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with getting all messages" });
+  } finally {
+    session.close();
   }
 };
 
 const createNewMessage = async (req: Request, res: Response): Promise<any> => {
   const { userId } = req.query;
   const { message, timestamp, channelId } = req.body;
+  const session = driver.session();
 
   try {
     const [newMessage] = await session.writeTransaction(async (txc) => {
@@ -53,7 +56,6 @@ const createNewMessage = async (req: Request, res: Response): Promise<any> => {
       );
       return result.records.map((el: any) => el.get("m").properties);
     });
-    console.log(newMessage);
 
     return res.json(newMessage);
   } catch (err) {
@@ -61,10 +63,13 @@ const createNewMessage = async (req: Request, res: Response): Promise<any> => {
     return res
       .status(400)
       .json({ message: "There was an error creating new message" });
+  } finally {
+    session.close();
   }
 };
 
 const getAllChannels = async (req: Request, res: Response): Promise<any> => {
+  const session = driver.session();
   try {
     const channels = await session.readTransaction(async (txc) => {
       const result = await txc.run(`
@@ -83,11 +88,14 @@ const getAllChannels = async (req: Request, res: Response): Promise<any> => {
     return res
       .status(400)
       .json({ message: "There was an error with getting all channels" });
+  } finally {
+    session.close();
   }
 };
 
 const createNewChannel = async (req: Request, res: Response): Promise<any> => {
   const { channelName } = req.body;
+  const session = driver.session();
 
   try {
     const [newChannel] = await session.writeTransaction(async (txc) => {
@@ -112,6 +120,8 @@ const createNewChannel = async (req: Request, res: Response): Promise<any> => {
     return res
       .status(400)
       .json({ message: "There was an error while creating new channel" });
+  } finally {
+    session.close();
   }
 };
 

@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.scss';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Sidebar from './components/Sidebar/Sidebar';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-  useParams,
 } from 'react-router-dom';
 
 import {

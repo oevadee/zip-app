@@ -9,17 +9,34 @@ import db, { auth } from '../../firebase';
 import { Trash2 as TrashIcon } from 'react-feather';
 import { Avatar } from '@chakra-ui/avatar';
 import useSWR from 'swr';
+import { Spinner } from '@chakra-ui/spinner';
 
 const HistoryRoute = ({ user }) => {
-  const { id } = useParams();
+  const [history, setHistory] = useState([]);
 
+  const { id } = useParams();
   const { data, mutate } = useSWR(
     `/api/expenses/history/${id}?userId=${user.id}`,
   );
 
-  console.log(data);
+  useEffect(() => {
+    if (data) {
+      const { inHistory, outHistory } = data;
+      const sortedHistory = inHistory
+        .concat(outHistory)
+        .sort((a, b) => b.id - a.id);
+
+      setHistory(sortedHistory);
+    }
+  }, [data]);
 
   const handleExpenseDelete = (expenseId) => {};
+
+  if (!data) return <Spinner color="pink" />;
+
+  console.log(history);
+
+  const prepared
 
   return (
     <div className="history">
@@ -34,29 +51,24 @@ const HistoryRoute = ({ user }) => {
         </div>
 
         <div className="historyList">
-          {/* {historyArr.map((historyEl) => {
-            console.log(historyEl.id)
-            return (
-              <div className="tableRow" key={historyEl.timestamp}>
-                <div className="tableRow__user">
-                  <Avatar src={user && user.photo} />
-                </div>
-                <p className="tableRow__expense">{historyEl.value}</p>
-                <p className="tableRow__timestamp">
-                  {new Date(historyEl.timestamp?.toDate()).toLocaleDateString()}
-                </p>
-                <p className="tableRow__about">{historyEl.aboutTransaction}</p>
-                <div className="tableRow__blank">
-                  <TrashIcon
-                    size={20}
-                    color="#e84545"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleExpenseDelete(historyEl.id)}
-                  />
-                </div>
+          {history.map((el) => (
+            <div className="tableRow" key={el.id}>
+              <div className="tableRow__user">
+                <Avatar src={el.photo} />
               </div>
-            );
-          })} */}
+              <p className="tableRow__expense">{el.value}</p>
+              <p className="tableRow__timestamp">{el.timestamp}</p>
+              <p className="tableRow__about">{el.details}</p>
+              <div className="tableRow__blank">
+                <TrashIcon
+                  size={20}
+                  color="#e84545"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleExpenseDelete(el.id)}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

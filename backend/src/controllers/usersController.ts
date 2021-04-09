@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import session from "../config/db";
 import bcrypt from "bcrypt";
+import driver from "../config/db";
 
 const login = async (req: Request, res: Response): Promise<any> => {
+  const session = driver.session();
   try {
     const { email, password } = req.body;
 
@@ -32,10 +33,13 @@ const login = async (req: Request, res: Response): Promise<any> => {
   } catch (err) {
     console.error(err);
     return res.status(400).json({ message: "Auth failed." });
+  } finally {
+    session.close();
   }
 };
 
 const register = async (req: Request, res: Response): Promise<any> => {
+  const session = driver.session();
   try {
     const { email, password, confirmPassword } = req.body;
 
@@ -88,10 +92,13 @@ const register = async (req: Request, res: Response): Promise<any> => {
     return res.status(400).json({
       message: "There was an error with registration new account.",
     });
+  } finally {
+    session.close();
   }
 };
 
 const getUsers = async (req: Request, res: Response): Promise<any> => {
+  const session = driver.session();
   try {
     const users = await session.readTransaction(async (txc) => {
       const result = await txc.run(`
@@ -110,6 +117,8 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
     return res
       .status(400)
       .json({ message: "There was an error while loading users" });
+  } finally {
+    session.close();
   }
 };
 
