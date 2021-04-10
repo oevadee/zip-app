@@ -91,6 +91,7 @@ const ExpensePopup = ({ user, users, mutate }) => {
             <Input
               name="value"
               type="number"
+              step="0.01"
               ref={register}
               placeholder="How big is the expese?"
               textColor="white"
