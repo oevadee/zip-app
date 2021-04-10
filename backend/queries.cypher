@@ -218,12 +218,12 @@ CREATE
   (adi)-[:OWES]->(e43:Expense {value: 75.0, timestamp: '04/02/2021', details: 'Przelew expresowy'})-[:IS_OWED]->(mazur),
   (mazur)-[:OWES]->(e42:Expense {value: 10.0, timestamp: '13/02/2021', details: 'Thioco'})-[:IS_OWED]->(adi),
   (adi)-[:OWES]->(e41:Expense {value: 60.0, timestamp: '12/03/2021', details: 'Cali limelatti 0.35'})-[:IS_OWED]->(mazur),
-  (adi)-[:OWES]->(e40:Expense {value: 15.0, timestamp: '15/03/2021', details: 'paliwko'})-[:IS_OWED]->(mazur),
+  (adi)-[:OWES]->(e402:Expense {value: 15.0, timestamp: '15/03/2021', details: 'paliwko'})-[:IS_OWED]->(mazur),
   (mazur)-[:OWES]->(e39:Expense {value: 12.5, timestamp: '17/03/2021', details: 'Backwoods'})-[:IS_OWED]->(adi),
-  (mazur)-[:OWES]->(e67:Expense {value: 56.0, timestamp: '19/03/2021', details: 'Cali 📦 whiteRuntz backwod'})-[:IS_OWED]->(adi)
-  (mazur)-[:OWES]->(e38:Expense {value: 42.0, timestamp: '20/03/2021', details: 'Lont cali'})-[:IS_OWED]->(adi),
+  (mazur)-[:OWES]->(e67:Expense {value: 56.0, timestamp: '19/03/2021', details: 'Cali 📦 whiteRuntz backwod'})-[:IS_OWED]->(adi),
+  (mazur)-[:OWES]->(e33218:Expense {value: 42.0, timestamp: '20/03/2021', details: 'Lont cali'})-[:IS_OWED]->(adi),
   (mazur)-[:OWES]->(e37:Expense {value: 325.0, timestamp: '24/03/2021', details: 'Cali 📦 whiteRuntz'})-[:IS_OWED]->(adi),
-  (adi)-[:OWES]->(e4043:Expense {value: 39.0, timestamp: '05/04/2021', details: '0.21 pozyczylem cali runtz'})-[:IS_OWED]->(mazur),
+  (adi)-[:OWES]->(e44043:Expense {value: 39.0, timestamp: '05/04/2021', details: '0.21 pozyczylem cali runtz'})-[:IS_OWED]->(mazur),
   (adi)-[:OWES]->(e40:Expense {value: 44.6, timestamp: '07/04/2021', details: 'Pożyczka cali runtz'})-[:IS_OWED]->(mazur),
   (mazur)-[:OWES]->(e372:Expense {value: 26.42, timestamp: '09/04/2021', details: 'Lidl 3 krafty + piwa'})-[:IS_OWED]->(adi),
   (mazur)-[:OWES]->(e3724:Expense {value: 2.5, timestamp: '10/04/2021', details: 'Cwiara zana'})-[:IS_OWED]->(adi),
@@ -273,17 +273,17 @@ CREATE
   (mazur)-[:OWES]->(e36547:Expense {value: 9.0, timestamp: '21/03/2021', details: 'Uber'})-[:IS_OWED]->(pawel),
   (mazur)-[:OWES]->(e3357456:Expense {value: 20.0, timestamp: '21/03/2021', details: 'Prega 900'})-[:IS_OWED]->(pawel),
   (pawel)-[:OWES]->(e34682:Expense {value: 9.0, timestamp: '29/03/2021', details: 'oddalem ci juz za ubera'})-[:IS_OWED]->(mazur),
-  (pawel)-[:OWES]->(e32546415341:Expense {value: 28.0, timestamp: '05/04/2021', details: '0.15 Runtz'})-[:IS_OWED]->(mazur)
+  (pawel)-[:OWES]->(e32546415341:Expense {value: 28.0, timestamp: '05/04/2021', details: '0.15 Runtz'})-[:IS_OWED]->(mazur),
 
-  (pjot)-[:OWES]->(e364151:Expense {value: 10.0, timestamp: '21/03/2021', details: 'Prega 300'})-[:IS_OWED]->(pawel)
-  (pjot)-[:OWES]->(e374551:Expense {value: 12.0, timestamp: '05/04/2021', details: 'Zakupy'})-[:IS_OWED]->(pawel)
+  (pjot)-[:OWES]->(e364151:Expense {value: 10.0, timestamp: '21/03/2021', details: 'Prega 300'})-[:IS_OWED]->(pawel),
+  (pjot)-[:OWES]->(e374551:Expense {value: 12.0, timestamp: '05/04/2021', details: 'Zakupy'})-[:IS_OWED]->(pawel),
   
-  (pjot)-[:OWES]->(e3132434:Expense {value: 155.0, timestamp: '20/02/2021', details: 'narkotyki'})-[:IS_OWED]->(mazur)
-  (mazur)-[:OWES]->(e3134234:Expense {value: 28.0, timestamp: '05/03/2021', details: 'nachosy'})-[:IS_OWED]->(pjot)
-  (pjot)-[:OWES]->(e3134423:Expense {value: 10.0, timestamp: '05/03/2021', details: 'thioco'})-[:IS_OWED]->(mazur)
-  (mazur)-[:OWES]->(e3153434:Expense {value: 137.0, timestamp: '15/03/2021', details: 'spłata'})-[:IS_OWED]->(pjot)
-  (pjot)-[:OWES]->(e3136454:Expense {value: 20.0, timestamp: '29/03/2021', details: 'maczan'})-[:IS_OWED]->(mazur)
-  (pjot)-[:OWES]->(e3137654:Expense {value: 380.0, timestamp: '07/04/2021', details: 'PC'})-[:IS_OWED]->(mazur)
+  (pjot)-[:OWES]->(e3132434:Expense {value: 155.0, timestamp: '20/02/2021', details: 'narkotyki'})-[:IS_OWED]->(mazur),
+  (mazur)-[:OWES]->(e3134234:Expense {value: 28.0, timestamp: '05/03/2021', details: 'nachosy'})-[:IS_OWED]->(pjot),
+  (pjot)-[:OWES]->(e3134423:Expense {value: 10.0, timestamp: '05/03/2021', details: 'thioco'})-[:IS_OWED]->(mazur),
+  (mazur)-[:OWES]->(e3153434:Expense {value: 137.0, timestamp: '15/03/2021', details: 'spłata'})-[:IS_OWED]->(pjot),
+  (pjot)-[:OWES]->(e3136454:Expense {value: 20.0, timestamp: '29/03/2021', details: 'maczan'})-[:IS_OWED]->(mazur),
+  (pjot)-[:OWES]->(e3137654:Expense {value: 380.0, timestamp: '07/04/2021', details: 'PC'})-[:IS_OWED]->(mazur),
   (pjot)-[:OWES]->(e3137564:Expense {value: 20.0, timestamp: '10/04/2021', details: '0.1 cali'})-[:IS_OWED]->(mazur)
   
 RETURN bob, pjot, pawel, mazur, adi
