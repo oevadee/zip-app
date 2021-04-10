@@ -54,6 +54,7 @@ const createNewMessage = async (req: Request, res: Response): Promise<any> => {
           timestamp,
         }
       );
+      
       return result.records.map((el: any) => el.get("m").properties);
     });
 

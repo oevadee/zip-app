@@ -30,7 +30,9 @@ const HistoryRoute = ({ user }) => {
     }
   }, [data]);
 
-  const handleExpenseDelete = (expenseId) => {};
+  const handleExpenseDelete = (expenseId) => {
+    
+  };
 
   if (!data) return <Spinner color="pink" />;
 

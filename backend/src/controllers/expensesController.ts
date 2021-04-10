@@ -37,7 +37,7 @@ const getAllUserExpenses = async (
           { id: userId, externalId: user.id }
         );
 
-        return result.records.map((el: any) => ({
+        return result.records.map((el) => ({
           value: el.get("e").properties.value,
         }));
       });
