@@ -7,21 +7,45 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Header } from '../../components';
 import Card from '../../uiComponents/Card/Card';
 import CardContent from '../../uiComponents/CardContent/CardContent';
 import './SettingsRoute.scss';
 
-const SettingsRoute = () => {
+const SettingsRoute = ({ user }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
   const { register, handleSubmit } = useForm({
-    defaultValues: null,
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
   });
-  const onSubmit = (values) => {
-    console.log(values);
+
+  const onSubmit = async (values) => {
+    setIsLoading(true);
+    try {
+      const data = await axios.put(
+        `/api/users/profile?userId=${user.id}`,
+        values,
+      );
+      setAlert(data);
+    } catch (err) {
+      setAlert(err);
+      // setTimeout(() => {
+      //   setAlert(null);
+      // }, 3000);
+    }
   };
+
+  console.log(alert);
+
   return (
     <div className="settings">
       <Header title="Settings" />
@@ -34,17 +58,36 @@ const SettingsRoute = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl mb={4}>
               <FormLabel>Password</FormLabel>
-              <Input type="password" name="password" />
+              <Input ref={register} type="password" name="password" />
             </FormControl>
             <FormControl mb={4}>
               <FormLabel>Confirm Password</FormLabel>
-              <Input type="password" name="confirmPassword" />
+              <Input ref={register} type="password" name="confirmPassword" />
               <FormHelperText>We'll never share your email.</FormHelperText>
             </FormControl>
-            <Button variant="solid" colorScheme="blue">Submit</Button>
+            <Button
+              isLoading={isLoading}
+              loadingText="Submitting"
+              colorScheme="teal"
+              variant="solid"
+              type="submit"
+              colorScheme="blue"
+            >
+              Submit
+            </Button>
           </form>
         </CardContent>
       </Card>
+      {alert && (
+        <Alert
+          mt={4}
+          status={alert.status === 200 ? 'success' : 'warning'}
+          variant="subtle"
+        >
+          <AlertIcon />
+          {alert.data.message || alert.statusText}
+        </Alert>
+      )}
     </div>
   );
 };

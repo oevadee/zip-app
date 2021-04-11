@@ -16,7 +16,7 @@ import {
   HistoryRoute,
   NotificationsRoute,
   RegisterRoute,
-  SettingsRoute
+  SettingsRoute,
 } from './routes';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
@@ -39,7 +39,7 @@ const App = () => {
                 <ExpensesRoute />
               </Route>
               <Route path="/settings">
-                <SettingsRoute />
+                <SettingsRoute user={user} />
               </Route>
               <Route path="/history/:id">
                 <HistoryRoute user={user} />
