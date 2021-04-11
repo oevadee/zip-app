@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import driver from "../config/db";
 import jwt from "jsonwebtoken";
+import Controller from "../types/Controller.type";
 
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
@@ -24,7 +25,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
     });
 
     const { password: dbPassword, ...restOfDbUser } = dbUser;
-    
+
     if (bcrypt.compareSync(password, dbPassword)) {
       const userInfo = restOfDbUser;
 
@@ -32,7 +33,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
         if (err) return res.status(403);
         return res.json({
           user: userInfo,
-          token
+          token,
         });
       });
     } else return res.status(400).json({ message: "Auth failed." });
@@ -103,6 +104,34 @@ const register = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+const updateProfile: Controller = async (req, res) => {
+  const values = req.body;
+  const { userId } = req.query;
+  const session = driver.session();
+
+  try {
+    const { password, confirmPassword } = values;
+    if (password === confirmPassword) {
+      const hash = await bcrypt.hash(password, 10);
+      await session.writeTransaction(async (txc) => {
+        await txc.run(
+          `
+          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash
+        `,
+          { userId, hash }
+        );
+      });
+      return res.json({ message: "Password changed." });
+    } else
+      return res.status(304);
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with updating profile." });
+  }
+};
+
 const getUsers = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
   try {
@@ -128,4 +157,4 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { login, register, getUsers };
+export { login, register, updateProfile, getUsers };
