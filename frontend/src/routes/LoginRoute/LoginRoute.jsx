@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './LoginRoute.scss';
 import { useForm } from 'react-hook-form';
 import {
@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
 import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 
 const LoginRoute = () => {
   const { register, handleSubmit } = useForm();
@@ -20,9 +21,20 @@ const LoginRoute = () => {
 
   const onSubmit = async (values) => {
     const { data } = await axios.post(`/api/users/login`, values);
+    const { user, token } = data;
 
-    data && dispatch(loginUser(data));
+    user && dispatch(loginUser(user));
+    token && localStorage.setItem('secret', token);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('secret');
+
+    if (token) {
+      const decoded = jwt_decode(token);
+      dispatch(loginUser(decoded.userInfo));
+    }
+  }, []);
 
   const onError = (err) => console.log(err);
 

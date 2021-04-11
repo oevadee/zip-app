@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import driver from "../config/db";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
@@ -23,17 +23,18 @@ const login = async (req: Request, res: Response): Promise<any> => {
       }));
     });
 
-    if (bcrypt.compareSync(password, dbUser.password)) {
-      const newData = {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        photo: dbUser.photo
-      };
+    const { password: dbPassword, ...restOfDbUser } = dbUser;
+    
+    if (bcrypt.compareSync(password, dbPassword)) {
+      const userInfo = restOfDbUser;
 
-      jwt.sign({user: newData}, 'secretkey', (err, token) => {
-        return res.json({token})
-      })
+      jwt.sign({ userInfo }, "secretkey", (err, token) => {
+        if (err) return res.status(403);
+        return res.json({
+          user: userInfo,
+          token
+        });
+      });
     } else return res.status(400).json({ message: "Auth failed." });
   } catch (err) {
     console.error(err);
