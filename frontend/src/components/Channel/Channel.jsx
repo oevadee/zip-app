@@ -1,15 +1,23 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import './Channel.scss';
+import { Link } from 'react-router-dom';
+import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
 
-const Channel = ({ channelName, ...props }) => {
-
+const Channel = ({ channelName, icon = false, url = null, ...props }) => {
+  console.log(channelName, url)
   return (
-    <div className="channel" {...props}>
-      <h3 className="channel__roomName">
-        # <span>{channelName}</span>
-      </h3>
-    </div>
+    <Link to={url}>
+      <div className={`channel${!url ? '--withoutHover' : ''}`}>
+        <h2>{channelName}</h2>
+        {icon && (
+          <AddIcon
+            className="channel__icon"
+            {...props}
+          />
+        )}
+      </div>
+    </Link>
   );
 };
 

@@ -47,29 +47,21 @@ const ExpensePopup = ({ user, users, mutate }) => {
 
   const onSubmit = async (values) => {
     console.log(values);
-    // const data = await axios.post(
-    //   `http://localhost:8080/api/expenses/${user.id}`,
-    //   {
-    //     values,
-    //     timestamp: new Date().toLocaleDateString(),
-    //   },
-    // );
+    const data = await axios.post(
+      `http://localhost:8080/api/expenses/${user.id}`,
+      {
+        values,
+        timestamp: new Date().toLocaleDateString(),
+      },
+    );
 
-    // reset();
-    // mutate();
-
-    // console.log(data);
+    reset();
+    mutate();
   };
-
-  const onError = (err) => {
-    console.log(err);
-  };
-
-  console.log(errors);
 
   return (
     <Box className="expensePopup" d="flex" alignItems="center">
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
           w={400}
           textColor="white"

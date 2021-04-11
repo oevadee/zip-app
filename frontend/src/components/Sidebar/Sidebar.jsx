@@ -34,31 +34,23 @@ const Sidebar = ({ user, mutate, channels }) => {
   if (!channels) return <Spinner color="pink" />;
 
   return (
-    <Box w={220} className={`sidebar ${navOpen && `sidebar--mobileOn`}`}>
+    <Box
+      maxW={200}
+      minW={200}
+      className={`sidebar ${navOpen && `sidebar--mobileOn`}`}
+    >
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar className="sidebar__userHeader__avatar" src={user.photo} />
-          <Heading as="h3" size="xs">
+          <Heading as="h4" size="xs">
             {user.name}
           </Heading>
         </div>
-        <Link to="/notifications">
-          <NotificationIcon />
-        </Link>
       </div>
       <div className="sidebar__selector">
-        <Link to="/expenses">
-          <div className="sidebar__selectorHeader">
-            <h2>Expenses</h2>
-          </div>
-        </Link>
-        <div className="sidebar__selectorHeader--withoutHover">
-          <h2>Chat room</h2>
-          <AddIcon
-            className="sidebar__selectorHeader__icon"
-            onClick={handleAddChannel}
-          />
-        </div>
+        <Channel channelName="Expenses" url="/expenses" />
+        <Channel channelName="Settings" url="/settings" />
+        <Channel channelName="Chat room" icon onClick={handleAddChannel} />
         <div className="sidebar__chatList">
           {channels.map(({ name, id }) => (
             <Link to={`/chat/${id}`} key={id}>

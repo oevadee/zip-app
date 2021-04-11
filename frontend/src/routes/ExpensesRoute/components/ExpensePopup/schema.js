@@ -5,7 +5,6 @@ const schema = yup.object().shape({
   value: yup.string().required(`You can't add an empty expense`),
   details: yup
     .string()
-    .required()
     .max(512, 'Description is to long. You can use 512 characters.'),
 });
 
