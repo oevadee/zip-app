@@ -122,8 +122,7 @@ const updateProfile: Controller = async (req, res) => {
         );
       });
       return res.json({ message: "Password changed." });
-    } else
-      return res.status(304);
+    } else return res.status(400).json({ message: "Passwords do not match." });
   } catch (err) {
     console.error(err);
     return res
