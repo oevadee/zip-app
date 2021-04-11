@@ -11,17 +11,24 @@ import { Spinner } from '@chakra-ui/spinner';
 
 // Firebase
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
 import axios from 'axios';
+import { logoutUser } from '../../state/actions/userAction';
 
 const Sidebar = ({ user, mutate, channels }) => {
   const navOpen = useSelector((state) => state.app.navOpen);
+  const dispatch = useDispatch();
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
     if (channelName) await axios.post('/api/chat/channel', { channelName });
     mutate();
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    localStorage.removeItem('secret');
   };
 
   if (!channels) return <Spinner color="pink" />;
@@ -61,7 +68,9 @@ const Sidebar = ({ user, mutate, channels }) => {
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button colorScheme="pink">Logout</Button>
+        <Button onClick={handleLogout} colorScheme="pink">
+          Logout
+        </Button>
       </div>
     </Box>
   );

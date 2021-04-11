@@ -27,7 +27,8 @@
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "redux-thunk": "^2.3.0",
-    "swr": "^0.5.5"
+    "swr": "^0.5.5",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.0.27",
