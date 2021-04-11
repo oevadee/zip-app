@@ -5,7 +5,7 @@ import App from './App';
 import store from './store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript, CSSReset } from '@chakra-ui/react';
 import theme from './themes/theme';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -16,6 +16,7 @@ ReactDOM.render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider>
+          <CSSReset />
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <App />
         </ChakraProvider>

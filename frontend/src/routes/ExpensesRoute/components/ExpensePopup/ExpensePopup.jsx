@@ -13,6 +13,13 @@ import {
   InputLeftElement,
   InputRightElement,
   Select,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  FormErrorMessage,
+  FormControl,
 } from '@chakra-ui/react';
 import {
   DollarSign as DollarSignIcon,
@@ -22,19 +29,24 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import axios from 'axios';
 import { getCurrentTimestamp } from '../../../../utils';
+import { yupResolver } from '@hookform/resolvers/yup';
+import schema from './schema';
 
 const ExpensePopup = ({ user, users, mutate }) => {
-  const { register, handleSubmit, control, watch, reset } = useForm({
+  const { register, handleSubmit, control, watch, reset, errors } = useForm({
     defaultValues: {
-      value: 0,
+      user: '',
+      value: '',
       details: '',
     },
+    resolver: yupResolver(schema),
   });
 
   const selectedUser = watch('user');
   const value = watch('value');
 
   const onSubmit = async (values) => {
+    console.log(values);
     const data = await axios.post(
       `http://localhost:8080/api/expenses/${user.id}`,
       {
@@ -45,17 +57,11 @@ const ExpensePopup = ({ user, users, mutate }) => {
 
     reset();
     mutate();
-
-    console.log(data);
-  };
-
-  const onError = (err) => {
-    console.log(err);
   };
 
   return (
     <Box className="expensePopup" d="flex" alignItems="center">
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
           w={400}
           textColor="white"
@@ -67,53 +73,62 @@ const ExpensePopup = ({ user, users, mutate }) => {
             name="user"
             control={control}
             as={
-              <Select
-                icon={
-                  <Avatar src={selectedUser && users[selectedUser]?.photo} />
-                }
-                placeholder="Who owes you money?"
-              >
-                {users.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.name}
-                  </option>
-                ))}
-              </Select>
+              <FormControl isInvalid={errors.user}>
+                <Select
+                  icon={
+                    <Avatar src={selectedUser && users[selectedUser]?.photo} />
+                  }
+                  placeholder="Who owes you money?"
+                >
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
             }
           />
-          <InputGroup>
-            <InputLeftElement
-              pointerEvents="none"
-              color="gray.300"
-              fontSize="1.2em"
-              children="$"
-            />
-            <Input
-              name="value"
-              type="number"
-              step="0.01"
-              ref={register}
-              placeholder="How big is the expese?"
-              textColor="white"
-            />
-            <InputRightElement
-              children={
-                value > 0 ? (
-                  <CheckIcon color="green" />
-                ) : value === 0 || value === '' ? null : (
-                  <XIcon color="red" />
-                )
-              }
-            />
-          </InputGroup>
+          <Controller
+            name="value"
+            control={control}
+            as={
+              <FormControl isInvalid={errors.value}>
+                <NumberInput max={10000} w={400}>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    color="gray.300"
+                    fontSize="1.2em"
+                    children="$"
+                  />
+                  <NumberInputField pl={8} />
+                  <InputRightElement
+                    mr={6}
+                    children={
+                      value > 0 ? (
+                        <CheckIcon color="green" />
+                      ) : value === 0 || value === '' ? null : (
+                        <XIcon color="red" />
+                      )
+                    }
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
+            }
+          />
+
           <Input
             name="details"
             type="text"
             ref={register}
             placeholder="Describe your expense"
-            mb={2}
           />
           <Button
+            mt={2}
             type="submit"
             w={100}
             variant="solid"

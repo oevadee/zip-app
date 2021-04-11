@@ -34,7 +34,7 @@ app.use("/api/expenses", expensesRoute);
 app.use("/api/chat", chatRoute);
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.send("dupa");
 });
 
 app.listen(config.port, () => console.log(`Started on ${config.port}`));

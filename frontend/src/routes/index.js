@@ -4,3 +4,4 @@ export { default as LoginRoute } from "./LoginRoute/LoginRoute";
 export { default as HistoryRoute } from "./HistoryRoute/HistoryRoute";
 export { default as NotificationsRoute } from "./NotificationRoute/NotificationRoute";
 export { default as RegisterRoute } from "./RegisterRoute/RegisterRoute";
+export { default as SettingsRoute } from "./SettingsRoute/SettingsRoute";

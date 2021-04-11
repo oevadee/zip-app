@@ -11,12 +11,14 @@ import { Spinner } from '@chakra-ui/spinner';
 
 // Firebase
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
 import axios from 'axios';
+import { logoutUser } from '../../state/actions/userAction';
 
 const Sidebar = ({ user, mutate, channels }) => {
   const navOpen = useSelector((state) => state.app.navOpen);
+  const dispatch = useDispatch();
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
@@ -24,34 +26,31 @@ const Sidebar = ({ user, mutate, channels }) => {
     mutate();
   };
 
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    localStorage.removeItem('secret');
+  };
+
   if (!channels) return <Spinner color="pink" />;
 
   return (
-    <Box w={220} className={`sidebar ${navOpen && `sidebar--mobileOn`}`}>
+    <Box
+      maxW={200}
+      minW={200}
+      className={`sidebar ${navOpen && `sidebar--mobileOn`}`}
+    >
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar className="sidebar__userHeader__avatar" src={user.photo} />
-          <Heading as="h3" size="xs">
+          <Heading as="h4" size="xs">
             {user.name}
           </Heading>
         </div>
-        <Link to="/notifications">
-          <NotificationIcon />
-        </Link>
       </div>
       <div className="sidebar__selector">
-        <Link to="/expenses">
-          <div className="sidebar__selectorHeader">
-            <h2>Expenses</h2>
-          </div>
-        </Link>
-        <div className="sidebar__selectorHeader--withoutHover">
-          <h2>Chat room</h2>
-          <AddIcon
-            className="sidebar__selectorHeader__icon"
-            onClick={handleAddChannel}
-          />
-        </div>
+        <Channel channelName="Expenses" url="/expenses" />
+        <Channel channelName="Settings" url="/settings" />
+        <Channel channelName="Chat room" icon onClick={handleAddChannel} />
         <div className="sidebar__chatList">
           {channels.map(({ name, id }) => (
             <Link to={`/chat/${id}`} key={id}>
@@ -61,7 +60,9 @@ const Sidebar = ({ user, mutate, channels }) => {
         </div>
       </div>
       <div className="sidebar__logout">
-        <Button colorScheme="pink">Logout</Button>
+        <Button onClick={handleLogout} colorScheme="pink">
+          Logout
+        </Button>
       </div>
     </Box>
   );

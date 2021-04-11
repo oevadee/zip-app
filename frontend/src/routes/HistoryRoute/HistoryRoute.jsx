@@ -5,11 +5,24 @@ import { PropTypes } from 'prop-types';
 // Components
 import { useParams } from 'react-router';
 import { Header } from '../../components';
-import db, { auth } from '../../firebase';
+
 import { Trash2 as TrashIcon } from 'react-feather';
-import { Avatar } from '@chakra-ui/avatar';
 import useSWR from 'swr';
-import { Spinner } from '@chakra-ui/spinner';
+import {
+  Spinner,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  Avatar,
+  TableCaption,
+  Tab,
+} from '@chakra-ui/react';
+import axios from 'axios';
+import Card from '../../uiComponents/Card/Card';
 
 const HistoryRoute = ({ user }) => {
   const [history, setHistory] = useState([]);
@@ -30,8 +43,17 @@ const HistoryRoute = ({ user }) => {
     }
   }, [data]);
 
-  const handleExpenseDelete = (expenseId) => {
-    
+  const handleExpenseDelete = async (expenseId) => {
+    console.log(expenseId);
+    console.log(user.id);
+    try {
+      await axios.post('/api/expenses/history/delete-request', {
+        expenseId,
+        user: user.id,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (!data) return <Spinner color="pink" />;
@@ -39,16 +61,39 @@ const HistoryRoute = ({ user }) => {
   return (
     <div className="history">
       <Header title="History" goBackButton />
-      <div className="historySection">
-        <div className="historyHeader">
-          <h3 className="historyHeader__user">User</h3>
-          <h3 className="historyHeader__expense">Expense</h3>
-          <h3 className="historyHeader__timestamp">Time</h3>
-          <h3 className="historyHeader__about">About</h3>
-          <div className="historyHeader__blank"></div>
-        </div>
-
-        <div className="historyList">
+      <Card>
+        <Table size="lg" colorScheme="blue">
+          <Thead>
+            <Tr>
+              <Th w={50}>User</Th>
+              <Th w={150} isNumeric>Expense</Th>
+              <Th>Time</Th>
+              <Th>About</Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {history.map((el) => (
+              <Tr key={el.id}>
+                <Td w={50}>
+                  <Avatar src={el.photo} />
+                </Td>
+                <Td w={150} isNumeric>{el.value}</Td>
+                <Td>{el.timestamp}</Td>
+                <Td>{el.details}</Td>
+                <Td>
+                  <TrashIcon
+                    size={20}
+                    color="#e84545"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleExpenseDelete(el.id)}
+                  />
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+        {/* <div className="historyList">
           {history.map((el) => (
             <div className="tableRow" key={el.id}>
               <div className="tableRow__user">
@@ -66,9 +111,9 @@ const HistoryRoute = ({ user }) => {
                 />
               </div>
             </div>
-          ))}
-        </div>
-      </div>
+          ))} */}
+        {/* </div> */}
+      </Card>
     </div>
   );
 };
