@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import driver from "../config/db";
+import jwt from 'jsonwebtoken';
 
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
@@ -27,8 +28,12 @@ const login = async (req: Request, res: Response): Promise<any> => {
         id: dbUser.id,
         name: dbUser.name,
         email: dbUser.email,
+        photo: dbUser.photo
       };
-      return res.status(200).json(newData);
+
+      jwt.sign({user: newData}, 'secretkey', (err, token) => {
+        return res.json({token})
+      })
     } else return res.status(400).json({ message: "Auth failed." });
   } catch (err) {
     console.error(err);

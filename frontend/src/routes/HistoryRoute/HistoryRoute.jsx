@@ -10,6 +10,7 @@ import { Trash2 as TrashIcon } from 'react-feather';
 import { Avatar } from '@chakra-ui/avatar';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
+import axios from 'axios';
 
 const HistoryRoute = ({ user }) => {
   const [history, setHistory] = useState([]);
@@ -30,8 +31,17 @@ const HistoryRoute = ({ user }) => {
     }
   }, [data]);
 
-  const handleExpenseDelete = (expenseId) => {
-    
+  const handleExpenseDelete = async (expenseId) => {
+    console.log(expenseId);
+    console.log(user.id);
+    try {
+      await axios.post('/api/expenses/history/delete-request', {
+        expenseId,
+        user: user.id,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (!data) return <Spinner color="pink" />;

@@ -17,164 +17,24 @@ CREATE (a)-[r:RELTYPE]->(b)
 RETURN type(r)
 
 
+
+
+
+
 ////////
 // Create DB
 ////////
 
-CREATE (bob:User {name:'Robert Szczechura', email: 'r.szczechura.01@gmailcom', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.'})
-CREATE (pjot:User {name:'Piotr Ostrowski', email: 'pitercpo@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.'})
-CREATE (pawel:User {name:'Paweł Grzelak', email: 'pawelgrzelak106@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.', photo: 'https://lh3.googleusercontent.com/a-/AOh14GjmmtGQnozx-jqzyCBozW4dkmZJ_J2gi6A1CUC0Kg=s96-c'})
-CREATE (mazur:User {name:'Kacper Mazurek', email: 'mazurekk.off@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.'})
-CREATE (adi:User {name:'Adrian Szczechura', email: 'a.szczechura.98@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.'})
+CREATE (bob:User {name:'Robert Szczechura', email: 'r.szczechura.01@gmailcom', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.', photo: "https://scontent-frt3-2.xx.fbcdn.net/v/t1.18169-9/390845_153756544731496_1265530199_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=cdbe9c&_nc_ohc=1_3grCcj-b4AX_oBdlq&_nc_ht=scontent-frt3-2.xx&oh=1dafdb0ceeda97ebb115fe24b720ada3&oe=6099C312",})
+CREATE (pjot:User {name:'Piotr Ostrowski', email: 'pitercpo@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.', photo: "https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/74666333_2566701070064059_9103208283660877824_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=gbcG-2sCh1EAX-T4Wbj&_nc_ht=scontent-frt3-1.xx&oh=7224f17fb0c5d8e9bf597e43a7bd3c9f&oe=609939B5",})
+CREATE (pawel:User {name:'Paweł Grzelak', email: 'pawelgrzelak106@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.', photo: "https://scontent-frt3-1.xx.fbcdn.net/v/t1.18169-9/22814054_1805596266178172_2445518881239445487_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=7_X8fanv8FcAX9MwXlF&_nc_ht=scontent-frt3-1.xx&oh=456bf1a3b3fc51509ab3079957afc50f&oe=60971629",})
+CREATE (mazur:User {name:'Kacper Mazurek', email: 'mazurekk.off@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.', photo: "https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/116671575_2812710695623640_5860611069918484227_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=0twPe3A4YioAX8LhcQV&_nc_ht=scontent-frt3-1.xx&oh=33286f779c6374169059269c5a98f971&oe=60974678",})
+CREATE (adi:User {name:'Adrian Szczechura', email: 'a.szczechura.98@gmail.com', password: '$2b$10$8QDQlbTzUPbg3KmLMr/zPu/0n2XUTvA0pNgetvWXGTjEU6Z9F0Ob.', photo: "https://i.imgur.com/5NoP2Jb_d.webp?maxwidth=760&fidelity=grand",})
 RETURN bob, pjot, pawel, mazur, adi
 
 ////////
-// Match
+// Add expenses
 ////////
-
-MATCH 
-  (bob:User),
-  (pjot:User),
-  (pawel:User),
-  (mazur:User),
-  (adi:User)
-WHERE id(bob) = 0 AND id(pjot) = 1 AND id(pawel) = 2 AND id(mazur) = 3 AND id(adi) = 4
-CREATE
-  (bob)-[:EXPENSE {value:8, details: 'Kraft parapetówa', timestamp: '20/03/2021'}]->(adi),
-  (bob)-[:EXPENSE {value:17.60, details: 'Mc donalds', timestamp: '21/03/2021'}]->(adi)
-RETURN bob, pjot, pawel, mazur, adi
-
-////////
-// Get 
-////////
-
-////////
-// Bob
-////////
-
-MATCH 
-  (bob:User),
-  (pjot:User),
-  (pawel:User),
-  (mazur:User),
-  (adi:User)
-WHERE id(bob) = 0 AND id(pjot) = 1 AND id(pawel) = 2 AND id(mazur) = 3 AND id(adi) = 4
-CREATE
-  (bob)-[:EXPENSE {value:8.0, details: 'Kraft parapetówa', timestamp: '20/03/2021'}]->(adi),
-  (bob)-[:EXPENSE {value:17.60, details: 'Mc donalds', timestamp: '21/03/2021'}]->(adi)
-RETURN bob, pjot, pawel, mazur, adi
-
-////////
-// Paweł
-////////
-
-MATCH 
-  (bob:User),
-  (pjot:User),
-  (pawel:User),
-  (mazur:User),
-  (adi:User)
-WHERE id(bob) = 0 AND id(pjot) = 1 AND id(pawel) = 2 AND id(mazur) = 3 AND id(adi) = 4
-CREATE
-  (adi)-[:EXPENSE {value: -5.0, timestamp: '21/03/2021', details: 'Prega 150'}]->(pawel),
-  (pawel)-[:EXPENSE {value: 15.0, timestamp: '21/03/2021', details: 'Mc donalds'}]->(adi),
-  (pawel)-[:EXPENSE {value: 12.5, timestamp: '17/03/2021', details: 'Backwoods'}]->(adi),
-  (pawel)-[:EXPENSE {value: 325.0, timestamp: '15/03/2021', details: 'White runTz'}]->(adi),
-  (adi)-[:EXPENSE {value: -30.0, timestamp: '15/03/2021', details: 'pregabelina 7szt'}]->(pawel),
-  (pawel)-[:EXPENSE {value: 34.3, timestamp: '13/03/2021', details: 'Cali'}]->(adi),
-  (pawel)-[:EXPENSE {value: 11.3.0, timestamp: '13/03/2021', details: 'Subway'}]->(adi),
-  (pawel)-[:EXPENSE {value: 30.0, timestamp: '12/03/2021', details: 'Cali 0.35'}]->(adi),
-  (pawel)-[:EXPENSE {value: 20.0, timestamp: '12/03/2021', details: 'Zabawka dla kota'}]->(adi),
-  (pawel)-[:EXPENSE {value: 5.0, timestamp: '06/03/2021', details: 'Burger king parapetówa'}]->(adi),
-  (adi)-[:EXPENSE {value: -28.0, timestamp: '21/02/2021', details: 'Max burgers'}]->(pawel),
-  (adi)-[:EXPENSE {value: -150.0, timestamp: '19/02/2021', details: 'Cali 🔥'}]->(pawel),
-  (pawel)-[:EXPENSE {value: 15.0, timestamp: '09/01/2021', details: 'Piwko Ancient Connection'}]->(adi),
-  (adi)-[:EXPENSE {value: -110.0, timestamp: '05/01/2021', details: 'Dziadu'}]->(pawel),
-  (adi)-[:EXPENSE {value: -10.0, timestamp: '22/12/2020', details: 'za paliwo an oglądanie gwiazdy xd'}]->(pawel),
-  (pawel)-[:EXPENSE {value: 10.0, timestamp: '20/12/2020' }]->(adi),
-  (adi)-[:EXPENSE {value: -10.0, timestamp: '02/11/2020'}]->(pawel),
-  (pawel)-[:EXPENSE {value: 120.0, timestamp: '02/11/2020', details: 'za zipa okropnego'}]->(adi),
-  (adi)-[:EXPENSE {value: -56.0, timestamp: '25/10/2020'}]->(pawel)
-
-RETURN bob, pjot, pawel, mazur, adi
-
-////////
-// Mazur
-////////
-
-MATCH 
-  (bob:User),
-  (pjot:User),
-  (pawel:User),
-  (mazur:User),
-  (adi:User)
-WHERE id(bob) = 0 AND id(pjot) = 1 AND id(pawel) = 2 AND id(mazur) = 3 AND id(adi) = 4
-CREATE
-  (mazur)-[:EXPENSE {value: 325.0, timestamp: '24/03/2021', details: 'Cali 📦 whiteRuntz'}]->(adi),
-  (mazur)-[:EXPENSE {value: 42.0, timestamp: '20/03/2021', details: 'Lont cali'}]->(adi),
-  (mazur)-[:EXPENSE {value: 56.0, timestamp: '19/03/2021', details: 'Cali 📦 whiteRuntz backwod'}]->(adi),
-  (mazur)-[:EXPENSE {value: 12.5, timestamp: '17/03/2021', details: 'Backwoods'}]->(adi),
-  (adi)-[:EXPENSE {value: -15.0, timestamp: '15/03/2021', details: 'paliwko'}]->(mazur),
-  (adi)-[:EXPENSE {value: -60.0, timestamp: '12/03/2021', details: 'Cali limelatti 0.35'}]->(mazur),
-  (mazur)-[:EXPENSE {value: 10.0, timestamp: '13/02/2021', details: 'Thioco'}]->(adi),
-  (adi)-[:EXPENSE {value: -75.0, timestamp: '04/02/2021', details: 'Przelew expresowy'}]->(mazur),
-  (mazur)-[:EXPENSE {value: 18.0, timestamp: '30/01/2021', details: '2x tramoll'}]->(adi),
-  (adi)-[:EXPENSE {value: -4.5.0, timestamp: '20/01/2021', details: 'Piwo żywiec biały 0'}]->(mazur),
-  (mazur)-[:EXPENSE {value: 22.5, timestamp: '13/01/2021', details: 'Wegańskie curry zakupy'}]->(adi),
-  (mazur)-[:EXPENSE {value: 39.0, timestamp: '20/12/2020'}]->(adi),
-  (mazur)-[:EXPENSE {value: 72.0, timestamp: '16/12/2020'}]->(adi),
-  (adi)-[:EXPENSE {value: -70.0, timestamp: '24/11/2020'}]->(mazur),
-  (adi)-[:EXPENSE {value: -251.0, timestamp: '04/11/2020'}]->(mazur),
-  (mazur)-[:EXPENSE {value: 249.0, timestamp: '26/10/2020'}]->(adi)
-
-RETURN bob, pjot, pawel, mazur, adi
-
-////////
-// Pjot
-////////
-
-MATCH 
-  (bob:User),
-  (pjot:User),
-  (pawel:User),
-  (mazur:User),
-  (adi:User)
-WHERE id(bob) = 0 AND id(pjot) = 1 AND id(pawel) = 2 AND id(mazur) = 3 AND id(adi) = 4
-CREATE
-  (pjot)-[:EXPENSE {value: 56.0, timestamp: '19/03/2021', details: 'Cali 📦 whiteRuntz backwood'}]->(adi),
-  (pjot)-[:EXPENSE {value: 12.5, timestamp: '17/03/2021', details: 'Backwoods'}]->(adi),
-  (pjot)-[:EXPENSE {value: 180.0, timestamp: '12/03/2021', details: 'return mbank'}]->(adi),
-  (adi)-[:EXPENSE {value: -120.0, timestamp: '06/03/2021', details: 'Cali 📦📦 (sorki ale no przeprowadzka i wiesz... Na parapetowe postaram sie zeby był rs'}]->(pjot),
-  (adi)-[:EXPENSE {value: -30.0, timestamp: '28/02/2021', details: 'hajsik'}]->(pjot),
-  (adi)-[:EXPENSE {value: -30.0, timestamp: '20/02/2021'}]->(pjot),
-  (adi)-[:EXPENSE {value: -20.0, timestamp: '20/02/2021'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 200.0, timestamp: '01/02/2021', details: 'Częsciowy zwrot niedzielnej pozyczki mbak'}]->(adi),
-  (adi)-[:EXPENSE {value: -300.0, timestamp: '31/01/2021', details: 'Niedzielna pożyczka mbąk'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 300.0, timestamp: '11/01/2021', details: 'Przelew Mbąk'}]->(adi),
-  (pjot)-[:EXPENSE {value: 80.0, timestamp: '07/01/2021', details: 'Moda'}]->(adi),
-  (adi)-[:EXPENSE {value: -100.0, timestamp: '05/01/2021', details: 'przelew na dziada'}]->(pjot),
-  (adi)-[:EXPENSE {value: -5.0, timestamp: '04/01/2021', details: 'Zakupy w biedrze na burito'}]->(pjot),
-  (adi)-[:EXPENSE {value: -50.0, timestamp: '04/01/2021', details: 'Sizzurp'}]->(pjot),
-  (adi)-[:EXPENSE {value: -7.0, timestamp: '31/12/2020', details: '2 piwa w żabce zwoleńska'}]->(pjot),
-  (adi)-[:EXPENSE {value: -4.0, timestamp: '30/12/2020', details: 'Piwo grodziskie mango ale'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 16.0, timestamp: '30/12/2020', details: 'Zakupy w lidlu na szamke'}]->(adi),
-  (adi)-[:EXPENSE {value: -250.0, timestamp: '30/12/2020', details: 'Zany'}]->(pjot),
-  (adi)-[:EXPENSE {value: -13.0, timestamp: '30/12/2020', details: 'Mc donalds'}]->(pjot),
-  (adi)-[:EXPENSE {value: -24.0, timestamp: '25/12/2020', details: 'piwko + limbus'}]->(pjot),
-  (adi)-[:EXPENSE {value: -23.0, timestamp: '25/12/2020', details: 'Drank in my cup'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 28.0, timestamp: '23/12/2020', details: 'Spłata zaległego siana za rzeczy z Irlandii'}]->(adi),
-  (pjot)-[:EXPENSE {value: 300.0, timestamp: '20/12/2020'}]->(adi),
-  (adi)-[:EXPENSE {value: -328.0, timestamp: '18/12/2020'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 30.0, timestamp: '16/12/2020'}]->(adi),
-  (adi)-[:EXPENSE {value: -30.0, timestamp: '24/11/2020'}]->(pjot),
-  (adi)-[:EXPENSE {value: -260.0, timestamp: '28/10/2020'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 20.0, timestamp: '25/10/2020'}]->(adi),
-  (adi)-[:EXPENSE {value: -20.0, timestamp: '25/10/2020'}]->(pjot),
-  (pjot)-[:EXPENSE {value: 260.0, timestamp: '25/10/2020'}]->(adi)
-
-RETURN bob, pjot, pawel, mazur, adi
-
-
 
 MATCH 
   (bob:User),

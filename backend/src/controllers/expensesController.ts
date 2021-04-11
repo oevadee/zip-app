@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import driver from "../config/db";
+import Controller from "../types/Controller.type";
 
 interface IuserWithExpeses {
   id: number;
@@ -199,4 +200,17 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { getAllUserExpenses, createExpense, getHistory };
+const handleDeleteRequest: Controller = async (req, res) => {
+  const values = req.body;
+
+  try {
+    console.log(values);
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with sending delete request." });
+  }
+};
+
+export { getAllUserExpenses, createExpense, getHistory, handleDeleteRequest };
