@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PropTypes } from 'prop-types';
 import './Sidebar.scss';
 
@@ -6,7 +6,6 @@ import './Sidebar.scss';
 import { Channel } from '/src/components';
 
 // Icons
-import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
 import { Spinner } from '@chakra-ui/spinner';
 
 // Firebase
@@ -33,6 +32,8 @@ const Sidebar = ({ user, mutate, channels }) => {
 
   if (!channels) return <Spinner color="pink" />;
 
+  console.log(channels);
+
   return (
     <Box
       maxW={200}
@@ -53,9 +54,7 @@ const Sidebar = ({ user, mutate, channels }) => {
         <Channel channelName="Chat room" icon onClick={handleAddChannel} />
         <div className="sidebar__chatList">
           {channels.map(({ name, id }) => (
-            <Link to={`/chat/${id}`} key={id}>
-              <Channel key={id} id={id} channelName={name} />
-            </Link>
+            <Channel key={id} id={id} channelName={name} url={id} />
           ))}
         </div>
       </div>
