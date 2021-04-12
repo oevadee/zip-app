@@ -54,7 +54,7 @@ const Sidebar = ({ user, mutate, channels }) => {
         <Channel channelName="Chat room" icon onClick={handleAddChannel} />
         <div className="sidebar__chatList">
           {channels.map(({ name, id }) => (
-            <Channel key={id} id={id} channelName={name} url={id} />
+            <Channel key={id} id={id} channelName={name} url={`/chat/${id}`} />
           ))}
         </div>
       </div>
