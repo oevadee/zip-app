@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import driver from "../config/db";
 import jwt from "jsonwebtoken";
 import Controller from "../types/Controller.type";
