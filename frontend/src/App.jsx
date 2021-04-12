@@ -56,7 +56,7 @@ const App = () => {
           <>
             <Redirect to="/login" />
             <Route path="/login" component={LoginRoute} />
-            <Route path="/register" component={RegisterRoute} />
+            {/* <Route path="/register" component={RegisterRoute} /> */}
           </>
         )}
       </Router>

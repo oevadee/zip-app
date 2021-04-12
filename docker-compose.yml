@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  neo4j:
+    image: neo4j:latest
+    hostname: neo4j
+    container_name: neo4j
+    ports:
+      - 7474
+      - 7687
+    environment:
+      - NEO4J_AUTH=neo4j/123haslo123
+
+  backend:
+    container_name: backend
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    environment:
+      - PORT=8080
+      - NEO4J_PASSWORD=123haslo123
+    ports:
+      - 8080
+
+  frontend:
+    container_name: frontend
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    ports:
+      - 80:80

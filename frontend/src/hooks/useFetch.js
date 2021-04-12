@@ -5,7 +5,7 @@ const useFetch = (url) => {
   const [data, setData] = useState(null);
 
   const fetch = async () => {
-    const { data: newData } = await axios.get('http://localhost:8080' + url);
+    const { data: newData } = await axios.get(url);
     setData(newData);
   };
 

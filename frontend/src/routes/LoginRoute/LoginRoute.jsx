@@ -73,7 +73,7 @@ const LoginRoute = () => {
               Login
             </Button>
             <Link to="/register">
-              <Button variant="outline" colorScheme="pink">
+              <Button variant="outline" colorScheme="pink" disabled >
                 Register
               </Button>
             </Link>
