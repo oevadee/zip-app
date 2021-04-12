@@ -19,7 +19,7 @@ const options: cors.CorsOptions = {
     "X-Access-Token",
   ],
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-  origin: "https://zip.waw.pl",
+  origin: "http://localhost:3000",
   preflightContinue: false,
 };
 

@@ -115,7 +115,7 @@ const createNewChannel = async (req: Request, res: Response): Promise<any> => {
       }));
     });
 
-    return res.json(newChannel);
+    return res.json();
   } catch (err) {
     console.error(err);
     return res

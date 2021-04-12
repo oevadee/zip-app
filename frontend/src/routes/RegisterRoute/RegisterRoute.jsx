@@ -38,6 +38,15 @@ const RegisterRoute = () => {
       <Box maxWidth={600}>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit, onError)}>
           <Input
+            name="name"
+            ref={register}
+            placeholder="Fullname"
+            type="email"
+            size="lg"
+            variant="outline"
+            mb={5}
+          />
+          <Input
             name="email"
             ref={register}
             placeholder="Email"

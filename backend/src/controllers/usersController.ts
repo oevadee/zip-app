@@ -48,7 +48,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
 const register = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
   try {
-    const { email, password, confirmPassword } = req.body;
+    const { email, password, confirmPassword, name } = req.body;
 
     const dbUser = await session.readTransaction((txc) => {
       const result = txc.run(
@@ -56,7 +56,7 @@ const register = async (req: Request, res: Response): Promise<any> => {
         MATCH (a:User {email: $email}) RETURN a
       `,
         {
-          email: email,
+          email,
         }
       );
 
@@ -74,11 +74,12 @@ const register = async (req: Request, res: Response): Promise<any> => {
       const data = await session.writeTransaction(async (txc) => {
         const result = await txc.run(
           `
-        CREATE (a:User {email: $email, password: $password}) RETURN a
+        CREATE (a:User {email: $email, password: $password, name: $name}) RETURN a
       `,
           {
             email,
             password: hash,
+            name,
           }
         );
         return result.records.map((el: any) => ({
