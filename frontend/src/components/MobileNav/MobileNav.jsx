@@ -30,7 +30,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { toggleNav } from '../../state/actions/appAction';
-import { API_HOST } from "../../config/index";
+import config from "../../config";
 
 const MobileNav = ({ user, mutate, channels }) => {
   const navOpen = useSelector((state) => state.app.navOpen);
@@ -40,7 +40,7 @@ const MobileNav = ({ user, mutate, channels }) => {
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
-    if (channelName) await axios.post(`http://${API_HOST}/api/chat/channel`, { channelName });
+    if (channelName) await axios.post(`http://${config.API_HOST}/api/chat/channel`, { channelName });
     mutate();
   };
 

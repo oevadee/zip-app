@@ -17,6 +17,7 @@ import { Header } from '../../components';
 import Card from '../../uiComponents/Card/Card';
 import CardContent from '../../uiComponents/CardContent/CardContent';
 import './SettingsRoute.scss';
+import config from "../../config";
 
 const SettingsRoute = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +33,7 @@ const SettingsRoute = ({ user }) => {
     setIsLoading(true);
     try {
       const data = await axios.put(
-        `http://${API_HOST}/api/users/profile?userId=${user.id}`,
+        `http://${config.API_HOST}/api/users/profile?userId=${user.id}`,
         values,
       );
       setIsLoading(false);

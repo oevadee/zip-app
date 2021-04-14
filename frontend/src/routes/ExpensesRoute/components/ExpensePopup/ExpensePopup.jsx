@@ -31,7 +31,7 @@ import axios from 'axios';
 import { getCurrentTimestamp } from '../../../../utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from './schema';
-import { API_HOST } from "../../../../config/index";
+import config from "../../../../config";
 
 const ExpensePopup = ({ user, users, mutate }) => {
   const { register, handleSubmit, control, watch, reset, errors } = useForm({
@@ -49,7 +49,7 @@ const ExpensePopup = ({ user, users, mutate }) => {
   const onSubmit = async (values) => {
     console.log(values);
     const data = await axios.post(
-      `http://${API_HOST}/api/expenses/${user.id}`,
+      `http://${config.API_HOST}/api/expenses/${user.id}`,
       {
         values,
         timestamp: new Date().toLocaleDateString(),

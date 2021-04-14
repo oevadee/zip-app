@@ -23,14 +23,14 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Card from '../../uiComponents/Card/Card';
-import { API_HOST } from "../../config/index";
+import config from "../../config";
 
 const HistoryRoute = ({ user }) => {
   const [history, setHistory] = useState([]);
 
   const { id } = useParams();
   const { data, mutate } = useSWR(
-    `http://${API_HOST}/api/expenses/history/${id}?userId=${user.id}`,
+    `http://${config.API_HOST}/api/expenses/history/${id}?userId=${user.id}`,
   );
 
   useEffect(() => {

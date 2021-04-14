@@ -12,7 +12,7 @@ import { Avatar } from '@chakra-ui/avatar';
 import { Link } from 'react-router-dom';
 import { Clock as HistoryIcon } from 'react-feather';
 import { useBreakpointValue } from '@chakra-ui/media-query';
-import { API_HOST } from "../../config/index";
+import config from "../../config";
 
 const ExpensesRoute = () => {
   const popupVisible = useSelector((state) => state.app.popupVisible);
@@ -20,7 +20,7 @@ const ExpensesRoute = () => {
   const user = useSelector((state) => state.user.user);
   const isHidden = useBreakpointValue({ base: false, md: true });
 
-  const { data, mutate } = useSWR(`http://${API_HOST}/api/expenses?userId=${user.id}`);
+  const { data, mutate } = useSWR(`http://${config.API_HOST}/api/expenses?userId=${user.id}`);
 
   if (!data) return <Spinner color="pink" />;
 

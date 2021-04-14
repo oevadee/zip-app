@@ -14,14 +14,14 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
 import { Link } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import { API_HOST } from "../../config/index";
+import config from "../../config";
 
 const LoginRoute = () => {
   const { register, handleSubmit } = useForm();
   const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
-    const { data } = await axios.post(`http://${API_HOST}/api/users/login`, values);
+    const { data } = await axios.post(`http://${config.API_HOST}/api/users/login`, values);
     const { user, token } = data;
 
     user && dispatch(loginUser(user));

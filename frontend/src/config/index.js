@@ -1,7 +1,5 @@
-import dotenv from "dotenv";
-import { process } from "ipaddr.js";
-dotenv.config();
+const API_HOST = import.meta.env.VITE_API_HOST || "localhost:8080";
 
 export default {
-  API_HOST: process.env.API_HOST || "localhost:8080"
-}
+  API_HOST,
+};

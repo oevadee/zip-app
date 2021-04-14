@@ -12,7 +12,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
 import { Link } from 'react-router-dom';
-import { API_HOST } from "../../config/index";
+import config from "../../config";
 
 const RegisterRoute = () => {
   const { register, handleSubmit } = useForm();
@@ -21,7 +21,7 @@ const RegisterRoute = () => {
   const onSubmit = async (values) => {
     console.log(values);
     const { data } = await axios.post(
-      `http://${API_HOST}/api/users/register`,
+      `http://${config.API_HOST}/api/users/register`,
       values,
     );
   };
