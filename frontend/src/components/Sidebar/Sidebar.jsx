@@ -16,7 +16,6 @@ import axios from 'axios';
 import { logoutUser } from '../../state/actions/userAction';
 
 const Sidebar = ({ user, mutate, channels }) => {
-  const navOpen = useSelector((state) => state.app.navOpen);
   const dispatch = useDispatch();
 
   const handleAddChannel = async () => {
@@ -38,7 +37,7 @@ const Sidebar = ({ user, mutate, channels }) => {
     <Box
       maxW={200}
       minW={200}
-      className={`sidebar ${navOpen && `sidebar--mobileOn`}`}
+      className={`sidebar`}
     >
       <div className="sidebar__user">
         <div className="sidebar__userHeader">

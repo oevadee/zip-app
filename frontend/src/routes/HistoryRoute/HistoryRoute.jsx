@@ -47,7 +47,7 @@ const HistoryRoute = ({ user }) => {
     console.log(expenseId);
     console.log(user.id);
     try {
-      await axios.post('/api/expenses/history/delete-request', {
+      const {data} = await axios.post('/api/expenses/history/delete-request', {
         expenseId,
         user: user.id,
       });

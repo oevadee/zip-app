@@ -11,11 +11,13 @@ import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import { Avatar } from '@chakra-ui/avatar';
 import { Link } from 'react-router-dom';
 import { Clock as HistoryIcon } from 'react-feather';
+import { useBreakpointValue } from '@chakra-ui/media-query';
 
 const ExpensesRoute = () => {
   const popupVisible = useSelector((state) => state.app.popupVisible);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
+  const isHidden = useBreakpointValue({ base: false, md: true });
 
   const { data, mutate } = useSWR(`/api/expenses?userId=${user.id}`);
 
@@ -34,7 +36,7 @@ const ExpensesRoute = () => {
           <Thead>
             <Tr>
               <Th w={100}></Th>
-              <Th>User</Th>
+              {isHidden && <Th>User</Th>}
               <Th isNumeric>Expense</Th>
               <Th isNumeric>History</Th>
             </Tr>
@@ -43,14 +45,24 @@ const ExpensesRoute = () => {
             {data.expenses &&
               data.expenses.map((el) => (
                 <Tr key={el.user.id}>
-                  <Td w={100}>
-                    <Avatar src={el.user.photo} />
-                  </Td>
-                  <Td>{el.user.name}</Td>
+                  {isHidden ? (
+                    <Td w={100}>
+                      <Avatar src={el.user.photo} />
+                    </Td>
+                  ) : (
+                    <Td p={5} w={100}>
+                      <Avatar src={el.user.photo} />
+                    </Td>
+                  )}
+                  {isHidden && <Td>{el.user.name}</Td>}
                   <Td isNumeric>{el.value}</Td>
                   <Td isNumeric>
                     <Link
-                      style={{ display: 'flex', justifyContent: 'flex-end', marginRight: 23 }}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        marginRight: 23,
+                      }}
                       to={`/history/${el.user.id}`}
                     >
                       <HistoryIcon style={{ color: '#fff' }} />

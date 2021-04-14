@@ -40,11 +40,17 @@ const LoginRoute = () => {
 
   return (
     <div className="login">
-      <Heading as="h1" fontSize="6xl" isTruncated mb={1} colorScheme="pink">
+      <Heading
+        as="h1"
+        fontSize={['2xl', '3xl', '4xl', '5xl']}
+        isTruncated
+        mb={1}
+        colorScheme="pink"
+      >
         Ultimate crew expense tracker <br />
       </Heading>
       <span className="login__loginContainer__textSplit">
-        <Text fontSize="4xl" mb={10} color="rgb(31, 117, 196)">
+        <Text fontSize={['xl', '2xl', '2xl', '4xl']} mb={10} color="rgb(31, 117, 196)">
           OG edition
         </Text>
       </span>
@@ -73,7 +79,7 @@ const LoginRoute = () => {
               Login
             </Button>
             <Link to="/register">
-              <Button variant="outline" colorScheme="pink">
+              <Button disabled variant="outline" colorScheme="pink">
                 Register
               </Button>
             </Link>
