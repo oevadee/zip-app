@@ -28,10 +28,9 @@
 .chat__input {
   position: absolute;
   bottom: 20px;
-  width: calc(100% - 40px - 220px);
+  width: calc(100% - 240px);
   height: 71px;
   color: lightgray;
-  margin: 0 20px;
   border-radius: $border-radius;
   background-color: $color-secondary;
 

@@ -5,15 +5,16 @@ import { useParams } from 'react-router';
 // Components
 import { Header } from '/src/components';
 import { Chat } from './components';
+import { Box } from '@chakra-ui/react';
 
 const ChatRoute = () => {
   const { channelId } = useParams();
 
   return (
-    <div className="chat">
+    <Box className="chat">
       <Header title="Chat" />
       <Chat channelId={channelId} />
-    </div>
+    </Box>
   );
 };
 

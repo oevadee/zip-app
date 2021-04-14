@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import './Channel.scss';
 import { Link } from 'react-router-dom';
-import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
+import { Plus as AddIcon } from 'react-feather';
 
 const Channel = ({
   channelName,
@@ -11,7 +11,6 @@ const Channel = ({
   onChannelClick,
   ...props
 }) => {
-  console.log(channelName, url);
   return (
     <Link to={url}>
       <div
