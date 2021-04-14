@@ -35,12 +35,17 @@ const SettingsRoute = ({ user }) => {
         `/api/users/profile?userId=${user.id}`,
         values,
       );
+      setIsLoading(false);
       setAlert(data);
+      setTimeout(() => {
+        setAlert(null);
+      }, 3000);
     } catch (err) {
-      setAlert(err);
-      // setTimeout(() => {
-      //   setAlert(null);
-      // }, 3000);
+      setIsLoading(false);
+      setAlert(err.response);
+      setTimeout(() => {
+        setAlert(null);
+      }, 3000);
     }
   };
 

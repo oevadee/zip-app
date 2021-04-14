@@ -4,18 +4,22 @@ import './Channel.scss';
 import { Link } from 'react-router-dom';
 import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
 
-const Channel = ({ channelName, icon = false, url = null, ...props }) => {
-  console.log(channelName, url)
+const Channel = ({
+  channelName,
+  icon = false,
+  url = null,
+  onChannelClick,
+  ...props
+}) => {
+  console.log(channelName, url);
   return (
     <Link to={url}>
-      <div className={`channel${!url ? '--withoutHover' : ''}`}>
+      <div
+        className={`channel${!url ? '--withoutHover' : ''}`}
+        onClick={onChannelClick}
+      >
         <h2>{channelName}</h2>
-        {icon && (
-          <AddIcon
-            className="channel__icon"
-            {...props}
-          />
-        )}
+        {icon && <AddIcon className="channel__icon" {...props} />}
       </div>
     </Link>
   );

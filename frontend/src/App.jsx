@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
 import { useSelector } from 'react-redux';
-import Sidebar from './components/Sidebar/Sidebar';
+import { Sidebar, MobileNav } from './components';
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,10 +20,13 @@ import {
 } from './routes';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
+import { useBreakpointValue } from '@chakra-ui/media-query';
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
   const { data, mutate } = useSWR('/api/chat/channel');
+  const sidebardVisible = useBreakpointValue({ base: false, md: true });
+  const navOpen = useSelector((state) => state.app.navOpen);
 
   if (!data) return <Spinner color="pink" />;
 
@@ -33,7 +36,12 @@ const App = () => {
         {user ? (
           <>
             <Redirect to="/expenses" />
-            <Sidebar user={user} mutate={mutate} channels={data} />
+            {sidebardVisible && (
+              <Sidebar user={user} mutate={mutate} channels={data} />
+            )}
+            {navOpen && (
+              <MobileNav user={user} mutate={mutate} channels={data} />
+            )}
             <Switch>
               <Route path="/expenses">
                 <ExpensesRoute />

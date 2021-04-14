@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PropTypes } from 'prop-types';
 import './Sidebar.scss';
 
@@ -6,7 +6,6 @@ import './Sidebar.scss';
 import { Channel } from '/src/components';
 
 // Icons
-import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
 import { Spinner } from '@chakra-ui/spinner';
 
 // Firebase
@@ -17,7 +16,6 @@ import axios from 'axios';
 import { logoutUser } from '../../state/actions/userAction';
 
 const Sidebar = ({ user, mutate, channels }) => {
-  const navOpen = useSelector((state) => state.app.navOpen);
   const dispatch = useDispatch();
 
   const handleAddChannel = async () => {
@@ -33,11 +31,13 @@ const Sidebar = ({ user, mutate, channels }) => {
 
   if (!channels) return <Spinner color="pink" />;
 
+  console.log(channels);
+
   return (
     <Box
       maxW={200}
       minW={200}
-      className={`sidebar ${navOpen && `sidebar--mobileOn`}`}
+      className={`sidebar`}
     >
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
@@ -53,9 +53,7 @@ const Sidebar = ({ user, mutate, channels }) => {
         <Channel channelName="Chat room" icon onClick={handleAddChannel} />
         <div className="sidebar__chatList">
           {channels.map(({ name, id }) => (
-            <Link to={`/chat/${id}`} key={id}>
-              <Channel key={id} id={id} channelName={name} />
-            </Link>
+            <Channel key={id} id={id} channelName={name} url={`/chat/${id}`} />
           ))}
         </div>
       </div>

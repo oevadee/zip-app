@@ -1,22 +1,12 @@
-@import "../../variables";
+@import '../../variables';
 
 .sidebar {
   max-width: 220px;
   height: 100%;
+  background-color: $color-secondary !important;
+  color: $color-white !important;
   display: flex;
   flex-direction: column;
-  background-color: $color-secondary;
-  color: $color-white;
-
-  @media (max-width: $tablet) {
-    position: absolute;
-    left: 0;
-    top: 0;
-    max-width: 100%;
-    width: 100%;
-    z-index: 1;
-    transform: translateX(-100%);
-  }
 }
 
 .sidebar--mobileOn {
