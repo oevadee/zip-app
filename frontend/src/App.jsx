@@ -21,10 +21,11 @@ import {
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
 import { useBreakpointValue } from '@chakra-ui/media-query';
+import { API_HOST } from "./config/index";
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
-  const { data, mutate } = useSWR('/api/chat/channel');
+  const { data, mutate } = useSWR(`http://${API_HOST}/api/chat/channel`);
   const sidebardVisible = useBreakpointValue({ base: false, md: true });
   const navOpen = useSelector((state) => state.app.navOpen);
 

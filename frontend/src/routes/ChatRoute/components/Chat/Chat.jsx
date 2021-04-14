@@ -9,9 +9,10 @@ import { getCurrentTimestamp } from '/src/utils';
 import axios from 'axios';
 import useSWR from 'swr';
 import './Chat.scss';
+import { API_HOST } from "../../../../config/index";
 
 const Chat = ({ channelId }) => {
-  const { data: messages, mutate } = useSWR(`/api/chat/messages/${channelId}`);
+  const { data: messages, mutate } = useSWR(`http://${API_HOST}/api/chat/messages/${channelId}`);
   const { register, handleSubmit, reset } = useForm();
   const user = useSelector((state) => state.user.user);
 
@@ -22,7 +23,7 @@ const Chat = ({ channelId }) => {
   const onSubmit = async (values) => {
     const { message } = values;
     const timestamp = getCurrentTimestamp();
-    await axios.post(`/api/chat/messages?userId=${user.id}`, {
+    await axios.post(`http://${API_HOST}/api/chat/messages?userId=${user.id}`, {
       message,
       timestamp,
       channelId,

@@ -32,7 +32,7 @@ const SettingsRoute = ({ user }) => {
     setIsLoading(true);
     try {
       const data = await axios.put(
-        `/api/users/profile?userId=${user.id}`,
+        `http://${API_HOST}/api/users/profile?userId=${user.id}`,
         values,
       );
       setIsLoading(false);

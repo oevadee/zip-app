@@ -14,13 +14,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
 import axios from 'axios';
 import { logoutUser } from '../../state/actions/userAction';
+import { API_HOST } from "../../config/index";
 
 const Sidebar = ({ user, mutate, channels }) => {
   const dispatch = useDispatch();
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
-    if (channelName) await axios.post('/api/chat/channel', { channelName });
+    if (channelName) await axios.post(`http://${API_HOST}/api/chat/channel`, { channelName });
     mutate();
   };
 
