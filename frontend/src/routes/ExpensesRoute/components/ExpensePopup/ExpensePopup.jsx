@@ -61,84 +61,89 @@ const ExpensePopup = ({ user, users, mutate }) => {
 
   return (
     <Box className="expensePopup" d="flex" alignItems="center">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack
-          w={400}
-          textColor="white"
-          direction="column"
-          placeItems="center"
-          spacing={2}
+      <Box w={{ base: '100%', md: '80%' }} maxW={600}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{ border: 'solid 1px red' }}
         >
-          <Controller
-            name="user"
-            control={control}
-            as={
-              <FormControl isInvalid={errors.user}>
-                <Select
-                  icon={
-                    <Avatar src={selectedUser && users[selectedUser]?.photo} />
-                  }
-                  placeholder="Who owes you money?"
-                >
-                  {users.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.name}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            }
-          />
-          <Controller
-            name="value"
-            control={control}
-            as={
-              <FormControl isInvalid={errors.value}>
-                <NumberInput max={10000} w={400}>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    fontSize="1.2em"
-                    children="$"
-                  />
-                  <NumberInputField pl={8} />
-                  <InputRightElement
-                    mr={6}
-                    children={
-                      value > 0 ? (
-                        <CheckIcon color="green" />
-                      ) : value === 0 || value === '' ? null : (
-                        <XIcon color="red" />
-                      )
-                    }
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </FormControl>
-            }
-          />
-
-          <Input
-            name="details"
-            type="text"
-            ref={register}
-            placeholder="Describe your expense"
-          />
-          <Button
-            mt={2}
-            type="submit"
-            w={100}
-            variant="solid"
-            colorScheme="blue"
+          <Stack
             textColor="white"
+            direction="column"
+            placeItems="center"
+            spacing={2}
           >
-            Add
-          </Button>
-        </Stack>
-      </form>
+            <Controller
+              name="user"
+              control={control}
+              as={
+                <FormControl isInvalid={errors.user}>
+                  <Select
+                    icon={
+                      <Avatar
+                        src={selectedUser && users[selectedUser]?.photo}
+                      />
+                    }
+                    placeholder="Who owes you money?"
+                  >
+                    {users.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              }
+            />
+            <Controller
+              name="value"
+              control={control}
+              as={
+                <FormControl isInvalid={errors.value}>
+                  <NumberInput max={10000} w="100%">
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                      children="$"
+                    />
+                    <NumberInputField pl={8} />
+                    <InputRightElement
+                      mr={6}
+                      children={
+                        value > 0 ? (
+                          <CheckIcon color="green" />
+                        ) : value === 0 || value === '' ? null : (
+                          <XIcon color="red" />
+                        )
+                      }
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </FormControl>
+              }
+            />
+            <Input
+              name="details"
+              type="text"
+              ref={register}
+              placeholder="Describe your expense"
+            />
+            <Button
+              mt={2}
+              type="submit"
+              w={100}
+              variant="solid"
+              colorScheme="blue"
+              textColor="white"
+            >
+              Add
+            </Button>
+          </Stack>
+        </form>
+      </Box>
     </Box>
   );
 };

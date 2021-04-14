@@ -9,11 +9,12 @@ import { Menu as MenuIcon } from 'react-feather';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toggleNav, togglePopup } from '../../state/actions/appAction';
-import { Button, CloseButton } from '@chakra-ui/react';
+import { Button, CloseButton, useBreakpointValue } from '@chakra-ui/react';
 
 const Header = ({ title, expenseButton = false, goBackButton = false }) => {
   const appDispatch = useDispatch();
   const popupVisible = useSelector((state) => state.app.popupVisible);
+  const menuIconVisible = useBreakpointValue({ base: true, md: false });
 
   const handlePopupToggle = () => {
     appDispatch(togglePopup());
@@ -26,13 +27,15 @@ const Header = ({ title, expenseButton = false, goBackButton = false }) => {
   return (
     <div className="header">
       <div className="header__menu">
-        <MenuIcon
-          className="header__buttons__icon"
-          fontSize="large"
-          onClick={handleNavToggle}
-        />
+        {menuIconVisible && (
+          <MenuIcon
+            className="header__buttons__icon"
+            fontSize="large"
+            onClick={handleNavToggle}
+          />
+        )}
       </div>
-      <h1>{title}</h1>
+      {!menuIconVisible && <h1>{title}</h1>}
       <div className="header__buttons">
         {expenseButton && (
           <Link to="/expenses">
