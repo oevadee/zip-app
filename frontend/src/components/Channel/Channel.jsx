@@ -4,10 +4,19 @@ import './Channel.scss';
 import { Link } from 'react-router-dom';
 import { Plus as AddIcon } from 'react-feather';
 
-const Channel = ({ channelName, icon = false, url = null, ...props }) => {
+const Channel = ({
+  channelName,
+  icon = false,
+  url = null,
+  onChannelClick,
+  ...props
+}) => {
   return (
     <Link to={url}>
-      <div className={`channel${!url ? '--withoutHover' : ''}`}>
+      <div
+        className={`channel${!url ? '--withoutHover' : ''}`}
+        onClick={onChannelClick}
+      >
         <h2>{channelName}</h2>
         {icon && <AddIcon className="channel__icon" {...props} />}
       </div>

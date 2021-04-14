@@ -13,24 +13,14 @@
     color: $color-white;
     font-family: $font;
     flex: 1;
-
-    @media (max-width: $tablet) {
-      display: none;
-      flex: 0;
-    }
   }
 
   .header__menu {
     .header__buttons__icon {
       flex: 1;
-      display: none !important;
       cursor: pointer;
       color: $color-white;
       margin-left: 20px;
-
-      @media (max-width: $tablet) {
-        display: block !important;
-      }
     }
   }
 }
