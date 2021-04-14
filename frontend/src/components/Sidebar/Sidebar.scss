@@ -5,6 +5,8 @@
   height: 100%;
   background-color: $color-secondary !important;
   color: $color-white !important;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar--mobileOn {

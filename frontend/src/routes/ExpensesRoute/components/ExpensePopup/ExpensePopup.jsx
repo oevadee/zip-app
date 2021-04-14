@@ -62,10 +62,7 @@ const ExpensePopup = ({ user, users, mutate }) => {
   return (
     <Box className="expensePopup" d="flex" alignItems="center">
       <Box w={{ base: '100%', md: '80%' }} maxW={600}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          style={{ border: 'solid 1px red' }}
-        >
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Stack
             textColor="white"
             direction="column"
