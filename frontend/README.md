@@ -2,8 +2,8 @@
 
 ### You can check it out on:
 
-> https://zip-app--222.firebaseapp.com/
+> http://zip.waw.pl/
 
-**Please don't spam because I haven't added the friend grouping yet.**
+**Please don't spam because I didn't add the friend grouping yet.**
 
 > Peace

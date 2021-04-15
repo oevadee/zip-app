@@ -23,6 +23,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import Card from '../../uiComponents/Card/Card';
+import config from "../../config";
 
 const HistoryRoute = ({ user }) => {
   const [history, setHistory] = useState([]);
@@ -47,7 +48,7 @@ const HistoryRoute = ({ user }) => {
     console.log(expenseId);
     console.log(user.id);
     try {
-      const {data} = await axios.post('/api/expenses/history/delete-request', {
+      const {data} = await axios.post(`/api/expenses/history/delete-request`, {
         expenseId,
         user: user.id,
       });

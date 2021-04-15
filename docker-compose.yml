@@ -10,7 +10,8 @@ services:
       - 7687
     environment:
       - NEO4J_AUTH=neo4j/123haslo123
-
+    volumes:
+      - $HOME/zip-app/backend/neo4j/data:/data
   backend:
     container_name: backend
     build:
@@ -19,13 +20,17 @@ services:
     environment:
       - PORT=8080
       - NEO4J_PASSWORD=123haslo123
+      - CLIENT=frontend
+      - NEO4J_USERNAME=neo4j
+      - NEO4J_HOST=neo4j
     ports:
       - 8080
-
   frontend:
     container_name: frontend
     build:
       dockerfile: Dockerfile
       context: ./frontend
+    environment: 
+      - VITE_API_HOST=localhost
     ports:
       - 80:80

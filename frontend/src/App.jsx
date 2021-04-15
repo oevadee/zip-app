@@ -14,17 +14,17 @@ import {
   ExpensesRoute,
   LoginRoute,
   HistoryRoute,
-  NotificationsRoute,
   RegisterRoute,
   SettingsRoute,
 } from './routes';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
 import { useBreakpointValue } from '@chakra-ui/media-query';
+import config from "./config";
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
-  const { data, mutate } = useSWR('/api/chat/channel');
+  const { data, mutate } = useSWR(`/api/chat/channel`);
   const sidebardVisible = useBreakpointValue({ base: false, md: true });
   const navOpen = useSelector((state) => state.app.navOpen);
 
@@ -54,9 +54,6 @@ const App = () => {
               </Route>
               <Route path="/chat/:channelId">
                 <ChatRoute user={user} />
-              </Route>
-              <Route path="/notifications">
-                <NotificationsRoute />
               </Route>
             </Switch>
           </>

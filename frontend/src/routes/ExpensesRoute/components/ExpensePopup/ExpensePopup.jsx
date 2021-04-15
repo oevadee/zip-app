@@ -31,6 +31,7 @@ import axios from 'axios';
 import { getCurrentTimestamp } from '../../../../utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import schema from './schema';
+import config from "../../../../config";
 
 const ExpensePopup = ({ user, users, mutate }) => {
   const { register, handleSubmit, control, watch, reset, errors } = useForm({

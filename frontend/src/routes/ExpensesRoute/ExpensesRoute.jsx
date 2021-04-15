@@ -12,6 +12,7 @@ import { Avatar } from '@chakra-ui/avatar';
 import { Link } from 'react-router-dom';
 import { Clock as HistoryIcon } from 'react-feather';
 import { useBreakpointValue } from '@chakra-ui/media-query';
+import config from "../../config";
 
 const ExpensesRoute = () => {
   const popupVisible = useSelector((state) => state.app.popupVisible);

@@ -8,9 +8,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: `http://localhost:8080/api`,
+        target: `http://${process.env.VITE_API_HOST}`,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

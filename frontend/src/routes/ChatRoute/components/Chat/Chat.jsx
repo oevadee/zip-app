@@ -9,6 +9,7 @@ import { getCurrentTimestamp } from '/src/utils';
 import axios from 'axios';
 import useSWR from 'swr';
 import './Chat.scss';
+import config from "../../../../config";
 
 const Chat = ({ channelId }) => {
   const { data: messages, mutate } = useSWR(`/api/chat/messages/${channelId}`);
