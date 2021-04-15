@@ -21,7 +21,7 @@ const RegisterRoute = () => {
   const onSubmit = async (values) => {
     console.log(values);
     const { data } = await axios.post(
-      `http://${config.API_HOST}/api/users/register`,
+      `/api/users/register`,
       values,
     );
   };

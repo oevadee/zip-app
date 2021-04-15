@@ -20,7 +20,7 @@ const ExpensesRoute = () => {
   const user = useSelector((state) => state.user.user);
   const isHidden = useBreakpointValue({ base: false, md: true });
 
-  const { data, mutate } = useSWR(`http://${config.API_HOST}/api/expenses?userId=${user.id}`);
+  const { data, mutate } = useSWR(`/api/expenses?userId=${user.id}`);
 
   if (!data) return <Spinner color="pink" />;
 

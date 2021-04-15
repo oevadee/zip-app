@@ -21,7 +21,7 @@ const LoginRoute = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
-    const { data } = await axios.post(`http://${config.API_HOST}/api/users/login`, values);
+    const { data } = await axios.post(`/api/users/login`, values);
     const { user, token } = data;
 
     user && dispatch(loginUser(user));

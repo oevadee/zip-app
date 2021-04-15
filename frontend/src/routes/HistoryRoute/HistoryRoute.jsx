@@ -30,7 +30,7 @@ const HistoryRoute = ({ user }) => {
 
   const { id } = useParams();
   const { data, mutate } = useSWR(
-    `http://${config.API_HOST}/api/expenses/history/${id}?userId=${user.id}`,
+    `/api/expenses/history/${id}?userId=${user.id}`,
   );
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const HistoryRoute = ({ user }) => {
     console.log(expenseId);
     console.log(user.id);
     try {
-      const {data} = await axios.post(`http://${API_HOST}/api/expenses/history/delete-request`, {
+      const {data} = await axios.post(`/api/expenses/history/delete-request`, {
         expenseId,
         user: user.id,
       });

@@ -24,7 +24,7 @@ import config from "./config";
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
-  const { data, mutate } = useSWR(`http://${import.meta.env.VITE_API_HOST}/api/chat/channel`);
+  const { data, mutate } = useSWR(`/api/chat/channel`);
   const sidebardVisible = useBreakpointValue({ base: false, md: true });
   const navOpen = useSelector((state) => state.app.navOpen);
 
