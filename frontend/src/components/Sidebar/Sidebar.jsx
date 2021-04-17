@@ -1,33 +1,40 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
-import './Sidebar.scss';
+import React from "react";
+import { PropTypes } from "prop-types";
+import "./Sidebar.scss";
 
 // Components
-import { Channel } from '/src/components';
+import { Channel } from "/src/components";
 
 // Icons
-import { Spinner } from '@chakra-ui/spinner';
+import { Spinner } from "@chakra-ui/spinner";
 
 // Firebase
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
-import axios from 'axios';
-import { logoutUser } from '../../state/actions/userAction';
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Box, Avatar, Heading } from "@chakra-ui/react";
+import axios from "axios";
+import { logoutUser } from "../../state/actions/userAction";
 import config from "../../config";
+import { Bell as BellIcon } from "react-feather";
 
 const Sidebar = ({ user, mutate, channels }) => {
   const dispatch = useDispatch();
+  const notifications = useSelector((state) => state.app.notificationsAmount);
+
+  console.log(notifications);
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
-    if (channelName) await axios.post(`http://${config.API_HOST}/api/chat/channel`, { channelName });
+    if (channelName)
+      await axios.post(`http://${config.API_HOST}/api/chat/channel`, {
+        channelName,
+      });
     mutate();
   };
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    localStorage.removeItem('secret');
+    localStorage.removeItem("secret");
   };
 
   if (!channels) return <Spinner color="pink" />;
@@ -35,17 +42,16 @@ const Sidebar = ({ user, mutate, channels }) => {
   console.log(channels);
 
   return (
-    <Box
-      maxW={200}
-      minW={200}
-      className={`sidebar`}
-    >
+    <Box maxW={200} minW={200} className={`sidebar`}>
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar className="sidebar__userHeader__avatar" src={user.photo} />
           <Heading as="h4" size="xs">
-            {user.name}
+            {user.name.split(" ")[0]}
           </Heading>
+          <Link to="/notifications">
+            <BellIcon />
+          </Link>
         </div>
       </div>
       <div className="sidebar__selector">

@@ -1,13 +1,13 @@
-import React from 'react';
-import './App.scss';
-import { useSelector } from 'react-redux';
-import { Sidebar, MobileNav } from './components';
+import React from "react";
+import "./App.scss";
+import { useSelector } from "react-redux";
+import { Sidebar, MobileNav } from "./components";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-} from 'react-router-dom';
+} from "react-router-dom";
 
 import {
   ChatRoute,
@@ -16,10 +16,11 @@ import {
   HistoryRoute,
   RegisterRoute,
   SettingsRoute,
-} from './routes';
-import useSWR from 'swr';
-import { Spinner } from '@chakra-ui/spinner';
-import { useBreakpointValue } from '@chakra-ui/media-query';
+  NotificationsRoute,
+} from "./routes";
+import useSWR from "swr";
+import { Spinner } from "@chakra-ui/spinner";
+import { useBreakpointValue } from "@chakra-ui/media-query";
 import config from "./config";
 
 const App = () => {
@@ -29,6 +30,8 @@ const App = () => {
   const navOpen = useSelector((state) => state.app.navOpen);
 
   if (!data) return <Spinner color="pink" />;
+
+  console.log(data);
 
   return (
     <div className="app">
@@ -54,6 +57,9 @@ const App = () => {
               </Route>
               <Route path="/chat/:channelId">
                 <ChatRoute user={user} />
+              </Route>
+              <Route path="/notifications">
+                <NotificationsRoute user={user} />
               </Route>
             </Switch>
           </>

@@ -1,4 +1,4 @@
-@import '../../variables';
+@import "../../variables";
 
 .sidebar {
   max-width: 220px;
@@ -23,19 +23,16 @@
 
   a {
     color: $color-white;
-
-    .MuiSvgIcon-root {
-      cursor: pointer;
-    }
   }
 }
 
 .sidebar__userHeader {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 
   .sidebar__userHeader__avatar {
-    margin-right: 20px;
     cursor: pointer;
   }
 

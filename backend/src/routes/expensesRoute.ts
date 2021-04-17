@@ -4,14 +4,18 @@ import {
   getAllUserExpenses,
   createExpense,
   getHistory,
-  handleDeleteRequest
+  handleDeleteRequest,
+  handleAcceptRequest,
+  getExpenseNotifications,
 } from "../controllers/expensesController";
 
 const router = express.Router();
 
 router.get("/", getAllUserExpenses);
-router.post("/:userId", createExpense);
+router.post("/create/:userId", createExpense);
 router.get("/history/:externalId", getHistory);
-router.post('/history/delete-request', handleDeleteRequest)
+router.post("/delete-request", handleDeleteRequest);
+router.delete("/accept-request", handleAcceptRequest);
+router.get("/notifications", getExpenseNotifications);
 
 export default router;

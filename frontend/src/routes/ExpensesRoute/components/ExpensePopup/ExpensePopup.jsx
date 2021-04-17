@@ -49,7 +49,7 @@ const ExpensePopup = ({ user, users, mutate }) => {
   const onSubmit = async (values) => {
     console.log(values);
     const data = await axios.post(
-      `/api/expenses/${user.id}`,
+      `/api/expenses/create/${user.id}`,
       {
         values,
         timestamp: new Date().toLocaleDateString(),

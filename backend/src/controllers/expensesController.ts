@@ -202,15 +202,106 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
 
 const handleDeleteRequest: Controller = async (req, res) => {
   const values = req.body;
+  const { user: userId, expenseId } = values;
+  const session = driver.session();
 
   try {
-    console.log(values);
+    await session.writeTransaction(
+      async (txc) =>
+        await txc.run(
+          `
+        MATCH (a:User), (e:Expense) 
+        WHERE id(a) = toInteger($userId) 
+        AND id(e) = toInteger($expenseId) 
+        CREATE (a)-[:REQUESTED_DELETION]->(e)
+        SET e.deletion_requested = TRUE
+        RETURN a, e
+      `,
+          {
+            userId,
+            expenseId,
+          }
+        )
+    );
+
+    return res.json();
   } catch (err) {
     console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with sending delete request." });
+  } finally {
+    session.close();
   }
 };
 
-export { getAllUserExpenses, createExpense, getHistory, handleDeleteRequest };
+const handleAcceptRequest: Controller = async (req, res) => {
+  const { notificationId } = req.query;
+  const session = driver.session();
+
+  try {
+    await session.writeTransaction(
+      async (txc) =>
+        await txc.run(
+          `
+        MATCH (e:Expense) WHERE id(e) = toInteger($notificationId) DETACH DELETE e
+      `,
+          {
+            notificationId,
+          }
+        )
+    );
+
+    return res.json();
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with accepting deletion request." });
+  } finally {
+    session.close();
+  }
+};
+
+const getExpenseNotifications: Controller = async (req, res) => {
+  const { userId } = req.query;
+  const session = driver.session();
+
+  try {
+    const notifications = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
+        `
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+      `,
+        { userId }
+      );
+
+      return result.records.map((el: any) => ({
+        id: el.get("e").identity.low,
+        ...el.get("e").properties,
+        name: el.get("a.name"),
+        photo: el.get("a.photo"),
+      }));
+    });
+
+    console.log(notifications);
+
+    return res.json(notifications);
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with getting all notifications." });
+  } finally {
+    session.close();
+  }
+};
+
+export {
+  getAllUserExpenses,
+  createExpense,
+  getHistory,
+  handleDeleteRequest,
+  handleAcceptRequest,
+  getExpenseNotifications,
+};
