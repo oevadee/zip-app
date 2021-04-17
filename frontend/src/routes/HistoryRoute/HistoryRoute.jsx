@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import './HistoryRoute.scss';
-import { PropTypes } from 'prop-types';
+import React, { useEffect, useState } from "react";
+import "./HistoryRoute.scss";
+import { PropTypes } from "prop-types";
 
 // Components
-import { useParams } from 'react-router';
-import { Header } from '../../components';
+import { useParams } from "react-router";
+import { Header } from "../../components";
 
-import { Trash2 as TrashIcon } from 'react-feather';
-import useSWR from 'swr';
+import { Trash2 as TrashIcon, Clock as ClockIcon } from "react-feather";
+import useSWR from "swr";
 import {
   Spinner,
   Table,
@@ -20,9 +20,10 @@ import {
   Avatar,
   TableCaption,
   Tab,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import Card from '../../uiComponents/Card/Card';
+  Tooltip,
+} from "@chakra-ui/react";
+import axios from "axios";
+import Card from "../../uiComponents/Card/Card";
 import config from "../../config";
 
 const HistoryRoute = ({ user }) => {
@@ -30,11 +31,12 @@ const HistoryRoute = ({ user }) => {
 
   const { id } = useParams();
   const { data, mutate } = useSWR(
-    `/api/expenses/history/${id}?userId=${user.id}`,
+    `/api/expenses/history/${id}?userId=${user.id}`
   );
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       const { inHistory, outHistory } = data;
       const sortedHistory = inHistory
         .concat(outHistory)
@@ -48,10 +50,13 @@ const HistoryRoute = ({ user }) => {
     console.log(expenseId);
     console.log(user.id);
     try {
-      const {data} = await axios.post(`/api/expenses/history/delete-request`, {
-        expenseId,
-        user: user.id,
-      });
+      const { data } = await axios.post(
+        `/api/expenses/history/delete-request`,
+        {
+          expenseId,
+          user: user.id,
+        }
+      );
     } catch (err) {
       console.error(err);
     }
@@ -67,7 +72,9 @@ const HistoryRoute = ({ user }) => {
           <Thead>
             <Tr>
               <Th w={50}>User</Th>
-              <Th w={150} isNumeric>Expense</Th>
+              <Th w={150} isNumeric>
+                Expense
+              </Th>
               <Th>Time</Th>
               <Th>About</Th>
               <Th></Th>
@@ -79,16 +86,24 @@ const HistoryRoute = ({ user }) => {
                 <Td w={50}>
                   <Avatar src={el.photo} />
                 </Td>
-                <Td w={150} isNumeric>{el.value}</Td>
+                <Td w={150} isNumeric>
+                  {el.value}
+                </Td>
                 <Td>{el.timestamp}</Td>
                 <Td>{el.details}</Td>
                 <Td>
-                  <TrashIcon
-                    size={20}
-                    color="#e84545"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleExpenseDelete(el.id)}
-                  />
+                  {el.deletion_requested ? (
+                    <Tooltip label={`Pending for approval from ${el.name}`} placement="left">
+                      <ClockIcon />
+                    </Tooltip>
+                  ) : (
+                    <TrashIcon
+                      size={20}
+                      color="#e84545"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleExpenseDelete(el.id)}
+                    />
+                  )}
                 </Td>
               </Tr>
             ))}

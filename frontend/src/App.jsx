@@ -16,6 +16,7 @@ import {
   HistoryRoute,
   RegisterRoute,
   SettingsRoute,
+  NotificationsRoute,
 } from './routes';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
@@ -54,6 +55,9 @@ const App = () => {
               </Route>
               <Route path="/chat/:channelId">
                 <ChatRoute user={user} />
+              </Route>
+              <Route path="/notifications">
+                <NotificationsRoute user={user} />
               </Route>
             </Switch>
           </>

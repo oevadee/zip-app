@@ -202,9 +202,32 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
 
 const handleDeleteRequest: Controller = async (req, res) => {
   const values = req.body;
+  const { user: userId, expenseId } = values;
+  const session = driver.session();
 
   try {
-    console.log(values);
+    const test = await session.writeTransaction(async (txc) => {
+      const result = await txc.run(
+        `
+        MATCH (a:User), (e:Expense) 
+        WHERE id(a) = toInteger($userId) 
+        AND id(e) = toInteger($expenseId) 
+        CREATE (a)-[:REQUESTED_DELETION]->(e)
+        SET e.deletion_requested = TRUE
+        RETURN a, e
+      `,
+        {
+          userId,
+          expenseId,
+        }
+      );
+      return result.records.map((el: any) => ({
+        ...el.get("a").properties,
+        ...el.get("e").properties,
+      }));
+    });
+
+    console.log(test);
   } catch (err) {
     console.error(err);
     return res
