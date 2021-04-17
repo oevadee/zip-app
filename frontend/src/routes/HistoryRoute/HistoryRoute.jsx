@@ -50,13 +50,11 @@ const HistoryRoute = ({ user }) => {
     console.log(expenseId);
     console.log(user.id);
     try {
-      const { data } = await axios.post(
-        `/api/expenses/history/delete-request`,
-        {
-          expenseId,
-          user: user.id,
-        }
-      );
+      await axios.post(`/api/expenses/delete-request`, {
+        expenseId,
+        user: user.id,
+      });
+      await mutate();
     } catch (err) {
       console.error(err);
     }
@@ -93,7 +91,10 @@ const HistoryRoute = ({ user }) => {
                 <Td>{el.details}</Td>
                 <Td>
                   {el.deletion_requested ? (
-                    <Tooltip label={`Pending for approval from ${el.name}`} placement="left">
+                    <Tooltip
+                      label={`Pending for approval from ${el.name}`}
+                      placement="left"
+                    >
                       <ClockIcon />
                     </Tooltip>
                   ) : (
