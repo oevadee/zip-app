@@ -91,10 +91,7 @@ const HistoryRoute = ({ user }) => {
                 <Td>{el.details}</Td>
                 <Td>
                   {el.deletion_requested ? (
-                    <Tooltip
-                      label={`Pending for approval from ${el.name}`}
-                      placement="left"
-                    >
+                    <Tooltip label={`Pending for approval`} placement="left">
                       <ClockIcon />
                     </Tooltip>
                   ) : (
@@ -110,26 +107,6 @@ const HistoryRoute = ({ user }) => {
             ))}
           </Tbody>
         </Table>
-        {/* <div className="historyList">
-          {history.map((el) => (
-            <div className="tableRow" key={el.id}>
-              <div className="tableRow__user">
-                <Avatar src={el.photo} />
-              </div>
-              <p className="tableRow__expense">{el.value}</p>
-              <p className="tableRow__timestamp">{el.timestamp}</p>
-              <p className="tableRow__about">{el.details}</p>
-              <div className="tableRow__blank">
-                <TrashIcon
-                  size={20}
-                  color="#e84545"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => handleExpenseDelete(el.id)}
-                />
-              </div>
-            </div>
-          ))} */}
-        {/* </div> */}
       </Card>
     </div>
   );

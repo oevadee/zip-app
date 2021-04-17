@@ -230,6 +230,8 @@ const handleDeleteRequest: Controller = async (req, res) => {
     return res
       .status(400)
       .json({ message: "There was an error with sending delete request." });
+  } finally {
+    session.close();
   }
 };
 
@@ -256,6 +258,8 @@ const handleAcceptRequest: Controller = async (req, res) => {
     return res
       .status(400)
       .json({ message: "There was an error with accepting deletion request." });
+  } finally {
+    session.close();
   }
 };
 
@@ -267,7 +271,7 @@ const getExpenseNotifications: Controller = async (req, res) => {
     const notifications = await session.readTransaction(async (txc) => {
       const result = await txc.run(
         `
-        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[]->(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
       `,
         { userId }
       );
@@ -280,12 +284,16 @@ const getExpenseNotifications: Controller = async (req, res) => {
       }));
     });
 
+    console.log(notifications);
+
     return res.json(notifications);
   } catch (err) {
     console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with getting all notifications." });
+  } finally {
+    session.close();
   }
 };
 

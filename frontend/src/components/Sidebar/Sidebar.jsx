@@ -19,6 +19,9 @@ import { Bell as BellIcon } from "react-feather";
 
 const Sidebar = ({ user, mutate, channels }) => {
   const dispatch = useDispatch();
+  const notifications = useSelector((state) => state.app.notificationsAmount);
+
+  console.log(notifications);
 
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);

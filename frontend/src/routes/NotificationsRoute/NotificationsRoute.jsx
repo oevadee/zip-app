@@ -39,14 +39,14 @@ const NotificationsRoute = ({ user }) => {
     await axios.delete(
       `/api/expenses/accept-request?notificationId=${notificationId}`
     );
-    await mutate();
+    mutate();
   };
 
   return (
     <Box p={5} w="100%">
       <Header title="Notifications" />
       <Card>
-        {!data && <Spinner color="pink" />}
+        {!data || error && <Spinner color="pink" />}
         {notifications.length ? (
           <Table>
             <Thead>
