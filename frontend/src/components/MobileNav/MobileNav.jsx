@@ -72,7 +72,7 @@ const MobileNav = ({ user, mutate, channels }) => {
                 className="sidebar__userHeader__avatar"
                 src={user.photo}
               />
-              <Heading as="h4" size="xs">
+              <Heading as="h4" size="xs" pr={10}>
                 {user.name}
               </Heading>
             </div>

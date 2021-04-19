@@ -46,7 +46,7 @@ const NotificationsRoute = ({ user }) => {
     <Box p={5} w="100%">
       <Header title="Notifications" />
       <Card>
-        {!data || error && <Spinner color="pink" />}
+        {!data || (error && <Spinner color="pink" />)}
         {notifications.length ? (
           <Table>
             <Thead>
@@ -55,6 +55,7 @@ const NotificationsRoute = ({ user }) => {
                 <Th>User</Th>
                 <Th>id</Th>
                 <Th>timetamp</Th>
+                <Th>value</Th>
                 <Th>details</Th>
                 <Th>
                   <Box d="flex" justifyContent="center">
@@ -73,6 +74,7 @@ const NotificationsRoute = ({ user }) => {
                   <Td>{el.name}</Td>
                   <Td>{el.id}</Td>
                   <Td>{el.timestamp}</Td>
+                  <Td>{el.value}</Td>
                   <Td>{el.details}</Td>
                   <Td>
                     <Box d="flex" justifyContent="center">
