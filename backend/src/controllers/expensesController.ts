@@ -269,19 +269,40 @@ const getExpenseNotifications: Controller = async (req, res) => {
 
   try {
     const notifications = await session.readTransaction(async (txc) => {
-      const result = await txc.run(
+      const inResult = await txc.run(
         `
-        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[:IO_OWED]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
       `,
         { userId }
       );
 
-      return result.records.map((el: any) => ({
+      const inToAdd = inResult.records.map((el: any) => ({
         id: el.get("e").identity.low,
         ...el.get("e").properties,
         name: el.get("a.name"),
         photo: el.get("a.photo"),
       }));
+
+      const outResult = await txc.run(
+        `
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[:OWES]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+      `,
+        { userId }
+      );
+
+      const outToAdd = outResult.records.map((el: any) => ({
+        id: el.get("e").identity.low,
+        ...el.get("e").properties,
+        name: el.get("a.name"),
+        photo: el.get("a.photo"),
+      }));
+
+      return outToAdd
+        .map((el) => ({
+          ...el,
+          value: -el.value,
+        }))
+        .concat(inToAdd);
     });
 
     return res.json(notifications);

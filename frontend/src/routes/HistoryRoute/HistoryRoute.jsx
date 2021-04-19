@@ -31,6 +31,8 @@ const HistoryRoute = ({ user }) => {
     `/api/expenses/history/${id}?userId=${user.id}`
   );
 
+  console.log(history);
+
   useEffect(() => {
     if (data) {
       const { inHistory, outHistory } = data;

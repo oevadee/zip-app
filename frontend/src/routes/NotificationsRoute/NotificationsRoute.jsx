@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
+  color,
   Heading,
+  IconButton,
   Spinner,
   Table,
   Tbody,
@@ -10,6 +12,7 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   typography,
 } from "@chakra-ui/react";
@@ -20,6 +23,7 @@ import useSWR from "swr";
 import {
   Check as CheckIcon,
   HelpCircle as HelpCircleIcon,
+  X as XIcon,
 } from "react-feather";
 import axios from "axios";
 
@@ -38,6 +42,13 @@ const NotificationsRoute = ({ user }) => {
   const handleAcceptDeletion = async (notificationId) => {
     await axios.delete(
       `/api/expenses/accept-request?notificationId=${notificationId}`
+    );
+    mutate();
+  };
+
+  const handleRejectDeletion = async (notificationId) => {
+    await axios.put(
+      `/api/expenses/reject-request?notificationId=${notificationId}`
     );
     mutate();
   };
@@ -62,7 +73,11 @@ const NotificationsRoute = ({ user }) => {
                     Confirm
                   </Box>
                 </Th>
-                <Th p={0}></Th>
+                <Th>
+                  <Box d="flex" justifyContent="center">
+                    Cancel
+                  </Box>
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -79,15 +94,39 @@ const NotificationsRoute = ({ user }) => {
                   <Td>
                     <Box d="flex" justifyContent="center">
                       <Box _hover={{ color: "green" }}>
-                        <CheckIcon
-                          cursor="pointer"
+                        <IconButton
+                          aria-label="Search database"
+                          variant="solid"
+                          colorScheme="green"
                           onClick={() => handleAcceptDeletion(el.id)}
+                          icon={<CheckIcon cursor="pointer" />}
                         />
                       </Box>
                     </Box>
                   </Td>
-                  <Td p={(0, 5)}>
-                    <HelpCircleIcon cursor="pointer" />
+                  <Td>
+                    <Box d="flex" justifyContent="center">
+                      <Box>
+                        <Tooltip
+                          label="cancel and request explanation."
+                          placement="left"
+                        >
+                          <IconButton
+                            aria-label="Search database"
+                            variant="solid"
+                            colorScheme="red"
+                            onClick={() => handleRejectDeletion(el.id)}
+                            icon={
+                              <XIcon
+                                cursor="pointer"
+                                color="white"
+                                _hover={{ color: "white" }}
+                              />
+                            }
+                          />
+                        </Tooltip>
+                      </Box>
+                    </Box>
                   </Td>
                 </Tr>
               ))}
