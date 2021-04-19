@@ -13,13 +13,10 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
   Avatar,
-  TableCaption,
-  Tab,
   Tooltip,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -36,7 +33,6 @@ const HistoryRoute = ({ user }) => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const { inHistory, outHistory } = data;
       const sortedHistory = inHistory
         .concat(outHistory)
@@ -47,8 +43,6 @@ const HistoryRoute = ({ user }) => {
   }, [data]);
 
   const handleExpenseDelete = async (expenseId) => {
-    console.log(expenseId);
-    console.log(user.id);
     try {
       await axios.post(`/api/expenses/delete-request`, {
         expenseId,

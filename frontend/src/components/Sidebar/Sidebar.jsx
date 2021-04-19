@@ -21,8 +21,6 @@ const Sidebar = ({ user, mutate, channels }) => {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => state.app.notificationsAmount);
 
-  console.log(notifications);
-
   const handleAddChannel = async () => {
     const channelName = prompt(`Enter a new channel name`);
     if (channelName)
@@ -38,8 +36,6 @@ const Sidebar = ({ user, mutate, channels }) => {
   };
 
   if (!channels) return <Spinner color="pink" />;
-
-  console.log(channels);
 
   return (
     <Box maxW={200} minW={200} className={`sidebar`}>

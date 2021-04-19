@@ -284,8 +284,6 @@ const getExpenseNotifications: Controller = async (req, res) => {
       }));
     });
 
-    console.log(notifications);
-
     return res.json(notifications);
   } catch (err) {
     console.error(err);

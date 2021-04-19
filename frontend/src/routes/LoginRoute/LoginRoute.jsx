@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
 import { Link } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
-import config from "../../config";
 
 const LoginRoute = () => {
   const { register, handleSubmit } = useForm();

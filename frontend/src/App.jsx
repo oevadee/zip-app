@@ -31,8 +31,6 @@ const App = () => {
 
   if (!data) return <Spinner color="pink" />;
 
-  console.log(data);
-
   return (
     <div className="app">
       <Router>

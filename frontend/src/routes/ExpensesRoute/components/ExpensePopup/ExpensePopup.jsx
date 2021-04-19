@@ -13,25 +13,16 @@ import {
   InputLeftElement,
   InputRightElement,
   Select,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  FormErrorMessage,
   FormControl,
 } from "@chakra-ui/react";
 import {
-  DollarSign as DollarSignIcon,
   Check as CheckIcon,
   X as XIcon,
 } from "react-feather";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import { getCurrentTimestamp } from "../../../../utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import schema from "./schema";
-import config from "../../../../config";
 
 const ExpensePopup = ({ user, users, mutate }) => {
   const { register, handleSubmit, control, watch, reset, errors } = useForm({
@@ -46,10 +37,7 @@ const ExpensePopup = ({ user, users, mutate }) => {
   const selectedUser = watch("user");
   const { value } = watch();
 
-  console.log(Number(value) > 0);
-
   const onSubmit = async (values) => {
-    console.log(values);
     const data = await axios.post(`/api/expenses/create/${user.id}`, {
       values,
       timestamp: new Date().toLocaleDateString(),
