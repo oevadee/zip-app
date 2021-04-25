@@ -1,6 +1,7 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 import "./Sidebar.scss";
+import "../../uiUtils/darkMode--scrollbar.scss";
 
 // Components
 import { Channel } from "/src/components";
@@ -38,7 +39,7 @@ const Sidebar = ({ user, mutate, channels }) => {
   if (!channels) return <Spinner color="pink" />;
 
   return (
-    <Box maxW={200} minW={200} className={`sidebar`}>
+    <Box maxW={200} minW={200} className="sidebar">
       <div className="sidebar__user">
         <div className="sidebar__userHeader">
           <Avatar className="sidebar__userHeader__avatar" src={user.photo} />
@@ -54,17 +55,17 @@ const Sidebar = ({ user, mutate, channels }) => {
         <Channel channelName="Expenses" url="/expenses" />
         <Channel channelName="Settings" url="/settings" />
         <Channel channelName="Chat room" icon onClick={handleAddChannel} />
-        <div className="sidebar__chatList">
+        <div className={`sidebar__chatList darkMode--scrollbar`}>
           {channels.map(({ name, id }) => (
             <Channel key={id} id={id} channelName={name} url={`/chat/${id}`} />
           ))}
         </div>
       </div>
-      <div className="sidebar__logout">
+      <Box className="sidebar__logout">
         <Button onClick={handleLogout} colorScheme="pink">
           Logout
         </Button>
-      </div>
+      </Box>
     </Box>
   );
 };

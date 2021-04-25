@@ -1,0 +1,23 @@
+@import "../variables.scss";
+
+.darkMode--scrollbar {
+  scrollbar-face-color: $color-primary;
+  scrollbar-base-color: $color-primary;
+  scrollbar-3dlight-color: $color-primary;
+  scrollbar-dark-shadow-color: $color-primary;
+}
+
+.darkMode--scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 3px;
+}
+
+.darkMode--scrollbar::-webkit-scrollbar-track-piece {
+  background-color: $color-secondary;
+}
+
+.darkMode--scrollbar::-webkit-scrollbar-thumb {
+  height: 10px;
+  background-color: $color-lightGray;
+  border-radius: 3px;
+}

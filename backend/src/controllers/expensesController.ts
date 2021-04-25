@@ -200,7 +200,7 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const handleDeleteRequest: Controller = async (req, res) => {
+const requestDeletion: Controller = async (req, res) => {
   const values = req.body;
   const { user: userId, expenseId } = values;
   const session = driver.session();
@@ -235,7 +235,7 @@ const handleDeleteRequest: Controller = async (req, res) => {
   }
 };
 
-const handleAcceptRequest: Controller = async (req, res) => {
+const acceptDeletion: Controller = async (req, res) => {
   const { notificationId } = req.query;
   const session = driver.session();
 
@@ -244,7 +244,35 @@ const handleAcceptRequest: Controller = async (req, res) => {
       async (txc) =>
         await txc.run(
           `
-        MATCH (e:Expense) WHERE id(e) = toInteger($notificationId) DETACH DELETE e
+        MATCH (e:Expense) WHERE id(e) = toInteger($notificationId)  DETACH DELETE e
+      `,
+          {
+            notificationId,
+          }
+        )
+    );
+
+    return res.json();
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with accepting deletion request." });
+  } finally {
+    session.close();
+  }
+};
+
+const rejectDeletion: Controller = async (req, res) => {
+  const { notificationId } = req.query;
+  const session = driver.session();
+
+  try {
+    await session.writeTransaction(
+      async (txc) =>
+        await txc.run(
+          `
+          MATCH (e:Expense)-[r:REQUESTED_DELETION]-() WHERE id(e) = toInteger($notificationId) REMOVE e.deletion_requested DELETE r RETURN e
       `,
           {
             notificationId,
@@ -271,7 +299,7 @@ const getExpenseNotifications: Controller = async (req, res) => {
     const notifications = await session.readTransaction(async (txc) => {
       const inResult = await txc.run(
         `
-        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[:IO_OWED]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[:IS_OWED]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
       `,
         { userId }
       );
@@ -320,7 +348,8 @@ export {
   getAllUserExpenses,
   createExpense,
   getHistory,
-  handleDeleteRequest,
-  handleAcceptRequest,
+  requestDeletion,
+  acceptDeletion,
+  rejectDeletion,
   getExpenseNotifications,
 };
