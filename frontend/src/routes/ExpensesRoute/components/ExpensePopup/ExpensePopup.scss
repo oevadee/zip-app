@@ -1,4 +1,4 @@
-@import '../../../../variables';
+@import "../../../../variables";
 
 .expensePopup {
   min-height: 200px;
@@ -7,3 +7,9 @@
   justify-content: space-around;
   margin: 20px;
 }
+
+.expensePopup__select {
+  -webkit-appearance: none; /* for webkit (safari, chrome) compatibility */
+  -moz-appearance: none; /* for firefox compatibility */
+}
+

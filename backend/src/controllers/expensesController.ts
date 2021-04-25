@@ -200,17 +200,156 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const handleDeleteRequest: Controller = async (req, res) => {
+const requestDeletion: Controller = async (req, res) => {
   const values = req.body;
+  const { user: userId, expenseId } = values;
+  const session = driver.session();
 
   try {
-    console.log(values);
+    await session.writeTransaction(
+      async (txc) =>
+        await txc.run(
+          `
+        MATCH (a:User), (e:Expense) 
+        WHERE id(a) = toInteger($userId) 
+        AND id(e) = toInteger($expenseId) 
+        CREATE (a)-[:REQUESTED_DELETION]->(e)
+        SET e.deletion_requested = TRUE
+        RETURN a, e
+      `,
+          {
+            userId,
+            expenseId,
+          }
+        )
+    );
+
+    return res.json();
   } catch (err) {
     console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with sending delete request." });
+  } finally {
+    session.close();
   }
 };
 
-export { getAllUserExpenses, createExpense, getHistory, handleDeleteRequest };
+const acceptDeletion: Controller = async (req, res) => {
+  const { notificationId } = req.query;
+  const session = driver.session();
+
+  try {
+    await session.writeTransaction(
+      async (txc) =>
+        await txc.run(
+          `
+        MATCH (e:Expense) WHERE id(e) = toInteger($notificationId)  DETACH DELETE e
+      `,
+          {
+            notificationId,
+          }
+        )
+    );
+
+    return res.json();
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with accepting deletion request." });
+  } finally {
+    session.close();
+  }
+};
+
+const rejectDeletion: Controller = async (req, res) => {
+  const { notificationId } = req.query;
+  const session = driver.session();
+
+  try {
+    await session.writeTransaction(
+      async (txc) =>
+        await txc.run(
+          `
+          MATCH (e:Expense)-[r:REQUESTED_DELETION]-() WHERE id(e) = toInteger($notificationId) REMOVE e.deletion_requested DELETE r RETURN e
+      `,
+          {
+            notificationId,
+          }
+        )
+    );
+
+    return res.json();
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with accepting deletion request." });
+  } finally {
+    session.close();
+  }
+};
+
+const getExpenseNotifications: Controller = async (req, res) => {
+  const { userId } = req.query;
+  const session = driver.session();
+
+  try {
+    const notifications = await session.readTransaction(async (txc) => {
+      const inResult = await txc.run(
+        `
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[:IS_OWED]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+      `,
+        { userId }
+      );
+
+      const inToAdd = inResult.records.map((el: any) => ({
+        id: el.get("e").identity.low,
+        ...el.get("e").properties,
+        name: el.get("a.name"),
+        photo: el.get("a.photo"),
+      }));
+
+      const outResult = await txc.run(
+        `
+        MATCH (a:User), (b:User), (e:Expense) WHERE (a)-[:REQUESTED_DELETION]->(e)-[:OWES]-(b) AND id(b) = toInteger($userId) AND NOT id(a) = toInteger($userId) RETURN a.name, a.photo, e
+      `,
+        { userId }
+      );
+
+      const outToAdd = outResult.records.map((el: any) => ({
+        id: el.get("e").identity.low,
+        ...el.get("e").properties,
+        name: el.get("a.name"),
+        photo: el.get("a.photo"),
+      }));
+
+      return outToAdd
+        .map((el) => ({
+          ...el,
+          value: -el.value,
+        }))
+        .concat(inToAdd);
+    });
+
+    return res.json(notifications);
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with getting all notifications." });
+  } finally {
+    session.close();
+  }
+};
+
+export {
+  getAllUserExpenses,
+  createExpense,
+  getHistory,
+  requestDeletion,
+  acceptDeletion,
+  rejectDeletion,
+  getExpenseNotifications,
+};

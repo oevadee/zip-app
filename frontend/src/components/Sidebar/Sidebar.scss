@@ -1,16 +1,10 @@
-@import '../../variables';
+@import "../../variables";
 
 .sidebar {
   max-width: 220px;
   height: 100%;
   background-color: $color-secondary !important;
   color: $color-white !important;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar--mobileOn {
-  transform: translateX(0);
 }
 
 .sidebar__user {
@@ -23,34 +17,32 @@
 
   a {
     color: $color-white;
+  }
 
-    .MuiSvgIcon-root {
+  .sidebar__userHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .sidebar__userHeader__avatar {
       cursor: pointer;
+    }
+
+    h3 {
+      font-size: large;
     }
   }
 }
 
-.sidebar__userHeader {
-  display: flex;
-  align-items: center;
-
-  .sidebar__userHeader__avatar {
-    margin-right: 20px;
-    cursor: pointer;
-  }
-
-  h3 {
-    font-size: large;
-  }
-}
-
 .sidebar__selector {
-  flex: 1;
-}
-
-.sidebar__chatList {
-  display: flex;
-  flex-direction: column;
+  height: calc(100% - 80px - 100px);
+  .sidebar__chatList {
+    height: calc(100% - 195px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
 }
 
 .sidebar__logout {
@@ -58,4 +50,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }

@@ -1,36 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import './HistoryRoute.scss';
-import { PropTypes } from 'prop-types';
+import React, { useEffect, useState } from "react";
+import "./HistoryRoute.scss";
+import { PropTypes } from "prop-types";
 
 // Components
-import { useParams } from 'react-router';
-import { Header } from '../../components';
+import { useParams } from "react-router";
+import { Header } from "../../components";
 
-import { Trash2 as TrashIcon } from 'react-feather';
-import useSWR from 'swr';
+import { Trash2 as TrashIcon, Clock as ClockIcon } from "react-feather";
+import useSWR from "swr";
 import {
   Spinner,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
   Avatar,
-  TableCaption,
-  Tab,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import Card from '../../uiComponents/Card/Card';
+  Tooltip,
+} from "@chakra-ui/react";
+import axios from "axios";
+import Card from "../../uiComponents/Card/Card";
+import config from "../../config";
 
 const HistoryRoute = ({ user }) => {
   const [history, setHistory] = useState([]);
 
   const { id } = useParams();
   const { data, mutate } = useSWR(
-    `/api/expenses/history/${id}?userId=${user.id}`,
+    `/api/expenses/history/${id}?userId=${user.id}`
   );
+
+  console.log(history);
 
   useEffect(() => {
     if (data) {
@@ -44,13 +45,12 @@ const HistoryRoute = ({ user }) => {
   }, [data]);
 
   const handleExpenseDelete = async (expenseId) => {
-    console.log(expenseId);
-    console.log(user.id);
     try {
-      const {data} = await axios.post('/api/expenses/history/delete-request', {
+      await axios.post(`/api/expenses/delete-request`, {
         expenseId,
         user: user.id,
       });
+      await mutate();
     } catch (err) {
       console.error(err);
     }
@@ -66,7 +66,9 @@ const HistoryRoute = ({ user }) => {
           <Thead>
             <Tr>
               <Th w={50}>User</Th>
-              <Th w={150} isNumeric>Expense</Th>
+              <Th w={150} isNumeric>
+                Expense
+              </Th>
               <Th>Time</Th>
               <Th>About</Th>
               <Th></Th>
@@ -78,41 +80,29 @@ const HistoryRoute = ({ user }) => {
                 <Td w={50}>
                   <Avatar src={el.photo} />
                 </Td>
-                <Td w={150} isNumeric>{el.value}</Td>
+                <Td w={150} isNumeric>
+                  {el.value}
+                </Td>
                 <Td>{el.timestamp}</Td>
                 <Td>{el.details}</Td>
                 <Td>
-                  <TrashIcon
-                    size={20}
-                    color="#e84545"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleExpenseDelete(el.id)}
-                  />
+                  {el.deletion_requested ? (
+                    <Tooltip label={`Pending for approval`} placement="left">
+                      <ClockIcon />
+                    </Tooltip>
+                  ) : (
+                    <TrashIcon
+                      size={20}
+                      color="#e84545"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleExpenseDelete(el.id)}
+                    />
+                  )}
                 </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
-        {/* <div className="historyList">
-          {history.map((el) => (
-            <div className="tableRow" key={el.id}>
-              <div className="tableRow__user">
-                <Avatar src={el.photo} />
-              </div>
-              <p className="tableRow__expense">{el.value}</p>
-              <p className="tableRow__timestamp">{el.timestamp}</p>
-              <p className="tableRow__about">{el.details}</p>
-              <div className="tableRow__blank">
-                <TrashIcon
-                  size={20}
-                  color="#e84545"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => handleExpenseDelete(el.id)}
-                />
-              </div>
-            </div>
-          ))} */}
-        {/* </div> */}
       </Card>
     </div>
   );

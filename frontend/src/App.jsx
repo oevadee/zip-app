@@ -1,30 +1,31 @@
-import React from 'react';
-import './App.scss';
-import { useSelector } from 'react-redux';
-import { Sidebar, MobileNav } from './components';
+import React from "react";
+import "./App.scss";
+import { useSelector } from "react-redux";
+import { Sidebar, MobileNav } from "./components";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-} from 'react-router-dom';
+} from "react-router-dom";
 
 import {
   ChatRoute,
   ExpensesRoute,
   LoginRoute,
   HistoryRoute,
-  NotificationsRoute,
   RegisterRoute,
   SettingsRoute,
-} from './routes';
-import useSWR from 'swr';
-import { Spinner } from '@chakra-ui/spinner';
-import { useBreakpointValue } from '@chakra-ui/media-query';
+  NotificationsRoute,
+} from "./routes";
+import useSWR from "swr";
+import { Spinner } from "@chakra-ui/spinner";
+import { useBreakpointValue } from "@chakra-ui/media-query";
+import config from "./config";
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
-  const { data, mutate } = useSWR('/api/chat/channel');
+  const { data, mutate } = useSWR(`/api/chat/channel`);
   const sidebardVisible = useBreakpointValue({ base: false, md: true });
   const navOpen = useSelector((state) => state.app.navOpen);
 
@@ -56,7 +57,7 @@ const App = () => {
                 <ChatRoute user={user} />
               </Route>
               <Route path="/notifications">
-                <NotificationsRoute />
+                <NotificationsRoute user={user} />
               </Route>
             </Switch>
           </>
@@ -64,7 +65,7 @@ const App = () => {
           <>
             <Redirect to="/login" />
             <Route path="/login" component={LoginRoute} />
-            <Route path="/register" component={RegisterRoute} />
+            {/* <Route path="/register" component={RegisterRoute} /> */}
           </>
         )}
       </Router>
