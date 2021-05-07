@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import {
   Avatar,
   Box,
@@ -15,43 +15,43 @@ import {
   Tooltip,
   Tr,
   typography,
-} from "@chakra-ui/react";
-import Card from "../../uiComponents/Card/Card";
-import CardContent from "../../uiComponents/CardContent/CardContent";
-import { Header } from "../../components";
-import useSWR from "swr";
+} from '@chakra-ui/react'
+import Card from '../../uiComponents/Card/Card'
+import CardContent from '../../uiComponents/CardContent/CardContent'
+import { Header } from '../../components'
+import useSWR from 'swr'
 import {
   Check as CheckIcon,
   HelpCircle as HelpCircleIcon,
   X as XIcon,
-} from "react-feather";
-import axios from "axios";
+} from 'react-feather'
+import axios from 'axios'
 
 const NotificationsRoute = ({ user }) => {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([])
   const { data, error, mutate } = useSWR(
     `/api/expenses/notifications?userId=${user.id}`
-  );
+  )
 
   useEffect(() => {
     if (data) {
-      setNotifications(data);
+      setNotifications(data)
     }
-  }, [data]);
+  }, [data])
 
   const handleAcceptDeletion = async (notificationId) => {
     await axios.delete(
       `/api/expenses/accept-request?notificationId=${notificationId}`
-    );
-    mutate();
-  };
+    )
+    mutate()
+  }
 
   const handleRejectDeletion = async (notificationId) => {
     await axios.put(
       `/api/expenses/reject-request?notificationId=${notificationId}`
-    );
-    mutate();
-  };
+    )
+    mutate()
+  }
 
   return (
     <Box p={5} w="100%">
@@ -93,7 +93,7 @@ const NotificationsRoute = ({ user }) => {
                   <Td>{el.details}</Td>
                   <Td>
                     <Box d="flex" justifyContent="center">
-                      <Box _hover={{ color: "green" }}>
+                      <Box _hover={{ color: 'green' }}>
                         <IconButton
                           aria-label="Search database"
                           variant="solid"
@@ -120,7 +120,7 @@ const NotificationsRoute = ({ user }) => {
                               <XIcon
                                 cursor="pointer"
                                 color="white"
-                                _hover={{ color: "white" }}
+                                _hover={{ color: 'white' }}
                               />
                             }
                           />
@@ -139,7 +139,7 @@ const NotificationsRoute = ({ user }) => {
         )}
       </Card>
     </Box>
-  );
-};
+  )
+}
 
-export default NotificationsRoute;
+export default NotificationsRoute
