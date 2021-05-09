@@ -34,7 +34,7 @@ const getAllUserExpenses = async (
     for (const user of users) {
       const inExpensesQuery = await session.readTransaction(async (txc) => {
         const result = await txc.run(
-          `MATCH (a:User)<-[IS_OWED]-(e:Expense)<-[OWES]-(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
+          `MATCH (a:User)<-[:IS_OWED]-(e:Expense)<-[:OWES]-(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
           { id: userId, externalId: user.id }
         );
 
@@ -50,7 +50,7 @@ const getAllUserExpenses = async (
 
       const outExpensesQuery = await session.readTransaction(async (txc) => {
         const result = await txc.run(
-          `MATCH (a:User)-[OWES]->(e:Expense)-[IS_OWED]->(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
+          `MATCH (a:User)-[:OWES]->(e:Expense)-[:IS_OWED]->(b:User) WHERE id(a) = toInteger($id) AND id(b) = toInteger($externalId) RETURN e`,
           { id: userId, externalId: user.id }
         );
         return await result.records.map((el: any) => ({
@@ -74,7 +74,7 @@ const getAllUserExpenses = async (
 
     return res.json({ expenses, users });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with getting user expenses" });

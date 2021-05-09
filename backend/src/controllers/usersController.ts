@@ -88,8 +88,6 @@ const register = async (req: Request, res: Response): Promise<any> => {
         }));
       });
 
-      console.log(data);
-
       return res.json(data);
     } else
       return res
@@ -105,24 +103,64 @@ const register = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
+const getProfile: Controller = async (req, res) => {
+  const { userId } = req.query;
+  const session = driver.session();
+
+  try {
+    const [userName] = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
+        `
+        MATCH (a:User) WHERE id(a) = toInteger($userId) RETURN a
+      `,
+        { userId }
+      );
+
+      return result.records.map((el: any) => el.get("a").properties.name);
+    });
+
+    return res.json(userName);
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .json({ message: "There was an error with getting profile info." });
+  }
+};
+
 const updateProfile: Controller = async (req, res) => {
   const values = req.body;
   const { userId } = req.query;
   const session = driver.session();
 
   try {
-    const { password, confirmPassword } = values;
+    const { password, confirmPassword, name } = values;
     if (password === confirmPassword) {
       const hash = await bcrypt.hash(password, 10);
       await session.writeTransaction(async (txc) => {
         await txc.run(
           `
-          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash
+          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash, a.name = $name
         `,
-          { userId, hash }
+          { userId, hash, name }
         );
       });
       return res.json({ message: "Password changed." });
+    } else if (
+      (!password || !confirmPassword || password !== confirmPassword) &&
+      name
+    ) {
+      await session.writeTransaction(async (txc) => {
+        await txc.run(
+          `
+          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
+        `,
+          {
+            name,
+          }
+        );
+      });
+      return res.json({ message: "Name changed." });
     } else return res.status(400).json({ message: "Passwords do not match." });
   } catch (err) {
     console.error(err);
@@ -157,4 +195,4 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { login, register, updateProfile, getUsers };
+export { login, register, getProfile, updateProfile, getUsers };
