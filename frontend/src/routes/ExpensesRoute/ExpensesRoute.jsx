@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import "./ExpensesRoute.scss";
-import { Header } from "../../components";
-import { ExpensePopup } from "./components";
-import { useSelector } from "react-redux";
-import { Spinner } from "@chakra-ui/spinner";
-import useSWR from "swr";
-import Card from "../../uiComponents/Card/Card";
-import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import { Avatar } from "@chakra-ui/avatar";
-import { Link } from "react-router-dom";
-import { Clock as HistoryIcon } from "react-feather";
-import { useBreakpointValue } from "@chakra-ui/media-query";
+import React, { useState } from 'react';
+import './ExpensesRoute.scss';
+import { Header } from '../../components';
+import { ExpensePopup } from './components';
+import { useSelector } from 'react-redux';
+import { Spinner } from '@chakra-ui/spinner';
+import useSWR from 'swr';
+import Card from '../../uiComponents/Card/Card';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
+import { Avatar } from '@chakra-ui/avatar';
+import { Link } from 'react-router-dom';
+import { Clock as HistoryIcon } from 'react-feather';
+import { useBreakpointValue } from '@chakra-ui/media-query';
 
 const ExpensesRoute = () => {
   const popupVisible = useSelector((state) => state.app.popupVisible);
@@ -19,16 +19,18 @@ const ExpensesRoute = () => {
 
   const { data, mutate } = useSWR(`/api/expenses?userId=${user.id}`);
 
-  if (!data) return <Spinner color="pink" />;
+  if (!data) return <Spinner color='pink' />;
+
+  console.log(data);
 
   return (
-    <div className="expenses">
-      <Header title="Expenses" expenseButton />
+    <div className='expenses'>
+      <Header title='Expenses' expenseButton />
       {popupVisible && (
         <ExpensePopup user={user} users={data.users} mutate={mutate} />
       )}
       <Card>
-        <Table size="lg">
+        <Table size='lg'>
           <Thead>
             <Tr>
               <Th w={100}></Th>
@@ -55,13 +57,13 @@ const ExpensesRoute = () => {
                   <Td isNumeric>
                     <Link
                       style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
+                        display: 'flex',
+                        justifyContent: 'flex-end',
                         marginRight: 23,
                       }}
                       to={`/history/${el.user.id}`}
                     >
-                      <HistoryIcon style={{ color: "#fff" }} />
+                      <HistoryIcon style={{ color: '#fff' }} />
                     </Link>
                   </Td>
                 </Tr>
