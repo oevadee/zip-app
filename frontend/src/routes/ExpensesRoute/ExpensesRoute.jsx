@@ -21,8 +21,6 @@ const ExpensesRoute = () => {
 
   if (!data) return <Spinner color='pink' />;
 
-  console.log(data);
-
   return (
     <div className='expenses'>
       <Header title='Expenses' expenseButton />
