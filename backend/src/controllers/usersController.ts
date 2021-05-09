@@ -88,8 +88,6 @@ const register = async (req: Request, res: Response): Promise<any> => {
         }));
       });
 
-      console.log(data);
-
       return res.json(data);
     } else
       return res

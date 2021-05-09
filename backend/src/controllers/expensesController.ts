@@ -63,8 +63,6 @@ const getAllUserExpenses = async (
         0
       );
 
-      console.log(user, outExpensesQuery);
-
       const sum = incomingExpenses - outgoingExpenses;
 
       const expense = {
@@ -76,7 +74,7 @@ const getAllUserExpenses = async (
 
     return res.json({ expenses, users });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res
       .status(400)
       .json({ message: "There was an error with getting user expenses" });
