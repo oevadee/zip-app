@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { PropTypes } from 'prop-types';
-import './MobileNav.scss';
+import React, { useState, useEffect, useRef } from 'react'
+import { PropTypes } from 'prop-types'
+import './MobileNav.scss'
 
 // Components
-import { Channel } from '/src/components';
+import { Channel } from '/src/components'
 
 // Icons
-import { Bell as NotificationIcon, Plus as AddIcon } from 'react-feather';
-import { Spinner } from '@chakra-ui/spinner';
+import { Bell as BellIcon, Plus as AddIcon } from 'react-feather'
+import { Spinner } from '@chakra-ui/spinner'
 
 // Firebase
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 // import { Button, Box, Avatar, Heading } from '@chakra-ui/react';
-import axios from 'axios';
-import { logoutUser } from '../../state/actions/userAction';
+import axios from 'axios'
+import { logoutUser } from '../../state/actions/userAction'
 import {
   Button,
   Drawer,
@@ -28,69 +28,77 @@ import {
   Avatar,
   Heading,
   useBreakpointValue,
-} from '@chakra-ui/react';
-import { toggleNav } from '../../state/actions/appAction';
-import config from "../../config";
+  Box
+} from '@chakra-ui/react'
+import { toggleNav } from '../../state/actions/appAction'
+import config from '../../config'
 
 const MobileNav = ({ user, mutate, channels }) => {
-  const navOpen = useSelector((state) => state.app.navOpen);
-  const dispatch = useDispatch();
-  const btnRef = useRef();
-  const isOpen = useBreakpointValue({ base: false });
+  const navOpen = useSelector((state) => state.app.navOpen)
+  const dispatch = useDispatch()
+  const btnRef = useRef()
+  const isOpen = useBreakpointValue({ base: false })
 
   const handleAddChannel = async () => {
-    const channelName = prompt(`Enter a new channel name`);
-    if (channelName) await axios.post(`http://${config.API_HOST}/api/chat/channel`, { channelName });
-    mutate();
-  };
+    const channelName = prompt(`Enter a new channel name`)
+    if (channelName)
+      await axios.post(`http://${config.API_HOST}/api/chat/channel`, {
+        channelName,
+      })
+    mutate()
+  }
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-    localStorage.removeItem('secret');
-  };
+    dispatch(logoutUser())
+    localStorage.removeItem('secret')
+  }
 
   const handleSidebarClose = () => {
-    dispatch(toggleNav());
-  };
+    dispatch(toggleNav())
+  }
 
-  if (!channels) return <Spinner color="pink" />;
+  if (!channels) return <Spinner color='pink' />
 
   return (
     <Drawer
       isOpen={isOpen ? isOpen : navOpen}
-      placement="left"
+      placement='left'
       onClose={handleSidebarClose}
       finalFocusRef={btnRef}
-      size="xs"
+      size='xs'
     >
       <DrawerOverlay>
-        <DrawerContent className="sidebar">
+        <DrawerContent className='sidebar'>
           {!isOpen && <DrawerCloseButton />}
           <DrawerHeader>
-            <div className="sidebar__userHeader">
+            <Box d="flex" alignItems="center">
               <Avatar
-                className="sidebar__userHeader__avatar"
+                className='sidebar__userHeader__avatar'
                 src={user.photo}
+                mr={3}
               />
-              <Heading as="h4" size="xs" pr={10}>
+              <Heading as='h4' size='xs' pr={3}>
                 {user.name}
               </Heading>
-            </div>
+              <Link to='/notifications'>
+                <BellIcon />
+              </Link>
+            </Box>
           </DrawerHeader>
 
           <DrawerBody p={0}>
             <Channel
-              channelName="Expenses"
-              url="/expenses"
+              channelName='Expenses'
+              url='/expenses'
               onChannelClick={handleSidebarClose}
             />
             <Channel
-              channelName="Settings"
-              url="/settings"
+              channelName='Settings'
+              url='/settings'
               onChannelClick={handleSidebarClose}
             />
-            <Channel channelName="Chat room" icon onClick={handleAddChannel} />
-            <div className="sidebar__chatList">
+            <Channel channelName='Chat room' icon onClick={handleAddChannel} />
+            <div className='sidebar__chatList'>
               {channels.map(({ name, id }) => (
                 <Channel
                   id={id}
@@ -103,8 +111,8 @@ const MobileNav = ({ user, mutate, channels }) => {
           </DrawerBody>
 
           <DrawerFooter>
-            <div className="sidebar__logout">
-              <Button onClick={handleLogout} colorScheme="pink">
+            <div className='sidebar__logout'>
+              <Button onClick={handleLogout} colorScheme='pink'>
                 Logout
               </Button>
             </div>
@@ -112,7 +120,7 @@ const MobileNav = ({ user, mutate, channels }) => {
         </DrawerContent>
       </DrawerOverlay>
     </Drawer>
-  );
-};
+  )
+}
 
-export default MobileNav;
+export default MobileNav
