@@ -7,12 +7,15 @@ import Card from '../../uiComponents/Card/Card';
 import './SettingsRoute.scss';
 import useSWR from 'swr';
 import Form from './components/Form/Form';
+import { useDispatch } from 'react-redux';
+import { changeUserName } from '/src/state/actions/userAction';
 
 const SettingsRoute = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [defaults, setDefaults] = useState({ name: '' });
   const { data, error } = useSWR(`/api/users/profile?userId=${user.id}`);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoading(true);
@@ -50,6 +53,7 @@ const SettingsRoute = ({ user }) => {
       setTimeout(() => {
         setAlert(null);
       }, 3000);
+      dispatch(changeUserName(values.name));
     } catch (err) {
       setIsLoading(false);
       setAlert(err.response);

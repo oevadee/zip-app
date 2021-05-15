@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { CardContent } from '/src/uiComponents';
 
 const Form = ({ onSubmit, isLoading, defaults }) => {
@@ -19,16 +20,27 @@ const Form = ({ onSubmit, isLoading, defaults }) => {
       confirmPassword: '',
     },
   });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <CardContent>
-        <Heading size='md'>{defaults.name ? `Hello ${defaults.name}.` : 'Add your name and surname.'}</Heading>
+        <Heading size='md'>
+          {defaults.name
+            ? `Hello ${defaults.name}.`
+            : 'Add your name and surname.'}
+        </Heading>
       </CardContent>
       <Divider />
       <CardContent>
         <FormControl>
           <FormLabel></FormLabel>
-          <Input autoComplete='off' ref={register} type='text' name='name' />
+          <Input
+            autoComplete='off'
+            ref={register}
+            type='text'
+            name='name'
+            placeholder={defaults.name ? `Change your name` : 'enter your name'}
+          />
         </FormControl>
       </CardContent>
       <CardContent>

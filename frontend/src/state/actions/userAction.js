@@ -9,3 +9,8 @@ export const logoutUser = () => ({
   type: LOGOUT_USER,
   payload: null,
 });
+
+export const changeUserName = (name) => ({
+  type: 'CHANGE_USER_NAME',
+  payload: name
+})
