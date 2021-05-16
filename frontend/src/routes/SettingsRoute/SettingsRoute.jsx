@@ -17,6 +17,8 @@ const SettingsRoute = ({ user }) => {
     `/api/users/profile?userId=${user.id}`
   );
 
+  console.log(data);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,7 +26,8 @@ const SettingsRoute = ({ user }) => {
     if (data) {
       setDefaults({
         ...defaults,
-        name: data,
+        name: data.name,
+        photo: data.photo,
       });
     }
     setIsLoading(false);

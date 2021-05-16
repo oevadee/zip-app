@@ -109,7 +109,8 @@ const getProfile: Controller = async (req, res) => {
   const session = driver.session();
 
   try {
-    const [userName] = await session.readTransaction(async (txc) => {
+    const imagePath = `${process.env.SERVER}/users`;
+    const [user] = await session.readTransaction(async (txc) => {
       const result = await txc.run(
         `
         MATCH (a:User) WHERE id(a) = toInteger($userId) RETURN a
@@ -117,10 +118,13 @@ const getProfile: Controller = async (req, res) => {
         { userId }
       );
 
-      return result.records.map((el: any) => el.get('a').properties.name);
+      return result.records.map((el: any) => ({
+        name: el.get('a').properties.name,
+        photo: `${imagePath}/${el.get('a').properties.photo}`,
+      }));
     });
 
-    return res.json(userName);
+    return res.json(user);
   } catch (err) {
     console.error(err);
     return res
@@ -131,25 +135,23 @@ const getProfile: Controller = async (req, res) => {
 
 const updateProfile: Controller = async (req, res) => {
   upload(req, res, async (err: any) => {
+    const { userId } = req.query;
+    const session = driver.session();
+    const values = JSON.parse(req.body.values);
+
     if (err) {
       return res
         .status(400)
         .json({ message: 'There was an error with uploading a file.' });
     }
 
-    const values = JSON.parse(req.body.values);
-    //@ts-ignore
-    const files = req.files;
-
-    console.log(values);
-    console.log(files);
-
-    const { userId } = req.query;
-    const session = driver.session();
-
     try {
-      const { password, confirmPassword, name } = values;
-      if (password === confirmPassword) {
+      const { password, confirmPassword, name, file } = values;
+      //@ts-ignore
+      const photo = req.files.file[0].filename;
+      console.log(photo);
+
+      if (password && password === confirmPassword) {
         const hash = await bcrypt.hash(password, 10);
         await session.writeTransaction(async (txc) => {
           await txc.run(
@@ -167,10 +169,12 @@ const updateProfile: Controller = async (req, res) => {
         await session.writeTransaction(async (txc) => {
           await txc.run(
             `
-            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name, a.photo = $photo
           `,
             {
+              userId,
               name,
+              photo,
             }
           );
         });
@@ -182,6 +186,8 @@ const updateProfile: Controller = async (req, res) => {
       return res
         .status(400)
         .json({ message: 'There was an error with updating profile.' });
+    } finally {
+      session.close();
     }
   });
 };

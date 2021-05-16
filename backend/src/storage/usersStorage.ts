@@ -52,7 +52,6 @@ const storage = multer.diskStorage({
         Math.random() * 1e9
       )}${path.extname(file.originalname)}`
     );
-    console.log(file);
   },
 });
 

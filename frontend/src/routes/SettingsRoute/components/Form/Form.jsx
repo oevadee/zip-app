@@ -19,14 +19,14 @@ import { CardContent } from '/src/uiComponents';
 
 const Form = ({ onSubmit, isLoading, defaults }) => {
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     defaultValues: {
       name: defaults.name,
-      userImage: defaults.userImage,
+      userImage: defaults.photo,
       password: '',
       confirmPassword: '',
     },
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   });
   const [file, setFile] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
@@ -68,6 +68,7 @@ const Form = ({ onSubmit, isLoading, defaults }) => {
             name='name'
             placeholder={defaults.name ? `Change your name` : 'enter your name'}
             mb={6}
+            isInvalid={errors.name}
           />
         </FormControl>
       </CardContent>
@@ -76,7 +77,7 @@ const Form = ({ onSubmit, isLoading, defaults }) => {
       </CardContent>
       <Divider />
       <CardContent d='flex' alignItems='center'>
-        <Avatar src={profileImage ? profileImage : defaults.userImage} mr={5} />
+        <Avatar src={profileImage ? profileImage : defaults.photo} mr={5} />
         <input
           name='file'
           id='file'

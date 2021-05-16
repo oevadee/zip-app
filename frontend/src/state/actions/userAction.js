@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER } from "../types/userTypes";
+import { LOGIN_USER, LOGOUT_USER, CHANGE_USER_NAME } from '../types/userTypes';
 
 export const loginUser = (user) => ({
   type: LOGIN_USER,
@@ -11,6 +11,6 @@ export const logoutUser = () => ({
 });
 
 export const changeUserName = (name) => ({
-  type: 'CHANGE_USER_NAME',
-  payload: name
-})
+  type: CHANGE_USER_NAME,
+  payload: name,
+});
