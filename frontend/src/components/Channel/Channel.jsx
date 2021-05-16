@@ -7,7 +7,7 @@ import { Plus as AddIcon } from 'react-feather';
 const Channel = ({
   channelName,
   icon = false,
-  url = null,
+  url = '/',
   onChannelClick,
   ...props
 }) => {
@@ -18,7 +18,7 @@ const Channel = ({
         onClick={onChannelClick}
       >
         <h2>{channelName}</h2>
-        {icon && <AddIcon className="channel__icon" {...props} />}
+        {icon && <AddIcon className='channel__icon' {...props} />}
       </div>
     </Link>
   );

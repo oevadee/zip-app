@@ -12,7 +12,7 @@ import { changeUserName } from '/src/state/actions/userAction';
 const SettingsRoute = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
-  const [defaults, setDefaults] = useState({ name: '' });
+  const [defaults, setDefaults] = useState({ name: '', userImage: user.photo });
   const { data, error, mutate } = useSWR(
     `/api/users/profile?userId=${user.id}`
   );
@@ -23,17 +23,19 @@ const SettingsRoute = ({ user }) => {
     setIsLoading(true);
     if (data) {
       setDefaults({
+        ...defaults,
         name: data,
       });
     }
     setIsLoading(false);
   }, [data]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async ({ values, file }) => {
     if (
-      values.name.split(' ').length > 2 ||
-      values.name.split(' ')[0].length < 3 ||
-      values.name.split(' ')[1].length < 3
+      values.name.length > 0 &&
+      (values.name.split(' ').length > 2 ||
+        values.name.split(' ')[0].length < 3 ||
+        values.name.split(' ')[1].length < 3)
     ) {
       setAlert({
         data: {
@@ -46,11 +48,18 @@ const SettingsRoute = ({ user }) => {
 
     setIsLoading(true);
     try {
+      const formData = new FormData();
+      const newValues = {
+        ...values,
+        file,
+      };
+      formData.append('values', JSON.stringify(newValues));
+      formData.append('file', file);
+
       const data = await axios.put(
         `/api/users/profile?userId=${user.id}`,
-        values
+        formData
       );
-      setIsLoading(false);
       setAlert(data);
       setTimeout(() => {
         setAlert(null);
@@ -58,11 +67,12 @@ const SettingsRoute = ({ user }) => {
       dispatch(changeUserName(values.name));
       mutate();
     } catch (err) {
-      setIsLoading(false);
       setAlert(err.response);
       setTimeout(() => {
         setAlert(null);
       }, 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import driver from "../config/db";
-import jwt from "jsonwebtoken";
-import Controller from "../types/Controller.type";
+import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import driver from '../config/db';
+import jwt from 'jsonwebtoken';
+import Controller from '../types/Controller.type';
+import { upload } from '../storage/usersStorage';
 
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
@@ -19,8 +20,8 @@ const login = async (req: Request, res: Response): Promise<any> => {
       );
 
       return result.records.map((el: any) => ({
-        id: el.get("a").identity.low,
-        ...el.get("a").properties,
+        id: el.get('a').identity.low,
+        ...el.get('a').properties,
       }));
     });
 
@@ -29,17 +30,17 @@ const login = async (req: Request, res: Response): Promise<any> => {
     if (bcrypt.compareSync(password, dbPassword)) {
       const userInfo = restOfDbUser;
 
-      jwt.sign({ userInfo }, "secretkey", (err, token) => {
+      jwt.sign({ userInfo }, 'secretkey', (err, token) => {
         if (err) return res.status(403);
         return res.json({
           user: userInfo,
           token,
         });
       });
-    } else return res.status(400).json({ message: "Auth failed." });
+    } else return res.status(400).json({ message: 'Auth failed.' });
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ message: "Auth failed." });
+    return res.status(400).json({ message: 'Auth failed.' });
   } finally {
     session.close();
   }
@@ -64,8 +65,8 @@ const register = async (req: Request, res: Response): Promise<any> => {
     });
 
     const [data] = dbUser.records.map((el: any) => ({
-      id: el.get("a").identity.low,
-      ...el.get("a").properties,
+      id: el.get('a').identity.low,
+      ...el.get('a').properties,
     }));
 
     if (!data && password === confirmPassword) {
@@ -83,8 +84,8 @@ const register = async (req: Request, res: Response): Promise<any> => {
           }
         );
         return result.records.map((el: any) => ({
-          id: el.get("a").identity.low,
-          ...el.get("a").properties,
+          id: el.get('a').identity.low,
+          ...el.get('a').properties,
         }));
       });
 
@@ -92,11 +93,11 @@ const register = async (req: Request, res: Response): Promise<any> => {
     } else
       return res
         .status(400)
-        .json({ message: "There was an error with registration new account" });
+        .json({ message: 'There was an error with registration new account' });
   } catch (err) {
     console.error(err);
     return res.status(400).json({
-      message: "There was an error with registration new account.",
+      message: 'There was an error with registration new account.',
     });
   } finally {
     session.close();
@@ -116,7 +117,7 @@ const getProfile: Controller = async (req, res) => {
         { userId }
       );
 
-      return result.records.map((el: any) => el.get("a").properties.name);
+      return result.records.map((el: any) => el.get('a').properties.name);
     });
 
     return res.json(userName);
@@ -124,50 +125,65 @@ const getProfile: Controller = async (req, res) => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with getting profile info." });
+      .json({ message: 'There was an error with getting profile info.' });
   }
 };
 
 const updateProfile: Controller = async (req, res) => {
-  const values = req.body;
-  const { userId } = req.query;
-  const session = driver.session();
+  upload(req, res, async (err: any) => {
+    if (err) {
+      return res
+        .status(400)
+        .json({ message: 'There was an error with uploading a file.' });
+    }
 
-  try {
-    const { password, confirmPassword, name } = values;
-    if (password === confirmPassword) {
-      const hash = await bcrypt.hash(password, 10);
-      await session.writeTransaction(async (txc) => {
-        await txc.run(
-          `
-          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash, a.name = $name
-        `,
-          { userId, hash, name }
-        );
-      });
-      return res.json({ message: "Password changed." });
-    } else if (
-      (!password || !confirmPassword || password !== confirmPassword) &&
-      name
-    ) {
-      await session.writeTransaction(async (txc) => {
-        await txc.run(
-          `
-          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
-        `,
-          {
-            name,
-          }
-        );
-      });
-      return res.json({ message: "Name changed." });
-    } else return res.status(400).json({ message: "Passwords do not match." });
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(400)
-      .json({ message: "There was an error with updating profile." });
-  }
+    const values = JSON.parse(req.body.values);
+    //@ts-ignore
+    const files = req.files;
+
+    console.log(values);
+    console.log(files);
+
+    const { userId } = req.query;
+    const session = driver.session();
+
+    try {
+      const { password, confirmPassword, name } = values;
+      if (password === confirmPassword) {
+        const hash = await bcrypt.hash(password, 10);
+        await session.writeTransaction(async (txc) => {
+          await txc.run(
+            `
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash, a.name = $name
+          `,
+            { userId, hash, name }
+          );
+        });
+        return res.json({ message: 'Password changed.' });
+      } else if (
+        (!password || !confirmPassword || password !== confirmPassword) &&
+        name
+      ) {
+        await session.writeTransaction(async (txc) => {
+          await txc.run(
+            `
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
+          `,
+            {
+              name,
+            }
+          );
+        });
+        return res.json({ message: 'Name changed.' });
+      } else
+        return res.status(400).json({ message: 'Passwords do not match.' });
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(400)
+        .json({ message: 'There was an error with updating profile.' });
+    }
+  });
 };
 
 const getUsers = async (req: Request, res: Response): Promise<any> => {
@@ -179,8 +195,8 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
         `);
 
       return result.records.map((el: any) => ({
-        id: el.get("user").identity.low,
-        ...el.get("user").properties,
+        id: el.get('user').identity.low,
+        ...el.get('user').properties,
       }));
     });
 
@@ -189,7 +205,7 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error while loading users" });
+      .json({ message: 'There was an error while loading users' });
   } finally {
     session.close();
   }
