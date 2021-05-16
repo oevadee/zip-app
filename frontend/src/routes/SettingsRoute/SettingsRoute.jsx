@@ -1,7 +1,6 @@
 import { Alert, AlertIcon, Spinner } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { Header } from '../../components';
 import Card from '../../uiComponents/Card/Card';
 import './SettingsRoute.scss';
@@ -14,7 +13,10 @@ const SettingsRoute = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [defaults, setDefaults] = useState({ name: '' });
-  const { data, error } = useSWR(`/api/users/profile?userId=${user.id}`);
+  const { data, error, mutate } = useSWR(
+    `/api/users/profile?userId=${user.id}`
+  );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,6 +56,7 @@ const SettingsRoute = ({ user }) => {
         setAlert(null);
       }, 3000);
       dispatch(changeUserName(values.name));
+      mutate();
     } catch (err) {
       setIsLoading(false);
       setAlert(err.response);

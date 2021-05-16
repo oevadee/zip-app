@@ -10,19 +10,26 @@ import {
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { changeUserName } from '/src/state/actions/userAction';
 import { CardContent } from '/src/uiComponents';
 
 const Form = ({ onSubmit, isLoading, defaults }) => {
-  const { register, handleSubmit } = useForm({
+  const dispatch = useDispatch();
+  const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       name: defaults.name,
       password: '',
       confirmPassword: '',
     },
   });
+  const handleRequest = (values) => {
+    console.log(values.name);
+    onSubmit(values);
+    dispatch(changeUserName(values.name));
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleRequest)}>
       <CardContent>
         <Heading size='md'>
           {defaults.name
