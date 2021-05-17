@@ -12,13 +12,13 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '/src/state/actions/userAction';
 import schema from '../schema';
 import { CardContent } from '/src/uiComponents';
 
 const Form = ({ onSubmit, isLoading, defaults }) => {
-  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
   const { register, handleSubmit, errors } = useForm({
     defaultValues: {
       name: defaults.name,
@@ -51,9 +51,7 @@ const Form = ({ onSubmit, isLoading, defaults }) => {
     <form onSubmit={handleSubmit(handleRequest)}>
       <CardContent>
         <Heading size='md'>
-          {defaults.name
-            ? `Hello ${defaults.name}.`
-            : 'Add your name and surname.'}
+          {user.name ? `Hello ${user.name}.` : 'Add your name and surname.'}
         </Heading>
       </CardContent>
       <Divider />
@@ -76,7 +74,7 @@ const Form = ({ onSubmit, isLoading, defaults }) => {
       </CardContent>
       <Divider />
       <CardContent d='flex' alignItems='center'>
-        <Avatar src={profileImage ? profileImage : defaults.photo} mr={5} />
+        <Avatar src={profileImage ? profileImage : user.photo} mr={5} />
         <input
           name='file'
           id='file'

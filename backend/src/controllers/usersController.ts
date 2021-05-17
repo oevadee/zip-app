@@ -29,12 +29,15 @@ const login = async (req: Request, res: Response): Promise<any> => {
 
     const { password: dbPassword, ...restOfDbUser } = dbUser;
 
+    console.log(password);
+    console.log(bcrypt.compareSync(password, dbPassword));
+
     if (bcrypt.compareSync(password, dbPassword)) {
       const userToAdd = {
         ...restOfDbUser,
         photo: `${imagePath}/${dbUser.photo}`,
       };
-      jwt.sign(userToAdd.id, 'secretkey', (err, token) => {
+      jwt.sign({ id: userToAdd.id }, 'secretkey', (err, token) => {
         if (err) return res.status(403);
         return res.json({
           user: userToAdd,
@@ -50,7 +53,7 @@ const login = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-const register = async (req: Request, res: Response): Promise<any> => {
+const register: Controller = async (req, res) => {
   const session = driver.session();
   try {
     const { email, password, confirmPassword, name } = req.body;
@@ -71,10 +74,12 @@ const register = async (req: Request, res: Response): Promise<any> => {
       }));
     });
 
+    console.log(password);
+
     if (!dbUser && password === confirmPassword) {
       const hash = await bcrypt.hash(password, 10);
 
-      const data = await session.writeTransaction(async (txc) => {
+      const [newUser] = await session.writeTransaction(async (txc) => {
         const result = await txc.run(
           `
         CREATE (a:User {email: $email, password: $password, name: $name}) RETURN a
@@ -91,7 +96,15 @@ const register = async (req: Request, res: Response): Promise<any> => {
         }));
       });
 
-      return res.json(data);
+      const { password: newPassword, ...userToAdd } = newUser;
+
+      jwt.sign({ id: userToAdd.id }, 'secretkey', (err, token) => {
+        if (err) return res.status(403);
+        return res.json({
+          user: userToAdd,
+          token,
+        });
+      });
     } else
       return res
         .status(400)
@@ -120,7 +133,9 @@ const getProfile: Controller = async (req, res) => {
       );
 
       return result.records.map((el: any) => ({
+        id: el.get('a').identity.low,
         name: el.get('a').properties.name,
+        email: el.get('a').properties.email,
         photo: `${imagePath}/${el.get('a').properties.photo}`,
       }));
     });
@@ -148,8 +163,7 @@ const updateProfile: Controller = async (req, res) => {
 
     try {
       const { password, confirmPassword, name } = values;
-      //@ts-ignore
-      const photo = req.files.file[0].filename;
+      console.log(values);
 
       if (password && password === confirmPassword) {
         const hash = await bcrypt.hash(password, 10);
@@ -177,7 +191,10 @@ const updateProfile: Controller = async (req, res) => {
         });
       }
 
-      if (photo) {
+      //@ts-ignore
+      if (req.files.file) {
+        //@ts-ignore
+        const photo = req.files.file[0].filename;
         await session.writeTransaction(async (txc) => {
           await txc.run(
             `
@@ -192,8 +209,7 @@ const updateProfile: Controller = async (req, res) => {
       }
 
       return res.json({
-        message: 'Name changed.',
-        photo: `${imagePath}/${photo}`,
+        message: 'Profile updated.',
       });
     } catch (err) {
       console.error(err);
@@ -216,6 +232,7 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
 
       return result.records.map((el: any) => ({
         id: el.get('user').identity.low,
+        photo: `${imagePath}/${el.get('user').properties.photo}`,
         ...el.get('user').properties,
       }));
     });

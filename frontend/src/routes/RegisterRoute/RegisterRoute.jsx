@@ -21,7 +21,10 @@ const RegisterRoute = () => {
   const onSubmit = async (values) => {
     const { data } = await axios.post(`/api/users/register`, values);
 
-    console.log(data);
+    const { user, token } = data;
+
+    user && dispatch(loginUser(user));
+    token && localStorage.setItem('secret', token);
   };
 
   const onError = (err) => console.log(err);

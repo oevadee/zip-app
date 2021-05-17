@@ -7,7 +7,7 @@ import './SettingsRoute.scss';
 import useSWR from 'swr';
 import Form from './components/Form/Form';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '/src/state/actions/userAction';
+import { loginUser } from '/src/state/actions/userAction';
 
 const SettingsRoute = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,18 +20,16 @@ const SettingsRoute = ({ user }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsLoading(true);
     if (data) {
       setDefaults({
         ...defaults,
         name: data.name,
         photo: data.photo,
       });
-    }
-    setIsLoading(false);
-  }, [data]);
 
-  console.log(defaults);
+      dispatch(loginUser(data));
+    }
+  }, [data]);
 
   const onSubmit = async ({ values, file }) => {
     if (
@@ -50,11 +48,7 @@ const SettingsRoute = ({ user }) => {
     setIsLoading(true);
     try {
       const formData = new FormData();
-      const newValues = {
-        ...values,
-        file,
-      };
-      formData.append('values', JSON.stringify(newValues));
+      formData.append('values', JSON.stringify(values));
       formData.append('file', file);
 
       const { data } = await axios.put(
@@ -65,7 +59,6 @@ const SettingsRoute = ({ user }) => {
       console.log(data);
 
       setIsLoading(false);
-      dispatch(updateUser(values.name, data.photo));
       mutate();
 
       setAlert({ message: data.message, status: 200 });
@@ -79,6 +72,7 @@ const SettingsRoute = ({ user }) => {
         setAlert(null);
       }, 3000);
     } finally {
+      Promise.reject();
     }
   };
 

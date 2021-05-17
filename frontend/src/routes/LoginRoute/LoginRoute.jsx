@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './LoginRoute.scss';
 import { useForm } from 'react-hook-form';
 import {
@@ -13,28 +13,34 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
 import { Link } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
+import useSWR from 'swr';
 
-const LoginRoute = () => {
+const LoginRoute = ({ tokenUser }) => {
   const { register, handleSubmit } = useForm();
   const dispatch = useDispatch();
+  const { data } = useSWR(`/api/users/profile?userId=${tokenUser.id}`);
+
+  useEffect(() => {
+    if (data) {
+      const userToDispatch = {
+        id: tokenUser.id,
+        ...data,
+      };
+      dispatch(loginUser(userToDispatch));
+    }
+  }, [data]);
 
   const onSubmit = async (values) => {
-    const { data } = await axios.post(`/api/users/login`, values);
-    const { user, token } = data;
+    const { data: postData } = await axios.post(`/api/users/login`, values);
+    const { user, token } = postData;
+
+    console.log(user);
+
+    console.log(data);
 
     user && dispatch(loginUser(user));
     token && localStorage.setItem('secret', token);
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem('secret');
-
-    if (token) {
-      const decoded = jwt_decode(token);
-      dispatch(loginUser(decoded.userInfo));
-    }
-  }, []);
 
   const onError = (err) => console.log(err);
 
