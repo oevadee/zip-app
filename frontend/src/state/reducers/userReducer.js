@@ -1,27 +1,30 @@
+import { LOGIN_USER, LOGOUT_USER, UPDATE_USER } from '../types/userTypes';
+
 const initialState = {
   user: null,
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'LOGIN_USER': {
+    case LOGIN_USER: {
       return {
         ...state,
         user: action.payload,
       };
     }
-    case 'LOGOUT_USER': {
+    case LOGOUT_USER: {
       return {
         ...state,
         user: null,
       };
     }
-    case 'CHANGE_USER_NAME': {
+    case UPDATE_USER: {
       return {
         ...state,
         user: {
           ...state.user,
-          name: action.payload,
+          name: action.payload.name,
+          photo: action.payload.photo,
         },
       };
     }

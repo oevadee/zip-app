@@ -13,8 +13,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { updateUser } from '/src/state/actions/userAction';
 import schema from '../schema';
-import { changeUserName } from '/src/state/actions/userAction';
 import { CardContent } from '/src/uiComponents';
 
 const Form = ({ onSubmit, isLoading, defaults }) => {
@@ -41,7 +41,6 @@ const Form = ({ onSubmit, isLoading, defaults }) => {
 
   const handleRequest = (values) => {
     onSubmit({ values, file });
-    dispatch(changeUserName(values.name));
   };
 
   const handleImageChange = (e) => {

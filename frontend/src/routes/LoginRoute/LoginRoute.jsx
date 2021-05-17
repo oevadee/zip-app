@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import './LoginRoute.scss'
-import { useForm } from 'react-hook-form'
+import React, { useEffect } from 'react';
+import './LoginRoute.scss';
+import { useForm } from 'react-hook-form';
 import {
   Heading,
   Input,
@@ -8,35 +8,35 @@ import {
   Text,
   Button,
   ButtonGroup,
-} from '@chakra-ui/react'
-import axios from 'axios'
-import { useDispatch } from 'react-redux'
-import { loginUser } from '../../state/actions/userAction'
-import { Link } from 'react-router-dom'
-import jwt_decode from 'jwt-decode'
+} from '@chakra-ui/react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../state/actions/userAction';
+import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 
 const LoginRoute = () => {
-  const { register, handleSubmit } = useForm()
-  const dispatch = useDispatch()
+  const { register, handleSubmit } = useForm();
+  const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
-    const { data } = await axios.post(`/api/users/login`, values)
-    const { user, token } = data
+    const { data } = await axios.post(`/api/users/login`, values);
+    const { user, token } = data;
 
-    user && dispatch(loginUser(user))
-    token && localStorage.setItem('secret', token)
-  }
+    user && dispatch(loginUser(user));
+    token && localStorage.setItem('secret', token);
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem('secret')
+    const token = localStorage.getItem('secret');
 
     if (token) {
-      const decoded = jwt_decode(token)
-      dispatch(loginUser(decoded.userInfo))
+      const decoded = jwt_decode(token);
+      dispatch(loginUser(decoded.userInfo));
     }
-  }, [])
+  }, []);
 
-  const onError = (err) => console.log(err)
+  const onError = (err) => console.log(err);
 
   return (
     <div className='login'>
@@ -83,7 +83,7 @@ const LoginRoute = () => {
               Login
             </Button>
             <Link to='/register'>
-              <Button disabled variant='outline' colorScheme='pink'>
+              <Button variant='outline' colorScheme='pink'>
                 Register
               </Button>
             </Link>
@@ -91,7 +91,7 @@ const LoginRoute = () => {
         </form>
       </Box>
     </div>
-  )
-}
+  );
+};
 
-export default LoginRoute
+export default LoginRoute;

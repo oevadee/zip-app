@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 import Controller from '../types/Controller.type';
 import { upload } from '../storage/usersStorage';
 
+const imagePath = `${process.env.SERVER}/users`;
+
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
   try {
@@ -28,12 +30,14 @@ const login = async (req: Request, res: Response): Promise<any> => {
     const { password: dbPassword, ...restOfDbUser } = dbUser;
 
     if (bcrypt.compareSync(password, dbPassword)) {
-      const userInfo = restOfDbUser;
-
-      jwt.sign({ userInfo }, 'secretkey', (err, token) => {
+      const userToAdd = {
+        ...restOfDbUser,
+        photo: `${imagePath}/${dbUser.photo}`,
+      };
+      jwt.sign(userToAdd.id, 'secretkey', (err, token) => {
         if (err) return res.status(403);
         return res.json({
-          user: userInfo,
+          user: userToAdd,
           token,
         });
       });
@@ -51,8 +55,8 @@ const register = async (req: Request, res: Response): Promise<any> => {
   try {
     const { email, password, confirmPassword, name } = req.body;
 
-    const dbUser = await session.readTransaction((txc) => {
-      const result = txc.run(
+    const [dbUser] = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
         `
         MATCH (a:User {email: $email}) RETURN a
       `,
@@ -61,15 +65,13 @@ const register = async (req: Request, res: Response): Promise<any> => {
         }
       );
 
-      return result;
+      return result.records.map((el: any) => ({
+        id: el.get('a').identity.low,
+        ...el.get('a').properties,
+      }));
     });
 
-    const [data] = dbUser.records.map((el: any) => ({
-      id: el.get('a').identity.low,
-      ...el.get('a').properties,
-    }));
-
-    if (!data && password === confirmPassword) {
+    if (!dbUser && password === confirmPassword) {
       const hash = await bcrypt.hash(password, 10);
 
       const data = await session.writeTransaction(async (txc) => {
@@ -109,7 +111,6 @@ const getProfile: Controller = async (req, res) => {
   const session = driver.session();
 
   try {
-    const imagePath = `${process.env.SERVER}/users`;
     const [user] = await session.readTransaction(async (txc) => {
       const result = await txc.run(
         `
@@ -146,41 +147,54 @@ const updateProfile: Controller = async (req, res) => {
     }
 
     try {
-      const { password, confirmPassword, name, file } = values;
+      const { password, confirmPassword, name } = values;
       //@ts-ignore
       const photo = req.files.file[0].filename;
-      console.log(photo);
 
       if (password && password === confirmPassword) {
         const hash = await bcrypt.hash(password, 10);
         await session.writeTransaction(async (txc) => {
           await txc.run(
             `
-            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash, a.name = $name
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash
           `,
-            { userId, hash, name }
+            { userId, hash }
           );
         });
-        return res.json({ message: 'Password changed.' });
-      } else if (
-        (!password || !confirmPassword || password !== confirmPassword) &&
-        name
-      ) {
+      }
+
+      if (name) {
         await session.writeTransaction(async (txc) => {
           await txc.run(
             `
-            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name, a.photo = $photo
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
           `,
             {
               userId,
               name,
+            }
+          );
+        });
+      }
+
+      if (photo) {
+        await session.writeTransaction(async (txc) => {
+          await txc.run(
+            `
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.photo = $photo
+          `,
+            {
+              userId,
               photo,
             }
           );
         });
-        return res.json({ message: 'Name changed.' });
-      } else
-        return res.status(400).json({ message: 'Passwords do not match.' });
+      }
+
+      return res.json({
+        message: 'Name changed.',
+        photo: `${imagePath}/${photo}`,
+      });
     } catch (err) {
       console.error(err);
       return res

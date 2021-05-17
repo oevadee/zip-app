@@ -7,17 +7,15 @@ import './SettingsRoute.scss';
 import useSWR from 'swr';
 import Form from './components/Form/Form';
 import { useDispatch } from 'react-redux';
-import { changeUserName } from '/src/state/actions/userAction';
+import { updateUser } from '/src/state/actions/userAction';
 
 const SettingsRoute = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
-  const [defaults, setDefaults] = useState({ name: '', userImage: user.photo });
+  const [defaults, setDefaults] = useState({ name: '', photo: '' });
   const { data, error, mutate } = useSWR(
     `/api/users/profile?userId=${user.id}`
   );
-
-  console.log(data);
 
   const dispatch = useDispatch();
 
@@ -33,6 +31,8 @@ const SettingsRoute = ({ user }) => {
     setIsLoading(false);
   }, [data]);
 
+  console.log(defaults);
+
   const onSubmit = async ({ values, file }) => {
     if (
       values.name.length > 0 &&
@@ -41,9 +41,7 @@ const SettingsRoute = ({ user }) => {
         values.name.split(' ')[1].length < 3)
     ) {
       setAlert({
-        data: {
-          message: `That's not a name + surname format. Enter your fullname`,
-        },
+        message: `That's not a name + surname format. Enter your fullname`,
         status: 400,
       });
       return;
@@ -59,23 +57,28 @@ const SettingsRoute = ({ user }) => {
       formData.append('values', JSON.stringify(newValues));
       formData.append('file', file);
 
-      const data = await axios.put(
+      const { data } = await axios.put(
         `/api/users/profile?userId=${user.id}`,
         formData
       );
-      setAlert(data);
+
+      console.log(data);
+
+      setIsLoading(false);
+      dispatch(updateUser(values.name, data.photo));
+      mutate();
+
+      setAlert({ message: data.message, status: 200 });
       setTimeout(() => {
         setAlert(null);
       }, 3000);
-      dispatch(changeUserName(values.name));
-      mutate();
     } catch (err) {
+      setIsLoading(false);
       setAlert(err.response);
       setTimeout(() => {
         setAlert(null);
       }, 3000);
     } finally {
-      setIsLoading(false);
     }
   };
 
@@ -94,7 +97,7 @@ const SettingsRoute = ({ user }) => {
           variant='subtle'
         >
           <AlertIcon />
-          {alert.data.message || alert.statusText}
+          {alert.message || alert.statusText}
         </Alert>
       )}
     </div>
