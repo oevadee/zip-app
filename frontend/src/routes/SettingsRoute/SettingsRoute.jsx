@@ -56,8 +56,6 @@ const SettingsRoute = ({ user }) => {
         formData
       );
 
-      console.log(data);
-
       setIsLoading(false);
       mutate();
 

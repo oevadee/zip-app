@@ -29,9 +29,6 @@ const login = async (req: Request, res: Response): Promise<any> => {
 
     const { password: dbPassword, ...restOfDbUser } = dbUser;
 
-    console.log(password);
-    console.log(bcrypt.compareSync(password, dbPassword));
-
     if (bcrypt.compareSync(password, dbPassword)) {
       const userToAdd = {
         ...restOfDbUser,
@@ -73,8 +70,6 @@ const register: Controller = async (req, res) => {
         ...el.get('a').properties,
       }));
     });
-
-    console.log(password);
 
     if (!dbUser && password === confirmPassword) {
       const hash = await bcrypt.hash(password, 10);
@@ -163,7 +158,6 @@ const updateProfile: Controller = async (req, res) => {
 
     try {
       const { password, confirmPassword, name } = values;
-      console.log(values);
 
       if (password && password === confirmPassword) {
         const hash = await bcrypt.hash(password, 10);

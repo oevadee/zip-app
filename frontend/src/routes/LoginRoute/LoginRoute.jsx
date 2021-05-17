@@ -34,10 +34,6 @@ const LoginRoute = ({ tokenUser }) => {
     const { data: postData } = await axios.post(`/api/users/login`, values);
     const { user, token } = postData;
 
-    console.log(user);
-
-    console.log(data);
-
     user && dispatch(loginUser(user));
     token && localStorage.setItem('secret', token);
   };
