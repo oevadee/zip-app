@@ -67,8 +67,6 @@ const getAllUserExpenses = async (
 
       const sum = incomingExpenses - outgoingExpenses;
 
-      console.log(user);
-
       const userToAdd = {
         ...user,
         photo: `${imagePath}/${user.photo}`,
