@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import driver from "../config/db";
-import jwt from "jsonwebtoken";
-import Controller from "../types/Controller.type";
+import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
+import driver from '../config/db';
+import jwt from 'jsonwebtoken';
+import Controller from '../types/Controller.type';
+import { upload } from '../storage/usersStorage';
+
+const imagePath = `${process.env.SERVER}/users`;
 
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
@@ -19,39 +22,41 @@ const login = async (req: Request, res: Response): Promise<any> => {
       );
 
       return result.records.map((el: any) => ({
-        id: el.get("a").identity.low,
-        ...el.get("a").properties,
+        id: el.get('a').identity.low,
+        ...el.get('a').properties,
       }));
     });
 
     const { password: dbPassword, ...restOfDbUser } = dbUser;
 
     if (bcrypt.compareSync(password, dbPassword)) {
-      const userInfo = restOfDbUser;
-
-      jwt.sign({ userInfo }, "secretkey", (err, token) => {
+      const userToAdd = {
+        ...restOfDbUser,
+        photo: `${imagePath}/${dbUser.photo}`,
+      };
+      jwt.sign({ id: userToAdd.id }, 'secretkey', (err, token) => {
         if (err) return res.status(403);
         return res.json({
-          user: userInfo,
+          user: userToAdd,
           token,
         });
       });
-    } else return res.status(400).json({ message: "Auth failed." });
+    } else return res.status(400).json({ message: 'Auth failed.' });
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ message: "Auth failed." });
+    return res.status(400).json({ message: 'Auth failed.' });
   } finally {
     session.close();
   }
 };
 
-const register = async (req: Request, res: Response): Promise<any> => {
+const register: Controller = async (req, res) => {
   const session = driver.session();
   try {
     const { email, password, confirmPassword, name } = req.body;
 
-    const dbUser = await session.readTransaction((txc) => {
-      const result = txc.run(
+    const [dbUser] = await session.readTransaction(async (txc) => {
+      const result = await txc.run(
         `
         MATCH (a:User {email: $email}) RETURN a
       `,
@@ -60,18 +65,16 @@ const register = async (req: Request, res: Response): Promise<any> => {
         }
       );
 
-      return result;
+      return result.records.map((el: any) => ({
+        id: el.get('a').identity.low,
+        ...el.get('a').properties,
+      }));
     });
 
-    const [data] = dbUser.records.map((el: any) => ({
-      id: el.get("a").identity.low,
-      ...el.get("a").properties,
-    }));
-
-    if (!data && password === confirmPassword) {
+    if (!dbUser && password === confirmPassword) {
       const hash = await bcrypt.hash(password, 10);
 
-      const data = await session.writeTransaction(async (txc) => {
+      const [newUser] = await session.writeTransaction(async (txc) => {
         const result = await txc.run(
           `
         CREATE (a:User {email: $email, password: $password, name: $name}) RETURN a
@@ -83,20 +86,28 @@ const register = async (req: Request, res: Response): Promise<any> => {
           }
         );
         return result.records.map((el: any) => ({
-          id: el.get("a").identity.low,
-          ...el.get("a").properties,
+          id: el.get('a').identity.low,
+          ...el.get('a').properties,
         }));
       });
 
-      return res.json(data);
+      const { password: newPassword, ...userToAdd } = newUser;
+
+      jwt.sign({ id: userToAdd.id }, 'secretkey', (err, token) => {
+        if (err) return res.status(403);
+        return res.json({
+          user: userToAdd,
+          token,
+        });
+      });
     } else
       return res
         .status(400)
-        .json({ message: "There was an error with registration new account" });
+        .json({ message: 'There was an error with registration new account' });
   } catch (err) {
     console.error(err);
     return res.status(400).json({
-      message: "There was an error with registration new account.",
+      message: 'There was an error with registration new account.',
     });
   } finally {
     session.close();
@@ -108,7 +119,7 @@ const getProfile: Controller = async (req, res) => {
   const session = driver.session();
 
   try {
-    const [userName] = await session.readTransaction(async (txc) => {
+    const [user] = await session.readTransaction(async (txc) => {
       const result = await txc.run(
         `
         MATCH (a:User) WHERE id(a) = toInteger($userId) RETURN a
@@ -116,58 +127,93 @@ const getProfile: Controller = async (req, res) => {
         { userId }
       );
 
-      return result.records.map((el: any) => el.get("a").properties.name);
+      return result.records.map((el: any) => ({
+        id: el.get('a').identity.low,
+        name: el.get('a').properties.name,
+        email: el.get('a').properties.email,
+        photo: `${imagePath}/${el.get('a').properties.photo}`,
+      }));
     });
 
-    return res.json(userName);
+    return res.json(user);
   } catch (err) {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with getting profile info." });
+      .json({ message: 'There was an error with getting profile info.' });
   }
 };
 
 const updateProfile: Controller = async (req, res) => {
-  const values = req.body;
-  const { userId } = req.query;
-  const session = driver.session();
+  upload(req, res, async (err: any) => {
+    const { userId } = req.query;
+    const session = driver.session();
+    const values = JSON.parse(req.body.values);
 
-  try {
-    const { password, confirmPassword, name } = values;
-    if (password === confirmPassword) {
-      const hash = await bcrypt.hash(password, 10);
-      await session.writeTransaction(async (txc) => {
-        await txc.run(
-          `
-          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash, a.name = $name
-        `,
-          { userId, hash, name }
-        );
+    if (err) {
+      return res
+        .status(400)
+        .json({ message: 'There was an error with uploading a file.' });
+    }
+
+    try {
+      const { password, confirmPassword, name } = values;
+
+      if (password && password === confirmPassword) {
+        const hash = await bcrypt.hash(password, 10);
+        await session.writeTransaction(async (txc) => {
+          await txc.run(
+            `
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.password = $hash
+          `,
+            { userId, hash }
+          );
+        });
+      }
+
+      if (name) {
+        await session.writeTransaction(async (txc) => {
+          await txc.run(
+            `
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
+          `,
+            {
+              userId,
+              name,
+            }
+          );
+        });
+      }
+
+      //@ts-ignore
+      if (req.files.file) {
+        //@ts-ignore
+        const photo = req.files.file[0].filename;
+        await session.writeTransaction(async (txc) => {
+          await txc.run(
+            `
+            MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.photo = $photo
+          `,
+            {
+              userId,
+              photo,
+            }
+          );
+        });
+      }
+
+      return res.json({
+        message: 'Profile updated.',
       });
-      return res.json({ message: "Password changed." });
-    } else if (
-      (!password || !confirmPassword || password !== confirmPassword) &&
-      name
-    ) {
-      await session.writeTransaction(async (txc) => {
-        await txc.run(
-          `
-          MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.name = $name
-        `,
-          {
-            name,
-          }
-        );
-      });
-      return res.json({ message: "Name changed." });
-    } else return res.status(400).json({ message: "Passwords do not match." });
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(400)
-      .json({ message: "There was an error with updating profile." });
-  }
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(400)
+        .json({ message: 'There was an error with updating profile.' });
+    } finally {
+      session.close();
+    }
+  });
 };
 
 const getUsers = async (req: Request, res: Response): Promise<any> => {
@@ -179,8 +225,9 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
         `);
 
       return result.records.map((el: any) => ({
-        id: el.get("user").identity.low,
-        ...el.get("user").properties,
+        id: el.get('user').identity.low,
+        photo: `${imagePath}/${el.get('user').properties.photo}`,
+        ...el.get('user').properties,
       }));
     });
 
@@ -189,7 +236,7 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error while loading users" });
+      .json({ message: 'There was an error while loading users' });
   } finally {
     session.close();
   }

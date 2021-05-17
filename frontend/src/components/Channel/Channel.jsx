@@ -11,17 +11,25 @@ const Channel = ({
   onChannelClick,
   ...props
 }) => {
-  return (
-    <Link to={url}>
-      <div
-        className={`channel${!url ? '--withoutHover' : ''}`}
-        onClick={onChannelClick}
-      >
-        <h2>{channelName}</h2>
-        {icon && <AddIcon className="channel__icon" {...props} />}
-      </div>
-    </Link>
+  const LinkWrapper = ({ children }) => <Link to={url}>{children}</Link>;
+
+  const ChannelBody = () => (
+    <div
+      className={`channel${!url ? '--withoutHover' : ''}`}
+      onClick={onChannelClick}
+    >
+      <h2>{channelName}</h2>
+      {icon && <AddIcon className='channel__icon' {...props} />}
+    </div>
   );
+
+  if (url)
+    return (
+      <LinkWrapper>
+        <ChannelBody />
+      </LinkWrapper>
+    );
+  else return <ChannelBody />;
 };
 
 Channel.propTypes = {

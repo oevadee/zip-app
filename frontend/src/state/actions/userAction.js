@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER } from "../types/userTypes";
+import { LOGIN_USER, LOGOUT_USER, UPDATE_USER } from '../types/userTypes';
 
 export const loginUser = (user) => ({
   type: LOGIN_USER,
@@ -10,7 +10,7 @@ export const logoutUser = () => ({
   payload: null,
 });
 
-export const changeUserName = (name) => ({
-  type: 'CHANGE_USER_NAME',
-  payload: name
-})
+export const updateUser = (name, photo) => ({
+  type: UPDATE_USER,
+  payload: { name, photo },
+});

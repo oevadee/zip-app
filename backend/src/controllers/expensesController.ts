@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import driver from "../config/db";
-import Controller from "../types/Controller.type";
+import { Request, Response } from 'express';
+import driver from '../config/db';
+import Controller from '../types/Controller.type';
 
 interface IuserWithExpeses {
   id: number;
@@ -9,6 +9,8 @@ interface IuserWithExpeses {
   password: string;
   email: string;
 }
+
+const imagePath = `${process.env.SERVER}/users`;
 
 const getAllUserExpenses = async (
   req: Request,
@@ -24,9 +26,9 @@ const getAllUserExpenses = async (
     );
 
     const users = usersQuery.records.map((el: any) => ({
-      id: el.get("a").identity.low,
+      id: el.get('a').identity.low,
       total: 0,
-      ...el.get("a").properties,
+      ...el.get('a').properties,
     }));
 
     const expenses: object[] = [];
@@ -39,7 +41,7 @@ const getAllUserExpenses = async (
         );
 
         return result.records.map((el) => ({
-          value: el.get("e").properties.value,
+          value: el.get('e').properties.value,
         }));
       });
 
@@ -54,7 +56,7 @@ const getAllUserExpenses = async (
           { id: userId, externalId: user.id }
         );
         return await result.records.map((el: any) => ({
-          value: el.get("e").properties.value,
+          value: el.get('e').properties.value,
         }));
       });
 
@@ -65,9 +67,14 @@ const getAllUserExpenses = async (
 
       const sum = incomingExpenses - outgoingExpenses;
 
+      const userToAdd = {
+        ...user,
+        photo: `${imagePath}/${user.photo}`,
+      };
+
       const expense = {
         value: sum.toFixed(),
-        user: user,
+        user: userToAdd,
       };
       expenses.push(expense);
     }
@@ -77,7 +84,7 @@ const getAllUserExpenses = async (
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with getting user expenses" });
+      .json({ message: 'There was an error with getting user expenses' });
   } finally {
     session.close();
   }
@@ -108,7 +115,7 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
               value: newValue,
             }
           : +value === 0
-          ? new Error("You cant create an empy expense.")
+          ? new Error('You cant create an empy expense.')
           : {
               id: userId,
               externalId: user,
@@ -117,7 +124,7 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
               value: newValue,
             }
       );
-      return result.records.map((el: any) => el.get("e").properties);
+      return result.records.map((el: any) => el.get('e').properties);
     });
 
     return res.json(expense);
@@ -125,7 +132,7 @@ const createExpense = async (req: Request, res: Response): Promise<any> => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "The was an error while creating new expense." });
+      .json({ message: 'The was an error while creating new expense.' });
   } finally {
     session.close();
   }
@@ -152,10 +159,10 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
       );
 
       return result.records.map((el) => ({
-        name: el.get("name"),
-        photo: el.get("photo"),
-        id: el.get("e").identity.low,
-        ...el.get("e").properties,
+        name: el.get('name'),
+        photo: el.get('photo'),
+        id: el.get('e').identity.low,
+        ...el.get('e').properties,
       }));
     });
 
@@ -179,10 +186,10 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
       );
 
       return result.records.map((el) => ({
-        name: el.get("name"),
-        photo: el.get("photo"),
-        id: el.get("e").identity.low,
-        ...el.get("e").properties,
+        name: el.get('name'),
+        photo: el.get('photo'),
+        id: el.get('e').identity.low,
+        ...el.get('e').properties,
       }));
     });
 
@@ -194,7 +201,7 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with getting history" });
+      .json({ message: 'There was an error with getting history' });
   } finally {
     session.close();
   }
@@ -229,7 +236,7 @@ const requestDeletion: Controller = async (req, res) => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with sending delete request." });
+      .json({ message: 'There was an error with sending delete request.' });
   } finally {
     session.close();
   }
@@ -257,7 +264,7 @@ const acceptDeletion: Controller = async (req, res) => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with accepting deletion request." });
+      .json({ message: 'There was an error with accepting deletion request.' });
   } finally {
     session.close();
   }
@@ -285,7 +292,7 @@ const rejectDeletion: Controller = async (req, res) => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with accepting deletion request." });
+      .json({ message: 'There was an error with accepting deletion request.' });
   } finally {
     session.close();
   }
@@ -305,10 +312,10 @@ const getExpenseNotifications: Controller = async (req, res) => {
       );
 
       const inToAdd = inResult.records.map((el: any) => ({
-        id: el.get("e").identity.low,
-        ...el.get("e").properties,
-        name: el.get("a.name"),
-        photo: el.get("a.photo"),
+        id: el.get('e').identity.low,
+        ...el.get('e').properties,
+        name: el.get('a.name'),
+        photo: el.get('a.photo'),
       }));
 
       const outResult = await txc.run(
@@ -319,10 +326,10 @@ const getExpenseNotifications: Controller = async (req, res) => {
       );
 
       const outToAdd = outResult.records.map((el: any) => ({
-        id: el.get("e").identity.low,
-        ...el.get("e").properties,
-        name: el.get("a.name"),
-        photo: el.get("a.photo"),
+        id: el.get('e').identity.low,
+        ...el.get('e').properties,
+        name: el.get('a.name'),
+        photo: el.get('a.photo'),
       }));
 
       return outToAdd
@@ -338,7 +345,7 @@ const getExpenseNotifications: Controller = async (req, res) => {
     console.error(err);
     return res
       .status(400)
-      .json({ message: "There was an error with getting all notifications." });
+      .json({ message: 'There was an error with getting all notifications.' });
   } finally {
     session.close();
   }
