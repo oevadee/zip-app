@@ -21,7 +21,7 @@ import {
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
 import { useBreakpointValue } from '@chakra-ui/media-query';
-import jwt_decode from 'jwt-decode';
+
 
 const App = () => {
   const user = useSelector((state) => state.user.user);
@@ -29,13 +29,6 @@ const App = () => {
   const sidebardVisible = useBreakpointValue({ base: false, md: true });
   const navOpen = useSelector((state) => state.app.navOpen);
   const [tokenUser, setTokenUser] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem('secret');
-    if (token) {
-      setTokenUser(jwt_decode(token));
-    }
-  }, []);
 
   if (!data) return <Spinner color='pink' />;
 
@@ -72,9 +65,7 @@ const App = () => {
         ) : (
           <>
             <Redirect to='/login' />
-            <Route path='/login'>
-              <LoginRoute tokenUser={tokenUser} />
-            </Route>
+            <Route path='/login' component={LoginRoute} />
             <Route path='/register' component={RegisterRoute} />
           </>
         )}

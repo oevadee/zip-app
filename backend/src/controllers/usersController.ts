@@ -118,6 +118,11 @@ const getProfile: Controller = async (req, res) => {
   const { userId } = req.query;
   const session = driver.session();
 
+  if (!userId) {
+    console.log('Auth failed!');
+    return res.json();
+  }
+
   try {
     const [user] = await session.readTransaction(async (txc) => {
       const result = await txc.run(
