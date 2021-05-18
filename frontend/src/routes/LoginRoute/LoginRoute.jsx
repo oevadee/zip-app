@@ -1,44 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import './LoginRoute.scss';
-import { useForm } from 'react-hook-form';
-import {
-  Heading,
-  Input,
-  Box,
-  Text,
-  Button,
-  ButtonGroup,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { Heading, Text } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../state/actions/userAction';
-import { Link } from 'react-router-dom';
 import useSWR from 'swr';
+import Form from './components/Form/Form';
+import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 
-const LoginRoute = ({ tokenUser }) => {
-  const { register, handleSubmit } = useForm();
+const LoginRoute = () => {
   const dispatch = useDispatch();
-  const { data } = useSWR(`/api/users/profile?userId=${tokenUser.id}`);
+  const user = useSelector((state) => state.user.user);
+  const { data } = useSWR(
+    `/api/users/profile${user ? `userId=${user.id}` : ''}`
+  );
+
+  const getTokenUser = async (userId) =>
+    axios.get(`/api/users/profile${userId ? `?userId=${userId}` : ''}`);
+
+  useEffect(() => {
+    const token = localStorage.getItem('secret');
+
+    if (token) {
+      const userId = jwt_decode(token).id;
+      getTokenUser(userId).then(({ data }) => dispatch(loginUser(data)));
+    }
+  }, []);
 
   useEffect(() => {
     if (data) {
-      const userToDispatch = {
-        id: tokenUser.id,
-        ...data,
-      };
-      dispatch(loginUser(userToDispatch));
+      dispatch(loginUser(data));
     }
   }, [data]);
-
-  const onSubmit = async (values) => {
-    const { data: postData } = await axios.post(`/api/users/login`, values);
-    const { user, token } = postData;
-
-    user && dispatch(loginUser(user));
-    token && localStorage.setItem('secret', token);
-  };
-
-  const onError = (err) => console.log(err);
 
   return (
     <div className='login'>
@@ -60,38 +53,7 @@ const LoginRoute = ({ tokenUser }) => {
           OG edition
         </Text>
       </span>
-      <Box maxWidth={600}>
-        <form autoComplete='off' onSubmit={handleSubmit(onSubmit, onError)}>
-          <Input
-            name='email'
-            ref={register}
-            placeholder='Email'
-            type='email'
-            size='lg'
-            variant='outline'
-            mb={5}
-          />
-          <Input
-            name='password'
-            ref={register}
-            placeholder='Password'
-            type='password'
-            size='lg'
-            variant='outline'
-            mb={5}
-          />
-          <ButtonGroup spacing='6'>
-            <Button type='submit' colorScheme='blue' variant='solid'>
-              Login
-            </Button>
-            <Link to='/register'>
-              <Button variant='outline' colorScheme='pink'>
-                Register
-              </Button>
-            </Link>
-          </ButtonGroup>
-        </form>
-      </Box>
+      <Form />
     </div>
   );
 };

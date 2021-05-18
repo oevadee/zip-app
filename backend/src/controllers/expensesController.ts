@@ -27,6 +27,9 @@ const getAllUserExpenses = async (
 
     const users = usersQuery.records.map((el: any) => ({
       id: el.get('a').identity.low,
+      photo: el.get('a').properties.photo
+        ? `${imagePath}/${el.get('a').properties.photo}`
+        : null,
       total: 0,
       ...el.get('a').properties,
     }));
@@ -160,7 +163,7 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
 
       return result.records.map((el) => ({
         name: el.get('name'),
-        photo: el.get('photo'),
+        photo: el.get('photo') ? `${imagePath}/${el.get('photo')}` : null,
         id: el.get('e').identity.low,
         ...el.get('e').properties,
       }));
@@ -187,7 +190,7 @@ const getHistory = async (req: Request, res: Response): Promise<any> => {
 
       return result.records.map((el) => ({
         name: el.get('name'),
-        photo: el.get('photo'),
+        photo: el.get('photo') ? `${imagePath}/${el.get('photo')}` : null,
         id: el.get('e').identity.low,
         ...el.get('e').properties,
       }));
