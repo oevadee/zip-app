@@ -36,10 +36,11 @@ const SettingsRoute = ({ user }) => {
       values.name.length > 0 &&
       (values.name.split(' ').length > 2 ||
         values.name.split(' ')[0].length < 3 ||
+        values.name.split(' ').length < 2 ||
         values.name.split(' ')[1].length < 3)
     ) {
       setAlert({
-        message: `That's not a name + surname format. Enter your fullname`,
+        message: `That's not a name + surname format. Enter your full name`,
         status: 400,
       });
       return;
@@ -66,6 +67,7 @@ const SettingsRoute = ({ user }) => {
     } catch (err) {
       setIsLoading(false);
       setAlert(err.response);
+      console.log(err.response)
       setTimeout(() => {
         setAlert(null);
       }, 3000);

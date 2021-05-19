@@ -9,6 +9,10 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
+      '/static': {
+        target: `http://${process.env.VITE_API_HOST}/`,
+        changeOrigin: true
+      },
       '/api': {
         target: `http://${process.env.VITE_API_HOST}/`,
         changeOrigin: true,

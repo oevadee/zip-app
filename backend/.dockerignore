@@ -1,5 +1,3 @@
 node_modules/
-.env
 yarn.lock
-uploads/
-neo4j/
+.prettierrc.json

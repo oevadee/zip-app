@@ -4,8 +4,10 @@ import driver from '../config/db';
 import jwt from 'jsonwebtoken';
 import Controller from '../types/Controller.type';
 import { upload } from '../storage/usersStorage';
+import fs from "fs";
+import config from '../config';
 
-const imagePath = `${process.env.SERVER}/users`;
+const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
 
 const login = async (req: Request, res: Response): Promise<any> => {
   const session = driver.session();
@@ -158,7 +160,7 @@ const updateProfile: Controller = async (req, res) => {
     if (err) {
       return res
         .status(400)
-        .json({ message: 'There was an error with uploading a file.' });
+        .json({ message: err.message });
     }
 
     try {
@@ -194,8 +196,21 @@ const updateProfile: Controller = async (req, res) => {
       if (req.files.file) {
         //@ts-ignore
         const photo = req.files.file[0].filename;
+
+        const [ oldPhoto ] = await session.readTransaction( async txc => {
+          const result = await txc.run(
+            `MATCH (a: User) WHERE id(a) = toInteger($userId) RETURN a.photo`,
+            {
+              userId
+            }
+          );
+          return result.records.map((r: any) => ({
+            photo: r.get("a.photo")
+          }))
+        });
+
         await session.writeTransaction(async (txc) => {
-          await txc.run(
+          txc.run(
             `
             MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.photo = $photo
           `,
@@ -203,7 +218,16 @@ const updateProfile: Controller = async (req, res) => {
               userId,
               photo,
             }
-          );
+          ).then(() => {
+            try {
+              console.log()
+              fs.unlinkSync(process.env.PWD + config.STATIC + "users/" + oldPhoto.photo)
+            } catch (err) {
+              console.log("Failed to unlink old photo")
+            }
+          }).catch(err => {
+            console.log("Failed to update photo")
+          });
         });
       }
 

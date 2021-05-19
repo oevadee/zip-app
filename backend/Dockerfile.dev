@@ -1,0 +1,7 @@
+FROM node:alpine
+WORKDIR /opt/dev
+COPY package.json .
+RUN yarn install
+RUN yarn global add nodemon
+COPY . .
+CMD ["yarn", "start"]

@@ -8,5 +8,6 @@ export default {
   NEO4J_USERNAME: process.env.NEO4J_USERNAME || "neo4j",
   NEO4J_PASSWORD: process.env.NEO4J_PASSWORD || "s3cr3t",
   PORT: process.env.PORT || "8080",
-  CLIENT: process.env.CLIENT || "localhost:3000"
+  CLIENT: process.env.CLIENT || "localhost:3000",
+  STATIC: "/uploads"
 };
