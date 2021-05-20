@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import driver from "../config/db";
 
+const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
+
 const getAllMessages = async (req: Request, res: Response): Promise<any> => {
   const { channelId } = req.params;
   const session = driver.session();
@@ -21,7 +23,10 @@ const getAllMessages = async (req: Request, res: Response): Promise<any> => {
           id: el.get("m").identity.low,
           ...el.get("m").properties,
         },
-        user: el.get("a").properties,
+        user: { 
+          ...el.get("a").properties,
+          photo: `${imagePath}/${el.get("a").properties.photo}`
+        },
       }));
     });
 

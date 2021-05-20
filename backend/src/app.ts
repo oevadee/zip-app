@@ -25,7 +25,8 @@ const options: cors.CorsOptions = {
 };
 
 //use cors middleware
-app.use(express.static(__dirname + '/uploads'));
+app.use("/static", express.static(path.join(__dirname, "../uploads"), { fallthrough: false }));
+console.log(path.join(__dirname, "../uploads"))
 app.use(cors(options));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

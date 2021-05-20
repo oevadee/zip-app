@@ -5,4 +5,6 @@ yarn-error.log
 nginx/
 .prettierrc.json
 .prettierignore
-dist
+dist/
+ssl/
+Dockerfile
