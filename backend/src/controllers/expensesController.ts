@@ -10,7 +10,7 @@ interface IuserWithExpeses {
   email: string;
 }
 
-const imagePath = `${process.env.SERVER}/users`;
+const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
 
 const getAllUserExpenses = async (
   req: Request,

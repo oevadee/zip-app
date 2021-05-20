@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import driver from "../config/db";
 
-const imagePath = `${process.env.SERVER}/users`;
+const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
 
 const getAllMessages = async (req: Request, res: Response): Promise<any> => {
   const { channelId } = req.params;
