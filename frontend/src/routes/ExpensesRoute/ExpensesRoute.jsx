@@ -33,16 +33,28 @@ const ExpensesRoute = () => {
         <Table size='lg'>
           <Thead>
             <Tr>
-              <Th p={5} w={20}></Th>
-              <Th p={0} w={10}>
-                User
-              </Th>
-              <Th p={0} pl={2} w={10} isNumeric>
-                Expense
-              </Th>
-              <Th p={0} pr={5} w={50} isNumeric>
-                History
-              </Th>
+              {isHidden ? <Th w={100}></Th> : <Th p={5} w={20}></Th>}
+              {isHidden ? (
+                <Th>User</Th>
+              ) : (
+                <Th p={0} w={10}>
+                  User
+                </Th>
+              )}
+              {isHidden ? (
+                <Th isNumeric>Expense</Th>
+              ) : (
+                <Th p={0} pl={2} w={10} isNumeric>
+                  Expense
+                </Th>
+              )}
+              {isHidden ? (
+                <Th isNumeric>History</Th>
+              ) : (
+                <Th p={0} pr={5} w={50} isNumeric>
+                  History
+                </Th>
+              )}
             </Tr>
           </Thead>
           <Tbody>
@@ -54,34 +66,51 @@ const ExpensesRoute = () => {
                       <Avatar src={el.user.photo} />
                     </Td>
                   ) : (
-                    <Td p={2} w={20}>
+                    <Td p={4} w={20}>
                       <Avatar src={el.user.photo} />
                     </Td>
                   )}
                   {isHidden ? (
-                    <Td p={0} pl={5} w={40}>
-                      {el.user.name}
-                    </Td>
+                    <Td>{el.user.name}</Td>
                   ) : (
                     <Td p={0} w={10}>
                       {el.user.name.split(' ')[0]}
                     </Td>
                   )}
-                  <Td p={0} pl={2} w={10} isNumeric>
-                    {el.value}
-                  </Td>
-                  <Td p={0} pr={5} w={50} isNumeric>
-                    <Link
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        marginRight: 23,
-                      }}
-                      to={`/history/${el.user.id}`}
-                    >
-                      <HistoryIcon style={{ color: '#fff' }} />
-                    </Link>
-                  </Td>
+                  {isHidden ? (
+                    <Td isNumeric>{el.value}</Td>
+                  ) : (
+                    <Td p={0} pl={2} w={10} isNumeric>
+                      {el.value}
+                    </Td>
+                  )}
+                  {isHidden ? (
+                    <Td isNumeric>
+                      <Link
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          marginRight: 23,
+                        }}
+                        to={`/history/${el.user.id}`}
+                      >
+                        <HistoryIcon style={{ color: '#fff' }} />
+                      </Link>
+                    </Td>
+                  ) : (
+                    <Td p={0} pr={5} w={50} isNumeric>
+                      <Link
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          marginRight: 23,
+                        }}
+                        to={`/history/${el.user.id}`}
+                      >
+                        <HistoryIcon style={{ color: '#fff' }} />
+                      </Link>
+                    </Td>
+                  )}
                 </Tr>
               ))}
           </Tbody>
