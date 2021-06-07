@@ -4,7 +4,7 @@ import driver from '../config/db';
 import jwt from 'jsonwebtoken';
 import Controller from '../types/Controller.type';
 import { upload } from '../storage/usersStorage';
-import fs from "fs";
+import fs from 'fs';
 import config from '../config';
 
 const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
@@ -157,14 +157,18 @@ const updateProfile: Controller = async (req, res) => {
     const session = driver.session();
     const values = JSON.parse(req.body.values);
 
+    console.log('smiga');
+
     if (err) {
-      return res
-        .status(400)
-        .json({ message: err.message });
+      return res.status(400).json({ message: err.message });
     }
+
+    console.log('smiga');
 
     try {
       const { password, confirmPassword, name } = values;
+
+      console.log('smiga');
 
       if (password && password === confirmPassword) {
         const hash = await bcrypt.hash(password, 10);
@@ -197,37 +201,41 @@ const updateProfile: Controller = async (req, res) => {
         //@ts-ignore
         const photo = req.files.file[0].filename;
 
-        const [ oldPhoto ] = await session.readTransaction( async txc => {
+        const [oldPhoto] = await session.readTransaction(async (txc) => {
           const result = await txc.run(
             `MATCH (a: User) WHERE id(a) = toInteger($userId) RETURN a.photo`,
             {
-              userId
+              userId,
             }
           );
           return result.records.map((r: any) => ({
-            photo: r.get("a.photo")
-          }))
+            photo: r.get('a.photo'),
+          }));
         });
 
         await session.writeTransaction(async (txc) => {
-          txc.run(
-            `
+          txc
+            .run(
+              `
             MATCH (a:User) WHERE id(a) = toInteger($userId) SET a.photo = $photo
           `,
-            {
-              userId,
-              photo,
-            }
-          ).then(() => {
-            try {
-              console.log()
-              fs.unlinkSync(process.env.PWD + config.STATIC + "users/" + oldPhoto.photo)
-            } catch (err) {
-              console.log("Failed to unlink old photo")
-            }
-          }).catch(err => {
-            console.log("Failed to update photo")
-          });
+              {
+                userId,
+                photo,
+              }
+            )
+            .then(() => {
+              try {
+                fs.unlinkSync(
+                  process.env.PWD + config.STATIC + 'users/' + oldPhoto.photo
+                );
+              } catch (err) {
+                console.log('Failed to unlink old photo');
+              }
+            })
+            .catch((err) => {
+              console.log('Failed to update photo');
+            });
         });
       }
 

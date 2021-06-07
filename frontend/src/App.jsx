@@ -22,7 +22,6 @@ import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/spinner';
 import { useBreakpointValue } from '@chakra-ui/media-query';
 
-
 const App = () => {
   const user = useSelector((state) => state.user.user);
   const { data, mutate } = useSWR(`/api/chat/channel`);

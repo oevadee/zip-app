@@ -52,6 +52,8 @@ const SettingsRoute = ({ user }) => {
       formData.append('values', JSON.stringify(values));
       formData.append('file', file);
 
+      console.log('smiga');
+
       const { data } = await axios.put(
         `/api/users/profile?userId=${user.id}`,
         formData
@@ -67,7 +69,7 @@ const SettingsRoute = ({ user }) => {
     } catch (err) {
       setIsLoading(false);
       setAlert(err.response);
-      console.log(err.response)
+      console.log(err.response);
       setTimeout(() => {
         setAlert(null);
       }, 3000);
