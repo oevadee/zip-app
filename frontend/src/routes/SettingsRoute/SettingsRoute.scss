@@ -2,8 +2,9 @@
 
 .settings {
   width: 100%;
-  height: 100%;
+  height: calc(100% - $headerHeight);
   padding: 20px;
+  overflow-y: scroll;
 }
 
 .settingsView__uploadInput {
