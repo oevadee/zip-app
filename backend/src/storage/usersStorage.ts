@@ -7,7 +7,7 @@ const limits = {
   fileSize: 5 * 1000000, //x megabytes
 };
 
-export const uploadsPath = `./uploads/users`;
+export const uploadsPath = `../uploads/users`;
 
 const fileFilter = (req: any, file: any, cb: any) => {
   interface IAcceptedFiles {
@@ -46,9 +46,12 @@ const storage = multer.diskStorage({
     cb(null, uploadsPath);
   },
   filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}-${Math.round(
-      Math.random() * 1e9
-    )}-${file.originalname}`);
+    cb(
+      null,
+      `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e9)}-${
+        file.originalname
+      }`
+    );
   },
 });
 

@@ -6,6 +6,7 @@ import Controller from '../types/Controller.type';
 import { upload } from '../storage/usersStorage';
 import fs from 'fs';
 import config from '../config';
+import path from 'path';
 
 const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
 
@@ -45,7 +46,6 @@ const login = async (req: Request, res: Response): Promise<any> => {
       });
     } else return res.status(400).json({ message: 'Auth failed.' });
   } catch (err) {
-    console.error(err);
     return res.status(400).json({ message: 'Auth failed.' });
   } finally {
     session.close();
@@ -107,7 +107,6 @@ const register: Controller = async (req, res) => {
         .status(400)
         .json({ message: 'There was an error with registration new account' });
   } catch (err) {
-    console.error(err);
     return res.status(400).json({
       message: 'There was an error with registration new account.',
     });
@@ -144,7 +143,6 @@ const getProfile: Controller = async (req, res) => {
 
     return res.json(user);
   } catch (err) {
-    console.error(err);
     return res
       .status(400)
       .json({ message: 'There was an error with getting profile info.' });
@@ -157,18 +155,12 @@ const updateProfile: Controller = async (req, res) => {
     const session = driver.session();
     const values = JSON.parse(req.body.values);
 
-    console.log('smiga');
-
     if (err) {
       return res.status(400).json({ message: err.message });
     }
 
-    console.log('smiga');
-
     try {
       const { password, confirmPassword, name } = values;
-
-      console.log('smiga');
 
       if (password && password === confirmPassword) {
         const hash = await bcrypt.hash(password, 10);
@@ -227,7 +219,9 @@ const updateProfile: Controller = async (req, res) => {
             .then(() => {
               try {
                 fs.unlinkSync(
-                  process.env.PWD + config.STATIC + 'users/' + oldPhoto.photo
+                  path.join(__dirname + '../../../../uploads') +
+                    '/users/' +
+                    oldPhoto.photo
                 );
               } catch (err) {
                 console.log('Failed to unlink old photo');
@@ -243,7 +237,6 @@ const updateProfile: Controller = async (req, res) => {
         message: 'Profile updated.',
       });
     } catch (err) {
-      console.error(err);
       return res
         .status(400)
         .json({ message: 'There was an error with updating profile.' });
@@ -270,7 +263,6 @@ const getUsers = async (req: Request, res: Response): Promise<any> => {
 
     return res.json(users);
   } catch (err) {
-    console.error(err);
     return res
       .status(400)
       .json({ message: 'There was an error while loading users' });
