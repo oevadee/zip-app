@@ -27,7 +27,7 @@ const RegisterRoute = () => {
     token && localStorage.setItem('secret', token);
   };
 
-  const onError = (err) => console.log(err);
+  const onError = (err) => console.log(chalk.bgRed.white(err));
 
   return (
     <div className='login'>

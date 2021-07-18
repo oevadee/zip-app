@@ -43,8 +43,6 @@ const ExpensePopup = ({ user, users, mutate }) => {
     mutate();
   };
 
-  console.log(users.find(x => x.id == selectedUser)?.photo)
-
   return (
     <Box className='expensePopup' d='flex' alignItems='center'>
       <Box w={{ base: '100%', md: '80%' }} maxW={600}>

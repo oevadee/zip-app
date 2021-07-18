@@ -19,8 +19,6 @@ const ExpensesRoute = () => {
 
   const { data, mutate } = useSWR(`/api/expenses?userId=${user.id}`);
 
-  console.log(data);
-
   if (!data) return <Spinner color='pink' />;
 
   return (

@@ -7,6 +7,7 @@ import { upload } from '../storage/usersStorage';
 import fs from 'fs';
 import config from '../config';
 import path from 'path';
+import chalk from 'chalk';
 
 const imagePath = `${process.env.STATIC_FILES_HOST}/users`;
 
@@ -120,7 +121,7 @@ const getProfile: Controller = async (req, res) => {
   const session = driver.session();
 
   if (!userId) {
-    console.log('Auth failed!');
+    console.log(chalk.bgRed.white('Auth failed!'));
     return res.json();
   }
 
@@ -224,11 +225,11 @@ const updateProfile: Controller = async (req, res) => {
                     oldPhoto.photo
                 );
               } catch (err) {
-                console.log('Failed to unlink old photo');
+                console.log(chalk.bgRed.white('Failed to unlink old photo'));
               }
             })
             .catch((err) => {
-              console.log('Failed to update photo');
+              console.log(chalk.bgRed.white('Failed to update photo'));
             });
         });
       }
