@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react-refresh';
-import dotenv from 'dotenv';
+import { defineConfig } from "vite";
+import reactRefresh from "@vitejs/plugin-react-refresh";
+import dotenv from "dotenv";
 dotenv.config();
 
 // https://vitejs.dev/config/
@@ -9,12 +9,12 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/static': {
-        target: `http://${process.env.VITE_API_HOST}/`,
-        changeOrigin: true
+      "/static": {
+        target: `${VITE_API_HOST_V2}/`,
+        changeOrigin: true,
       },
-      '/api': {
-        target: `http://${process.env.VITE_API_HOST}/`,
+      "/api": {
+        target: `${VITE_API_HOST_V2}/`,
         changeOrigin: true,
       },
     },
